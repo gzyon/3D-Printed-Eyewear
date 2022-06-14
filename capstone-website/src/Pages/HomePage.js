@@ -1,28 +1,56 @@
-import { Typography, Grid, styled, Paper, Box, Button, Divider, List, ListItem, ListItemText, Container } from '@mui/material'
+import { Typography, Grid, styled, Paper, Box, Button, Divider, List, ListItem, ListItemText, Container, BottomNavigation } from '@mui/material'
 import React from 'react'
 import Header from '../Components/Header/Header'
+import Footer from '../Components/Footer/Footer'
 import Abc from '@mui/icons-material/Abc'
 import './HomePage.css';
 
 import landingImage from '../assets/images/landing.png'
 import DescItem from '../Components/DescItem/DescItem'
 
+//styles
+import { StylesProvider } from '@mui/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles'
+
 // icons
 import AccessAlarmOutlinedIcon from '@mui/icons-material/AccessAlarmOutlined';
 
+const { palette } = createTheme();
+const { augmentColor } = palette;
+
+const createColor = (mainColor) => augmentColor({ color: { main: mainColor } });
+const theme = createTheme({
+    components: {
+        MuiTypography: {
+            styleOverrides: {
+                root: {
+                    color: "#4E542C"
+                }
+                
+            }
+        },
+        MuiIcon:{
+            styleOverrides: {
+                root: {
+                    color: "#4E542C"
+                }
+                
+            }
+        }
+    },
+    palette:{
+        darkGreen: createColor("#4E542C")
+    }
+})
 
 const HomePage = () => {
-    const Item = styled(Paper)(({ theme }) => ({
-        backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-        ...theme.typography.body2,
-        padding: theme.spacing(1),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    }))
+    
 
     return (
         <>
             <Header />
+            <StylesProvider injectFirst>
+            <ThemeProvider theme={theme}>
             <Container>
                 {/* <Box display="flex" justifyContent="center"> */}
                     {/* <Box
@@ -39,16 +67,21 @@ const HomePage = () => {
                                 alignItems="center"
                             >
                                 <Box>
-                                    <Typography variant="h3" component="h1" m={1}>
-                                        Introduce Your Product Quickly & Effectively
+                                    <Typography variant="h3" component="h1" color="#14140A">
+                                        <b>Introduce Your Product Quickly & Effectively</b>
                                     </Typography>
-                                    <Typography variant="body1" component="body1">
+                                    <Typography variant="body1" component="body1" color="darkGreen">
                                         Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus 
     mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
                                     </Typography>
                                     <Grid columns={2} mt={4}>
-                                        <Button m={1}>Purchase Now</Button>
-                                        <Button m={1}>Learn More</Button>
+                                        <Button m={2} variant="contained" color="darkGreen">Purchase Now</Button>
+                                        <Button sx={
+                                            {
+                                                margin: '8px 30px',
+                                                color: "#4E542C"
+                                            }
+                                        } color="darkGreen">Learn More</Button>
                                     </Grid>
 
                                 </Box>
@@ -60,7 +93,7 @@ const HomePage = () => {
                                 justifyContent={'center'}
                                 alignItems={'center'}
                             >
-                                <img src={landingImage} /> 
+                                <img src={landingImage} className="bigPic"/> 
                                 {/* <Abc fontSize="large" /> replace with own image later */}
                             </Grid>
                         </Grid>
@@ -78,20 +111,30 @@ const HomePage = () => {
                                 alignItems="center"
                             >
                                 <Box>
-                                    <Typography variant="h3" component="h1" m={1}>
-                                        Light, Fast & Powerful
+                                    <Typography variant="h3" component="h1" color="#14140A">
+                                        <b>Light, Fast & Powerful</b>
                                     </Typography>
-                                    <Typography variant="body1" component="body1">
-                                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
+                                    <Typography variant="body1" component="body1" color="darkGreen">
+                                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus 
+    mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
                                     </Typography>
-                                    <Grid columns={2} mt={4}>
-                                        <DescItem title='Convenience'
-                                            content=' Lorem ipsum dolor sit amet, consectetuer adipisc'
-                                            icon={<AccessAlarmOutlinedIcon fontSize='large'/>}
-                                         />
+                                    <Grid container columns={2} mt={4} direction='column' >
+                                        <Grid item m='32px 32px 32px 0px' maxWidth='200px' minWidth='200px'>
+                                            <DescItem title='Convenience'
+                                                content=' Lorem ipsum dolor sit amet, consectetuer adipisc'
+                                                icon={<AccessAlarmOutlinedIcon fontSize='large' color="darkGreen"/>}
+                                            />
+                                         </Grid>
+                                        <Grid item m='32px 32px 32px 0px' maxWidth='200px' minWidth='200px'>
                                         <DescItem title='Comfort' content='lorem ipsum'
-                                            icon={<AccessAlarmOutlinedIcon fontSize='large'/>}
+                                            icon={<AccessAlarmOutlinedIcon fontSize='large' color="darkGreen"/>}
                                         />
+                                        </Grid>
+                                        <Grid item m='32px 32px 32px 0px' maxWidth='200px' minWidth='200px'>
+                                        <DescItem title='Customisability' content='lorem ipsum'
+                                            icon={<AccessAlarmOutlinedIcon fontSize='large' color="darkGreen"/>}
+                                        />
+                                        </Grid>
                                     </Grid>
 
                                 </Box>
@@ -103,7 +146,7 @@ const HomePage = () => {
                                 justifyContent={'center'}
                                 alignItems={'center'}
                             >
-                                <img src={landingImage} /> 
+                                <img src={landingImage} className="bigPic"/>  
                                 {/* <Abc fontSize="large" /> replace with own image later */}
                             </Grid>
                         </Grid>
@@ -113,9 +156,10 @@ const HomePage = () => {
                     m={2}
                     display="flex"
                     justifyContent="center"
+                    align='center'
                 >
-                    Description of current problems faced by our user and the motivation of
-                    why our product is needed
+                    <b>Description of current problems faced by our user and the motivation of
+                    why our product is needed</b>
                 </Typography>
 
                 <Divider variant="middle" />
@@ -141,7 +185,7 @@ const HomePage = () => {
                             justifyContent={'center'}
                             alignItems="center"
                         >
-                            <Abc fontSize="large" /> {/* replace with own image later */}
+                            <img src={landingImage} className='smallPic'/>  {/* replace with own image later */}
                         </Grid>
                     </Grid>
                 </Box>
@@ -155,7 +199,7 @@ const HomePage = () => {
                             justifyContent={'left'}
                             alignItems="center"
                         >
-                            <Abc fontSize="large" /> {/* replace with own image later */}
+                            <img src={landingImage} className='smallPic'/>  {/* replace with own image later */}
                         </Grid>
                         {/* <Grid item xs> */}
                         <Divider orientation="vertical" variant="middle" flexItem />
@@ -187,15 +231,15 @@ const HomePage = () => {
                             justifyContent={'center'}
                             alignItems="center"
                         >
-                            <Abc fontSize="large" /> {/* replace with own image later */}
+                            <img src={landingImage} className='smallPic'/>  {/* replace with own image later */}
                         </Grid>
                     </Grid>
                 </Box>
 
                 <Divider variant="middle" />
 
-                <Typography display="flex" justifyContent={'center'} m={2}>
-                    Here's How It Works!
+                <Typography fontSize={25} display="flex" justifyContent={'center'} m={2}>
+                    <b>Here's How It Works!</b>
                 </Typography>
                 <Box
                     sx={{ m: 3 }}
@@ -206,71 +250,45 @@ const HomePage = () => {
                     <List sx={{ display: 'list-item' }}>
                         <ListItem>
                             <ListItemText
-                                primary="Scan Your Face"
-                                secondary="Short description of scanning process"
+                                disableTypography
+                                primary={<Typography fontSize={20} type="body1" style={{ color: '#4E542C' }}><b>1. Scan Your Face</b></Typography>}
+                                secondary={<Typography fontSize={15} type="body2" style={{ color: '#4E542C' }}>Short description of scanning process</Typography>}
+                                
                             />
                         </ListItem>
                         <ListItem>
                             <ListItemText
-                                primary="Select Your Favourite Frame Design"
-                                secondary="Short description of virtual try-on"
+                                disableTypography
+                                primary={<Typography fontSize={20} type="body1" style={{ color: '#4E542C' }}><b>2. Select Your Favourite Frame Design</b></Typography>}
+                                secondary={<Typography fontSize={15} type="body2" style={{ color: '#4E542C' }}>Short description of virtual try-on</Typography>}
+                                
                             />
                         </ListItem>
                         <ListItem>
                             <ListItemText
-                                primary="Receive Your New Frame"
-                                secondary="Short description of production and home delivery"
+                                disableTypography
+                                primary={<Typography fontSize={20} type="body1" style={{ color: '#4E542C' }}><b>3. Receive Your New Frame</b></Typography>}
+                                secondary={<Typography fontSize={15} type="body2" style={{ color: '#4E542C' }}>Short description of production and home delivery</Typography>}
+                                
                             />
                         </ListItem>
                         <ListItem>
                             <ListItemText
-                                primary="Fine Tuning of Frame"
-                                secondary="Short description of how to adjust intricate pieces"
+                                disableTypography
+                                primary={<Typography fontSize={20} type="body1" style={{ color: '#4E542C' }}><b>4. Fine Tuning of Frame</b></Typography>}
+                                secondary={<Typography fontSize={15} type="body2" style={{ color: '#4E542C' }}>Short description of how to adjust intricate pieces</Typography>}
+                                
                             />
                         </ListItem>
                     </List>
                 </Box>
 
                 <Divider variant="middle" />
+                
 
-                <Typography variant="h5" display="flex" justifyContent={'center'} m={2}>
-                    Items That You Need
-                </Typography>
-                <Box m={3} display="flex" justifyContent="center">
-                    <Grid sx={{ width: 0.8, m: 2 }} spacing={3} container>
-                        <Grid item xs display="flex" justifyContent={'center'}>
-                            <Box display="flex" justifyContent={'center'}>
-                                <Typography variant="h5" display="flex" justifyContent={'center'}>
-                                    Computer
-                                </Typography>
-                                <Typography variant="h6" display="flex" justifyContent={'center'}>
-                                    Thing 3
-                                </Typography>
-                            </Box>
-                        </Grid>
-                        <Grid item xs display="flex" justifyContent={'center'}>
-                            <Box>
-                                <Typography variant="h5" display="flex" justifyContent={'center'}>
-                                    Smartphone
-                                </Typography>
-                                <Typography variant="h6" display="flex" justifyContent={'center'}>
-                                    Version of iPhone?
-                                </Typography>
-                            </Box>
-                        </Grid>
-                        <Grid item xs display="flex" justifyContent={'center'}>
-                            <Box>
-                                <Typography variant="h5" display="flex" justifyContent={'center'}>
-                                    Credit Card
-                                </Typography>
-                                <Typography variant="h6" display="flex" justifyContent={'center'}>
-                                    Or any other reference object
-                                </Typography>
-                            </Box>
-                        </Grid>
-                    </Grid>
-                </Box>
             </Container>
+            </ThemeProvider>
+            </StylesProvider>
         </>
     )
 }

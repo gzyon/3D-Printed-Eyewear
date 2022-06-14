@@ -11,12 +11,8 @@ import './Header.css';
 import { StylesProvider } from '@mui/styles';
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 
-// const theme = {
-//     colors: {
-//       primary: '#FFFDF6',
-//       textLight: '#F3F4F7',
-//     },
-//   };
+//logo
+import logo from './logo.png'
 
 const theme = createTheme({
     components: {
@@ -26,6 +22,7 @@ const theme = createTheme({
                     backgroundColor: '#fffdf6',
                     color: '#4E542C'
                 }
+                
             }
         }
     }
@@ -38,8 +35,15 @@ const Header = () => {
             <ThemeProvider theme={theme}>
                 <AppBar position="static" className="Appbar">
                     <Toolbar>
-                        <MenuIcon sx={{ mr: 2 }}/> {/*replace with own logo later on */}
-                        {/* </IconButton> */}
+                    <Box
+                        component="img"
+                        sx={{
+                        height: 64,
+                        pr: 2
+                        }}
+                        alt="Your logo."
+                        src={logo}
+                    />
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                             <b>Olive Eyecare and Wellness</b>
                         </Typography>

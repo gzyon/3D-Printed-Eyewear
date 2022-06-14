@@ -5,9 +5,13 @@ const DescItem = ({ title, content, icon }) => {
         <Box py={4}>
             {icon}
             <Typography variant='h6' component='h6'>
-                {title}
+                <b>{title}</b>
             </Typography>
-            <Typography variant='body2' component='body2'>
+            <Typography variant='body2' component='body2' sx={
+                {
+                    color: "#918E41"
+                }
+            }>
                 {content} 
             </Typography>
         </Box>
