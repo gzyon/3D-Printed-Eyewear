@@ -7,12 +7,15 @@ import { Menu as MenuIcon } from "@mui/icons-material"
 import { Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import './Header.css';
+
 // import { ThemeProvider } from 'styled-components';
 import { StylesProvider } from '@mui/styles';
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 //logo
 import logo from './logo.png'
+
+
 
 const theme = createTheme({
     components: {
@@ -47,8 +50,8 @@ const Header = () => {
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                             <b>Olive Eyecare and Wellness</b>
                         </Typography>
-                            <Button color="inherit">About Us</Button>
-                            <Button color="inherit">How It Works</Button>
+                            <Button color="inherit" href="/about">About Us</Button>
+                            <Button color="inherit" href="/contact">Contact Us</Button>
                     </Toolbar>
                 </AppBar>
             </ThemeProvider>

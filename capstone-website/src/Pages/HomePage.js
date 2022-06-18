@@ -39,7 +39,8 @@ const theme = createTheme({
         }
     },
     palette:{
-        darkGreen: createColor("#4E542C")
+        darkGreen: createColor("#4E542C"),
+        lightGreen: createColor("#EAE79B")
     }
 })
 
@@ -283,9 +284,10 @@ const HomePage = () => {
                     </List>
                 </Box>
 
-                <Divider variant="middle" />
-                
-
+                <Box p="30px" sx={{backgroundColor: '#EAE79B'}}>
+                <Divider variant="middle"/>
+                    <Footer/>                
+                </Box>
             </Container>
             </ThemeProvider>
             </StylesProvider>

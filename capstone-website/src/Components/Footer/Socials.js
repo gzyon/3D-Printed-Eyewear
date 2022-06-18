@@ -8,55 +8,21 @@ import HomeIcon from "@mui/icons-material/Home";
 // if you wanto to add twitter
 // import TwitterIcon from '@material-ui/icons/Twitter';
 
-import { socialMedia } from "./socialMedia";
 
-const useStyles = makeStyles((theme) => ({
-  snsIcon: {
-    width: "30px",
-    height: "30px",
+const Socials = ({just}) => {
 
-    [theme.breakpoints.down("xs")]: {
-      width: "25px",
-      height: "25px",
-    },
-    "&:hover": {
-      color: theme.palette.info.main,
-    },
-  },
-}));
-
-const Socials = ({ color }) => {
-  const classes = useStyles();
-  // if you want to add more social medias, add it to here and /data/socialMedia.js.
-  // and import the Material Icon, then add the code.
-  const { instagram, facebook, github, homepage } = socialMedia;
-
-  // if you add twitter , it will be
-  // const { instagram, facebook, github, homepage, twitter } = socialMedia;
-  {
-    //  and add this code to line 98,
-    /* <Grid
-        item
-        component={"a"}
-        target="_blank"
-        rel="noreferrer noopener"
-        href={twitter}
-      >
-       <TwitterIcon className={classes.snsIcon} />
-    </Grid> */
-  }
   return (
-    <Grid item container spacing={2} justify="center">
+    <Grid item container spacing={2} justify="center" justifyContent={just}>
       <Grid
         item
         component={"a"}
         target="_blank"
         rel="noreferrer noopener"
-        href={homepage}
+        href="https://www.youtube.com" //change when the other pages are ready
       >
         <HomeIcon
-          className={classes.snsIcon}
-          color={color ? "primary" : "secondary"}
+          className={"Home"}
+          style={{ color: '#4E542C' }}
         />
       </Grid>
       <Grid
@@ -64,11 +30,10 @@ const Socials = ({ color }) => {
         component={"a"}
         target="_blank"
         rel="noreferrer noopener"
-        href={facebook}
       >
         <FacebookIcon
-          className={classes.snsIcon}
-          color={color ? "primary" : "secondary"}
+          className={"Facebook"}
+          style={{ color: '#4E542C' }}
         />
       </Grid>
       <Grid
@@ -76,11 +41,10 @@ const Socials = ({ color }) => {
         component={"a"}
         target="_blank"
         rel="noreferrer noopener"
-        href={instagram}
       >
         <InstagramIcon
-          className={classes.snsIcon}
-          color={color ? "primary" : "secondary"}
+          className={"Instagram"}
+          style={{ color: '#4E542C' }}
         />
       </Grid>
       <Grid
@@ -88,11 +52,10 @@ const Socials = ({ color }) => {
         component={"a"}
         target="_blank"
         rel="noreferrer noopener"
-        href={github}
       >
         <GitHubIcon
-          className={classes.snsIcon}
-          color={color ? "primary" : "secondary"}
+          className={"Github"}
+          style={{ color: '#4E542C' }}
         />
       </Grid>
       {/* add social media*/}
