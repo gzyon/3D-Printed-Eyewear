@@ -2,6 +2,10 @@ import { Typography, Grid, styled, Paper, Box, Button, Divider, List, ListItem, 
 import React from 'react'
 import Header from '../Components/Header/Header'
 import Footer from '../Components/Footer/Footer'
+import Toolbar from '@mui/material/Toolbar';
+import PropTypes from 'prop-types';
+import CssBaseline from '@mui/material/CssBaseline';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
 import Abc from '@mui/icons-material/Abc'
 import './HomePage.css';
 
@@ -44,14 +48,16 @@ const theme = createTheme({
     }
 })
 
-const HomePage = () => {
-    
+
+
+const HomePage = (props) => {
 
     return (
-        <>
+        <StylesProvider injectFirst>
+        <ThemeProvider theme={theme}>
+        <React.Fragment>
+        <CssBaseline />
             <Header />
-            <StylesProvider injectFirst>
-            <ThemeProvider theme={theme}>
             <Container>
                 {/* <Box display="flex" justifyContent="center"> */}
                     {/* <Box
@@ -283,15 +289,14 @@ const HomePage = () => {
                         </ListItem>
                     </List>
                 </Box>
-
-                <Box p="30px" sx={{backgroundColor: '#EAE79B'}}>
+            </Container>
+            <Box p="30px" sx={{backgroundColor: '#EAE79B'}}>
                 <Divider variant="middle"/>
                     <Footer/>                
-                </Box>
-            </Container>
-            </ThemeProvider>
-            </StylesProvider>
-        </>
+            </Box>
+        </React.Fragment>
+        </ThemeProvider>
+        </StylesProvider>
     )
 }
 
