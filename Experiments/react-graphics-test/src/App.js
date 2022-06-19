@@ -1,187 +1,103 @@
 import "./App.css";
-import React, { Component, Suspense } from "react";
+import React, { Component, Suspense, useEffect, useState } from "react";
 
 // three.js imports
-// import * as THREE from "three";
-// import { Canvas } from "@react-three/fiber";
-// import { useLoader } from "@react-three/fiber";
-// import { Environment, OrbitControls } from "@react-three/drei";
-// import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
-// import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
-// import { TextureLoader } from 'three/src/loaders/TextureLoader'
-// import { DDSLoader } from "three-stdlib";
+import * as THREE from "three";
+import { Canvas } from "@react-three/fiber";
+import { useLoader } from "@react-three/fiber";
+import { PresentationControls, Stage } from "@react-three/drei";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
+import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
+import { TextureLoader } from 'three/src/loaders/TextureLoader'
+import { DDSLoader } from "three-stdlib";
 
-// babylon.js imports
-import '@babylonjs/inspector';
-import { Engine, Scene, Model } from 'react-babylonjs';
-import { Vector3, Color3 } from '@babylonjs/core';
-import { ActionManager, SetValueAction } from '@babylonjs/core/Actions';
-// import ScaledModelWithProgress from '../ScaledModelWithProgress';
+THREE.DefaultLoadingManager.addHandler(/\.dds$/i, new DDSLoader());
 
-// three.js
+const Model = (props) => {
+  
+  const [clicks, setClicks] = useState(0);
+  const [position, setPosition] = useState(new THREE.Vector3());
+  const [leftEye, setLeftEye] = useState(new THREE.Vector3());
+  const [rightEye, setRightEye] = useState(new THREE.Vector3());
+  const [renderSpecs, setRender] = useState(false);
 
-// THREE.DefaultLoadingManager.addHandler(/\.dds$/i, new DDSLoader());
+  const feliceMtl = useLoader(MTLLoader, "felice.mtl");
+  const feliceColor = useLoader(TextureLoader, "felice_0.png")
+  const felice = useLoader(OBJLoader, "felice.obj", (loader) => {
+    feliceMtl.preload();
+    loader.setMaterials(feliceMtl);
+  })
 
-// const Scene = () => {
-//   const materials = useLoader(MTLLoader, "yoshi.mtl");
-//   const colorMap = useLoader(TextureLoader, 'yoshi_0.png')
-//   const obj = useLoader(OBJLoader, "yoshi.obj", (loader) => {
-//     materials.preload();
-//     loader.setMaterials(materials);
-//   });
+  // spectacles
+  const specs = useLoader(OBJLoader, "Body2.obj");
 
-//   console.log(obj);
-//   return (
-//   <>
-//       <ambientLight intensity={0.2} />
-//       <directionalLight />
-//       <mesh>
-//         {/* Width and height segments for displacementMap */}
-//         <primitive object={obj} scale={0.5} />
-//         <meshStandardMaterial
-//           map={colorMap}
-//         />
-//       </mesh>
-//     </>
-//   )
-// };
-
-// export default function App() {
-//   return (
-//     <div className="App">
-//       <Canvas>
-//         <Suspense fallback={null}>
-//           <Scene />
-//           <OrbitControls autoRotate />
-//           <Environment preset="sunset" background />
-//         </Suspense>
-//       </Canvas>
-//     </div>
-//   );
-// }
-
-// babylonjs
-export default { title: "Models" };
-class WithModel extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      avocadoYPos: -1.5,
-      avocadoScaling: 3.0,
-    };
-
-    this.moveAvocadoUp = this.moveAvocadoUp.bind(this);
-    this.moveAvocadoDown = this.moveAvocadoDown.bind(this);
-    this.increaseAvocadoSize = this.increaseAvocadoSize.bind(this);
-    this.decreaseAvocadoSize = this.decreaseAvocadoSize.bind(this);
-    this.onModelLoaded = this.onModelLoaded.bind(this);
+  function onClick(event) {
+    console.log(event);
+    // if (clicks === 0) {
+    //   setClicks(clicks + 1);
+    //   setLeftEye(event.intersections[0].point);
+    //   console.log("Set left eye position:", leftEye);
+    // } else if (clicks === 1) {
+    //   setClicks(0);
+    //   setRightEye(event.intersections[0].point);
+    //   console.log("Set right eye position:", rightEye);
+    //   setPosition((leftEye.add(rightEye)).divideScalar(2));
+    //   setRender(true);
+    //   alert(`Middle between left and right eye: (${position.x}, ${position.y}, ${position.z})`)
+    // } 
+    // console.log(`clicked ${clicks} times`);
+    // setPosition(event.intersections[0].point);
+    const intersection = event.intersections[0].point.transformDirection(event.camera.matrixWorld);
+    setPosition(intersection);
+    // alert(`User clicked (${intersection.x}, ${intersection.y}, ${intersection.z}), rendering specs at position (${position.x}, ${position.y}, ${position.z})`);
+    setRender(true);
   }
 
-  moveAvocadoDown() {
-    this.setState((state) => ({
-      ...state,
-      avocadoYPos: state.avocadoYPos - 0.5,
-    }));
-  }
+  function logPointerLocation(event) {
+    console.log(event.point);
+  } 
 
-  moveAvocadoUp() {
-    this.setState((state) => ({
-      ...state,
-      avocadoYPos: state.avocadoYPos + 0.5,
-    }));
-  }
-
-  increaseAvocadoSize() {
-    this.setState((state) => ({
-      ...state,
-      avocadoScaling: state.avocadoScaling + 0.1,
-    }));
-  }
-
-  decreaseAvocadoSize() {
-    this.setState((state) => ({
-      ...state,
-      avocadoScaling: state.avocadoScaling - 0.1,
-    }));
-  }
-
-  onModelLoaded = (model, sceneContext) => {
-    let mesh = model.meshes[1];
-    mesh.actionManager = new ActionManager(mesh._scene);
-    mesh.actionManager.registerAction(
-      new SetValueAction(
-        ActionManager.OnPointerOverTrigger,
-        mesh.material,
-        "wireframe",
-        true
-      )
-    );
-    mesh.actionManager.registerAction(
-      new SetValueAction(
-        ActionManager.OnPointerOutTrigger,
-        mesh.material,
-        "wireframe",
-        false
-      )
-    );
-  };
-
-  render() {
-    let baseUrl = 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/'
+  if (!renderSpecs) {
     return (
-      <Engine antialias adaptToDeviceRatio canvasId="babylonJS">
-        <Scene>
-          <arcRotateCamera
-            name="camera1"
-            alpha={Math.PI / 2}
-            beta={Math.PI / 2}
-            radius={9.0}
-            target={Vector3.Zero()}
-            minZ={0.001}
-          />
-          <hemisphericLight
-            name="light1"
-            intensity={0.7}
-            direction={Vector3.Up()}
-          />
-
-          {/* <ScaledModelWithProgress
-            rootUrl={`${baseUrl}BoomBox/glTF/`}
-            sceneFilename="BoomBox.gltf"
-            scaleTo={3}
-            progressBarColor={Color3.FromInts(255, 165, 0)}
-            center={new Vector3(2.5, 0, 0)}
-            onModelLoaded={this.onModelLoaded}
-          /> */}
-
-          <Suspense
-            fallback={
-              <boxnp
-                name="fallback"
-                position={new Vector3(-2.5, this.state.avocadoYPos, 0)}
-              />
-            }
-          >
-            <Model
-              rootUrl={`${baseUrl}Avocado/glTF/`}
-              sceneFilename="Avocado.gltf"
-              scaleToDimension={this.state.avocadoScaling}
-              position={new Vector3(-2.5, this.state.avocadoYPos, 0)}
-            />
-          </Suspense>
-        </Scene>
-      </Engine>
-    );
+      <>
+      <mesh onClick={onClick}>
+        <primitive object={felice} {...props} />
+        <meshStandardMaterial
+          map={feliceColor} 
+        />
+      </ mesh>
+      </>
+    )
+  } 
+  else {
+    alert(`rendering spectacles at positon (${position.x}, ${position.y}, ${position.z})`)
+    return (
+      <>
+      <mesh onClick={onClick} position={[0, 0, 0]}>
+        <primitive object={felice} {...props} />
+        <meshStandardMaterial
+          map={feliceColor} 
+        />
+      </mesh>
+      <mesh position={position} scale={0.5}>
+        <primitive object={specs} rotation={[-Math.PI / 2, 0, 0]} />
+      </mesh>
+      </>
+    )
   }
 }
 
-export const ModelStory = () => (
-  <div style={{ flex: 1, display: "flex" }}>
-    <WithModel />
-  </div>
-);
-
-ModelStory.story = {
-  name: "3D-Model",
-};
+export default function App() {
+  return (
+    <Canvas shadows >
+      <Suspense fallback={null}>
+      <color attach="background"  />
+        <PresentationControls speed={1.5} polar={[-0.1, Math.PI / 4]}>
+          <Stage environment={null} intensity={1} contactShadow={false} shadowBias={-0.0015}>
+            <Model scale={0.5} />
+          </Stage>
+        </PresentationControls>
+      </Suspense>
+    </Canvas>
+  )
+}
