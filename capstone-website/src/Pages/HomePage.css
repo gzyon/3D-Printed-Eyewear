@@ -1,0 +1,13 @@
+body{
+    background-color: #FFFDF6;
+    font-family: Roboto;
+}
+
+
+img.bigPic{
+    max-width:-webkit-fill-available;
+}
+
+img.smallPic{
+    max-width:inherit;
+}
