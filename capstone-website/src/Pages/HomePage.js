@@ -3,9 +3,7 @@ import React from 'react'
 import Header from '../Components/Header/Header'
 import Footer from '../Components/Footer/Footer'
 import Toolbar from '@mui/material/Toolbar';
-import PropTypes from 'prop-types';
 import CssBaseline from '@mui/material/CssBaseline';
-import useScrollTrigger from '@mui/material/useScrollTrigger';
 import Abc from '@mui/icons-material/Abc'
 import './HomePage.css';
 
@@ -158,15 +156,14 @@ const HomePage = (props) => {
                             </Grid>
                         </Grid>
                 <Typography
-                    variant="h6"
+                    variant="h4"
                     component="div"
                     m={2}
                     display="flex"
                     justifyContent="center"
                     align='center'
                 >
-                    <b>Description of current problems faced by our user and the motivation of
-                    why our product is needed</b>
+                    <b>What are the problems faced?</b>
                 </Typography>
 
                 <Divider variant="middle" />
@@ -290,8 +287,8 @@ const HomePage = (props) => {
                     </List>
                 </Box>
             </Container>
-            <Box p="30px" sx={{backgroundColor: '#EAE79B'}}>
-                <Divider variant="middle"/>
+            <Box p="30px" sx={{backgroundColor: '#4E542C'}}>
+                <Divider sx={{ bgcolor: "#EAE79B" }} variant="middle"/>
                     <Footer/>                
             </Box>
         </React.Fragment>

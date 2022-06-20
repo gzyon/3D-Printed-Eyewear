@@ -22,7 +22,7 @@ const Socials = ({just}) => {
       >
         <HomeIcon
           className={"Home"}
-          style={{ color: '#4E542C' }}
+          style={{ color: '#EAE79B' }}
         />
       </Grid>
       <Grid
@@ -33,7 +33,7 @@ const Socials = ({just}) => {
       >
         <FacebookIcon
           className={"Facebook"}
-          style={{ color: '#4E542C' }}
+          style={{ color: '#EAE79B' }}
         />
       </Grid>
       <Grid
@@ -44,7 +44,7 @@ const Socials = ({just}) => {
       >
         <InstagramIcon
           className={"Instagram"}
-          style={{ color: '#4E542C' }}
+          style={{ color: '#EAE79B' }}
         />
       </Grid>
       <Grid
@@ -55,7 +55,7 @@ const Socials = ({just}) => {
       >
         <GitHubIcon
           className={"Github"}
-          style={{ color: '#4E542C' }}
+          style={{ color: '#EAE79B' }}
         />
       </Grid>
       {/* add social media*/}
