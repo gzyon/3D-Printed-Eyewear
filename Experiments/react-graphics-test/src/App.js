@@ -30,6 +30,12 @@ const Model = (props) => {
 
   // spectacles
   const specs = useLoader(OBJLoader, "Body2.obj");
+  let specs_geom;
+  specs.traverse( function(child) {
+    if (child.geometry !== undefined) {
+      specs_geom = child.geometry;
+    }
+  })
 
   function onClick(event) {
     console.log(event);
@@ -79,9 +85,9 @@ const Model = (props) => {
           map={feliceColor} 
         />
       </mesh>
-      <mesh position={position} scale={0.5}>
-        <primitive object={specs} rotation={[-Math.PI / 2, 0, 0]} />
-      </mesh>
+      <mesh position={position} scale={0.5} rotation={[-Math.PI / 2, 0, 0]} geometry={specs_geom}>
+        <meshStandardMaterial attach="material" color={0xff0000} /> {/*change material color here*/}
+      </mesh> 
       </>
     )
   }
