@@ -85,7 +85,7 @@ const HomePage = (props) => {
                                         <b>Customisable, Ergonomic eyewear</b>
                                     </Typography>
                                     <Typography variant="body1" component="body1" color="darkGreen">
-                                        Here at Olive Eyecare and Wellness, we are invested in the comfort and aesthetics of our customers eyewear. We believe that eyewear can be both stylish and comfortable at the same time. With our unique 3D rendering technology and state-of-the-art AI, we will generate eyewear most suited for our customers.
+                                        Here at Olive Eyecare and Wellness, we are invested in the comfort and aesthetics of our customers' eyewear. We believe that eyewear can be both stylish and comfortable at the same time. With our unique 3D rendering technology and state-of-the-art AI, we will generate eyewear most suited for our customers.
                                     </Typography>
                                     <Grid columns={2} mt={4}>
                                         <Button m={2} variant="contained" color="darkGreen">Purchase Now</Button>
@@ -136,7 +136,7 @@ const HomePage = (props) => {
                             >
                                 <Box>
                                     <Typography variant="h3" component="h1" color="#14140A" >
-                                        <b> Comfort, Convenient & Customisable</b>
+                                        <b> Comfort, Convenience & Customisable</b>
                                     </Typography>
                                     <Typography variant="body1" component="body1" color="darkGreen">
                                         In order to optimise the <b>3Cs</b> of eyewear, we utilised state-of-the-art technology that allows us to generate the best fitting eyewear for the users, based on their demographics. In addition, users are able to visualise the eyewear immediately on the 3D render of their faces and based on their style and preferences they can freely customise the eyewear.
@@ -173,21 +173,29 @@ const HomePage = (props) => {
                     justifyContent="center"
                     align='center'
                 >
-                    <b>What are the problems faced?</b>
+                    <b>What do we aim to solve?</b>
                 </Typography>
 
                 <Divider variant="middle" />
 
                 <Box m={3} display="flex" justifyContent="center">
-                    <Grid sx={{ width: 0.8, m: 2 }} spacing={3} container>
+                    <Grid sx={{ width: 0.8, m: 2}} spacing={3} container>
                         <Grid
                             item
                             xs
                             display="flex"
                             justifyContent={'left'}
                             alignItems="center"
+                            paddingRight={3}
                         >
-                            <Typography>Thing 1</Typography>
+                            <Typography variant='h5'>
+                                <b>Facial Asymmetry</b>
+                                <br></br>
+                                <br></br>
+                                <Typography>Almost everyone has some degree of asymmetry on our face. However, other factors like injury, aging and smoking can contribute to more obvious asymmetry in our faces. These asymmetry result in the fast-fashion eyewear to not rest perfectly on our facial contours and hence result in discomfort.</Typography>
+                            </Typography>
+                            
+                            
                         </Grid>
                         {/* <Grid item xs> */}
                         <Divider orientation="vertical" variant="middle" flexItem />
@@ -210,8 +218,9 @@ const HomePage = (props) => {
                             item
                             xs
                             display="flex"
-                            justifyContent={'left'}
+                            justifyContent={'right'}
                             alignItems="center"
+                            paddingRight={3}
                         >
                             <img src={landingImage} className='smallPic'/>  {/* replace with own image later */}
                         </Grid>
@@ -224,16 +233,27 @@ const HomePage = (props) => {
                             display="flex"
                             justifyContent={'center'}
                             alignItems="center"
+                            paddingLeft={3}
                         >
-                            <Typography>Thing 2</Typography>
+                            <Typography variant='h5'>
+                                <b>Representation of Comfort</b>
+                                <br></br>
+                                <br></br>
+                                <Typography>While comfort is deeply personal to each and every person. Using Big Data and AI technology, we are able to draw hidden insights that perhaps one's preference in comfort may not be as unique as we may think it is. Depending on one's previous eyewear weight and size and the user's demographic, we are able to predict the comfortability factor of a current design at a particular dimension.</Typography>
+                            </Typography>
                         </Grid>
                     </Grid>
                 </Box>
 
                 <Box m={3} display="flex" justifyContent="center">
                     <Grid sx={{ width: 0.8, m: 2 }} spacing={3} container>
-                        <Grid item xs display="flex" justifyContent={'left'}>
-                            <Typography>Thing 3</Typography>
+                        <Grid item xs display="flex" justifyContent={'center'} alignItems="center" paddingRight={3}>
+                            <Typography variant='h5'>
+                                <b>Representation of Comfort</b>
+                                <br></br>
+                                <br></br>
+                                <Typography>While comfort is deeply personal to each and every person. Using Big Data and AI technology, we are able to draw hidden insights that perhaps one's preference in comfort may not be as unique as we may think it is. Depending on one's previous eyewear weight and size and the user's demographic, we are able to predict the comfortability factor of a current design at a particular dimension.</Typography>
+                            </Typography>
                         </Grid>
                         {/* <Grid item xs> */}
                         <Divider orientation="vertical" variant="middle" flexItem />
