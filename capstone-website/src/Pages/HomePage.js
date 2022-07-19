@@ -245,30 +245,7 @@ const HomePage = (props) => {
                     </Grid>
                 </Box>
 
-                <Box m={3} display="flex" justifyContent="center">
-                    <Grid sx={{ width: 0.8, m: 2 }} spacing={3} container>
-                        <Grid item xs display="flex" justifyContent={'center'} alignItems="center" paddingRight={3}>
-                            <Typography variant='h5'>
-                                <b>Representation of Comfort</b>
-                                <br></br>
-                                <br></br>
-                                <Typography>While comfort is deeply personal to each and every person. Using Big Data and AI technology, we are able to draw hidden insights that perhaps one's preference in comfort may not be as unique as we may think it is. Depending on one's previous eyewear weight and size and the user's demographic, we are able to predict the comfortability factor of a current design at a particular dimension.</Typography>
-                            </Typography>
-                        </Grid>
-                        {/* <Grid item xs> */}
-                        <Divider orientation="vertical" variant="middle" flexItem />
-                        {/* </Grid> */}
-                        <Grid
-                            item
-                            xs
-                            display="flex"
-                            justifyContent={'center'}
-                            alignItems="center"
-                        >
-                            <img src={landingImage} className='smallPic'/>  {/* replace with own image later */}
-                        </Grid>
-                    </Grid>
-                </Box>
+                
 
                 <Divider variant="middle" />
 
@@ -286,7 +263,8 @@ const HomePage = (props) => {
                             <ListItemText
                                 disableTypography
                                 primary={<Typography fontSize={20} type="body1" style={{ color: '#4E542C' }}><b>1. Scan Your Face</b></Typography>}
-                                secondary={<Typography fontSize={15} type="body2" style={{ color: '#4E542C' }}>Short description of scanning process</Typography>}
+                                secondary={<Typography fontSize={15} type="body2" style={{ color: '#4E542C' }}>Download photogrammetry app <a href='https://poly.cam/'>Polycam</a> and take a 3d scan of your face. Upload the file <a>here</a>.
+                                </Typography>}
                                 
                             />
                         </ListItem>
@@ -294,7 +272,7 @@ const HomePage = (props) => {
                             <ListItemText
                                 disableTypography
                                 primary={<Typography fontSize={20} type="body1" style={{ color: '#4E542C' }}><b>2. Select Your Favourite Frame Design</b></Typography>}
-                                secondary={<Typography fontSize={15} type="body2" style={{ color: '#4E542C' }}>Short description of virtual try-on</Typography>}
+                                secondary={<Typography fontSize={15} type="body2" style={{ color: '#4E542C' }}>Select your favourite colour, material and design. See how it looks on the 3D render.</Typography>}
                                 
                             />
                         </ListItem>
@@ -302,7 +280,7 @@ const HomePage = (props) => {
                             <ListItemText
                                 disableTypography
                                 primary={<Typography fontSize={20} type="body1" style={{ color: '#4E542C' }}><b>3. Receive Your New Frame</b></Typography>}
-                                secondary={<Typography fontSize={15} type="body2" style={{ color: '#4E542C' }}>Short description of production and home delivery</Typography>}
+                                secondary={<Typography fontSize={15} type="body2" style={{ color: '#4E542C' }}>The glasses will be sent for 3D printing and it will be delivered to your doorstep.</Typography>}
                                 
                             />
                         </ListItem>
@@ -310,7 +288,7 @@ const HomePage = (props) => {
                             <ListItemText
                                 disableTypography
                                 primary={<Typography fontSize={20} type="body1" style={{ color: '#4E542C' }}><b>4. Fine Tuning of Frame</b></Typography>}
-                                secondary={<Typography fontSize={15} type="body2" style={{ color: '#4E542C' }}>Short description of how to adjust intricate pieces</Typography>}
+                                secondary={<Typography fontSize={15} type="body2" style={{ color: '#4E542C' }}>Come down to the store to fine tune the intricate parts like the nose piece if it is not perfectly comfortable.</Typography>}
                                 
                             />
                         </ListItem>
