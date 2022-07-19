@@ -2,7 +2,7 @@ import React from 'react'
 import { Typography, Box } from '@mui/material'
 const DescItem = ({ title, content, icon }) => {
     return (
-        <Box py={4}>
+        <Box py={3}>
             {icon}
             <Typography variant='h6' component='h6'>
                 <b>{title}</b>

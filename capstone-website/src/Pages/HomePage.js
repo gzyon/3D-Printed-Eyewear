@@ -17,6 +17,8 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 // icons
 import AccessAlarmOutlinedIcon from '@mui/icons-material/AccessAlarmOutlined';
+import TuneIcon from '@mui/icons-material/Tune';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 const { palette } = createTheme();
 const { augmentColor } = palette;
@@ -80,11 +82,10 @@ const HomePage = (props) => {
                             >
                                 <Box>
                                     <Typography variant="h3" component="h1" color="#14140A">
-                                        <b>Introduce Your Product Quickly & Effectively</b>
+                                        <b>Customisable, Ergonomic eyewear</b>
                                     </Typography>
                                     <Typography variant="body1" component="body1" color="darkGreen">
-                                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus 
-    mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
+                                        Here at Olive Eyecare and Wellness, we are invested in the comfort and aesthetics of our customers eyewear. We believe that eyewear can be both stylish and comfortable at the same time. With our unique 3D rendering technology and state-of-the-art AI, we will generate eyewear most suited for our customers.
                                     </Typography>
                                     <Grid columns={2} mt={4}>
                                         <Button m={2} variant="contained" color="darkGreen">Purchase Now</Button>
@@ -119,47 +120,49 @@ const HomePage = (props) => {
                                 item
                                 xs={8}
                                 display="flex"
-                                justifyContent={'left'}
-                                alignItems="center"
-                            >
-                                <Box>
-                                    <Typography variant="h3" component="h1" color="#14140A" ref={ref}>
-                                        <b>Light, Fast & Powerful</b>
-                                    </Typography>
-                                    <Typography variant="body1" component="body1" color="darkGreen">
-                                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus 
-    mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
-                                    </Typography>
-                                    <Grid container columns={2} mt={4} direction='column' display='-webkit-inline-box'>
-                                        <Grid item m='32px 32px 32px 0px' maxWidth='200px' minWidth='200px'>
-                                            <DescItem title='Convenience'
-                                                content=' Lorem ipsum dolor sit amet, consectetuer adipisc'
-                                                icon={<AccessAlarmOutlinedIcon fontSize='large' color="darkGreen"/>}
-                                            />
-                                         </Grid>
-                                        <Grid item m='32px 32px 32px 0px' maxWidth='200px' minWidth='200px'>
-                                        <DescItem title='Comfort' content='lorem ipsum'
-                                            icon={<AccessAlarmOutlinedIcon fontSize='large' color="darkGreen"/>}
-                                        />
-                                        </Grid>
-                                        <Grid item m='32px 32px 32px 0px' maxWidth='200px' minWidth='200px'>
-                                        <DescItem title='Customisability' content='lorem ipsum'
-                                            icon={<AccessAlarmOutlinedIcon fontSize='large' color="darkGreen"/>}
-                                        />
-                                        </Grid>
-                                    </Grid>
-
-                                </Box>
-                            </Grid>
-                            <Grid
-                                item
-                                xs={8}
-                                display="flex"
                                 justifyContent={'center'}
                                 alignItems={'center'}
                             >
                                 <img src={landingImage} className="bigPic"/>  
                                 {/* <Abc fontSize="large" /> replace with own image later */}
+                            </Grid>
+                            <Grid
+                                item
+                                xs={8}
+                                display="flex"
+                                justifyContent={'left'}
+                                alignItems="center"
+                                ref={ref}
+                            >
+                                <Box>
+                                    <Typography variant="h3" component="h1" color="#14140A" >
+                                        <b> Comfort, Convenient & Customisable</b>
+                                    </Typography>
+                                    <Typography variant="body1" component="body1" color="darkGreen">
+                                        In order to optimise the <b>3Cs</b> of eyewear, we utilised state-of-the-art technology that allows us to generate the best fitting eyewear for the users, based on their demographics. In addition, users are able to visualise the eyewear immediately on the 3D render of their faces and based on their style and preferences they can freely customise the eyewear.
+                                    </Typography>
+                                    <Grid container columns={2} spacing={2} mt={4} direction='column' display='-webkit-inline-box'>
+                                        <Grid item xs={1}>
+                                            <DescItem title='Comfort'
+                                                content='Using AI technology, we are able to generate the best fit for the user based on their demographic information.'
+                                                icon={<AutoAwesomeIcon fontSize='large' color="darkGreen"/>}
+                                            />
+                                         </Grid>
+                                        <Grid item xs={1}>
+                                        <DescItem title='Convenience' 
+                                            content='Customising and generation of the eyewear is done entirely online.'
+                                            icon={<AccessAlarmOutlinedIcon fontSize='large' color="darkGreen"/>}
+                                        />
+                                        </Grid>
+                                        <Grid item xs={1}>
+                                        <DescItem title='Customisability' 
+                                            content='Users can select amongst the large variety of colours, material and design of their desired eyewear. Further personalisation like engraving and custom design is also an option in our 3D printed eyewear.'
+                                            icon={<TuneIcon fontSize='large' color="darkGreen"/>}
+                                        />
+                                        </Grid>
+                                    </Grid>
+
+                                </Box>
                             </Grid>
                         </Grid>
                 <Typography
