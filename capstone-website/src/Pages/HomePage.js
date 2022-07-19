@@ -1,5 +1,6 @@
 import { Typography, Grid, styled, Paper, Box, Button, Divider, List, ListItem, ListItemText, Container, BottomNavigation } from '@mui/material'
 import React from 'react'
+import {useRef} from 'react'
 import Header from '../Components/Header/Header'
 import Footer from '../Components/Footer/Footer'
 import Toolbar from '@mui/material/Toolbar';
@@ -50,6 +51,12 @@ const theme = createTheme({
 
 const HomePage = (props) => {
 
+    const ref = useRef(null);
+
+    const handleClick = () => {
+        ref.current?.scrollIntoView({behavior: 'smooth'});
+    };
+
     return (
         <StylesProvider injectFirst>
         <ThemeProvider theme={theme}>
@@ -86,7 +93,7 @@ const HomePage = (props) => {
                                                 margin: '8px 30px',
                                                 color: "#4E542C"
                                             }
-                                        } color="darkGreen">Learn More</Button>
+                                        } color="darkGreen" onClick={handleClick}>Learn More</Button>
                                     </Grid>
 
                                 </Box>
@@ -116,7 +123,7 @@ const HomePage = (props) => {
                                 alignItems="center"
                             >
                                 <Box>
-                                    <Typography variant="h3" component="h1" color="#14140A">
+                                    <Typography variant="h3" component="h1" color="#14140A" ref={ref}>
                                         <b>Light, Fast & Powerful</b>
                                     </Typography>
                                     <Typography variant="body1" component="body1" color="darkGreen">
