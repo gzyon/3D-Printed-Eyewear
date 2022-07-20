@@ -1,22 +1,24 @@
 import "./App.css";
-import React, { Component, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import React, { Suspense, useState } from "react";
 
 // three.js imports
 import * as THREE from "three";
-import { Canvas } from "@react-three/fiber";
-import { useLoader } from "@react-three/fiber";
-import { OrbitControls, PresentationControls, Stage } from "@react-three/drei";
+import { Canvas, useLoader } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import { DDSLoader } from "three-stdlib";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import GltfModel from "./GltfModel";
+import Specs from "./Specs";
+import FrameFront from "./FrameFront";
+import FrameLeft from "./FrameLeft";
+import FrameRight from "./FrameRight";
 
 THREE.DefaultLoadingManager.addHandler(/\.dds$/i, new DDSLoader());
 
 let scale = 1;
-let spec_scale = 0.9;
+let spec_scale = 1;
 
 /**
  * 
@@ -83,7 +85,10 @@ const getEarPositions = (geometry, renderedOrigin, comparedGeometry) => {
 const Model = (props) => {
   
   const [position, setPosition] = useState([]);
+  const [leftEar, setLeftEar] = useState([]);
+  const [rightEar, setRightEar] = useState([]);
   const [renderSpecs, setRender] = useState(false);
+  const [clicks, setClicks] = useState(1);
   const [rotation, setRotation] = useState([]);
 
   // felice
@@ -101,7 +106,7 @@ const Model = (props) => {
   });
   felice_geom = preprocessMesh(felice_geom);
   const phi = Math.atan(felice_geom.boundingBox.max.z/felice_geom.boundingBox.max.x);
-  console.log("felice geom: ", felice_geom);
+  // console.log("felice geom: ", felice_geom);
 
   // spectacles
   const specsModel = useLoader(OBJLoader, "Body2.obj");
@@ -112,7 +117,7 @@ const Model = (props) => {
   specs_geom = preprocessMesh(specs_geom);
   const theta = Math.atan(specs_geom.boundingBox.max.z/specs_geom.boundingBox.max.y);
   // specs_geom.translate(0, 0, specs_geom.boundingBox.min.z);
-  console.log(specs_geom.boundingBox);
+  // console.log(specs_geom.boundingBox);
 
   // gltf files
   // const gltf = useLoader(GLTFLoader, 'poly.glb')
@@ -125,47 +130,81 @@ const Model = (props) => {
   // });
   // gltf_geom = preprocessMesh(gltf_geom);
   // console.log("gltf geom", gltf_geom);
-  
-  function logPointerLocation(event) {
-    console.log(event.point);
-  } 
 
   function onClick(event) {
     console.log(event);
-    console.log(specs_geom.boundingBox.min.z);
-    setPosition([event.point.x, event.point.y , (event.point.z + 1) + (specs_geom.boundingBox.min.y * spec_scale)]);
-    setRender(true);
+    setClicks(clicks + 1);
+    console.log(clicks);
+    // setPosition([event.point.x, event.point.y , (event.point.z + 20) * spec_scale]);
+    if (clicks % 3 == 1) {
+      setPosition([event.point.x, event.point.y, (event.point.z + 10) * spec_scale]);
+    } 
+    else if (clicks % 3 == 2) {
+      setLeftEar([event.point.x, event.point.y, event.point.z]);
+      // setRender(true);
+    }
+    else if (clicks % 3 == 0) {
+      setRightEar([event.point.x, event.point.y, event.point.z]);
+      setRender(true);
+    }
   }
 
+  const p = [0, 0, 0];
+  const points = new THREE.BufferAttribute(new Float32Array(p), 3);
   if (!renderSpecs) {  
     // getEarPositions(felice_geom, position, specs_geom);
     return (
-      <mesh onClick={onClick} rotation={[theta, theta/2, 0]} position={[0, 0, 0]} geometry={felice_geom} scale={scale}>
-        <meshStandardMaterial
-          map={feliceColor} 
-        />
-      </mesh>
-      // <GltfModel onClick={onClick} />
-      // <mesh position={[0, 0, 0]} geometry={gltf_geom} >
-      //   <meshStandardMaterial attach="material" />
+      // hires artec scan
+      // <mesh onClick={onClick} rotation={[theta, theta/2, 0]} position={[0, 0, 0]} geometry={felice_geom} scale={scale}>
+      //   <meshStandardMaterial
+      //     map={feliceColor} 
+      //   />
       // </mesh>
+
+      // lowres polycam scan
+      <GltfModel position={[0,-150,0]} onClick={onClick} scale={1250} />
+      // <FrameRight position={[0, 0, 0]} rotation={[-Math.PI / 2, 2 * (-Math.PI / 180), -Math.PI / 2]} scale={spec_scale} />
+      // <>
+      // <primitive object={new THREE.AxesHelper(2)} />
+      // <points>
+      //   <bufferGeometry>
+      //       <bufferAttribute attach={"attributes-position"} {...points} />
+      //   </bufferGeometry>
+      //   <pointsMaterial
+      //       size={1}
+      //       color={0xff00ff}
+      //       sizeAttenuation={true}
+      //   />
+      // </points>
+      // </>
     )
   }
   else {
     // getEarPositions(felice_geom, position, specs_geom);
     console.log(`rendering spectacles at positon (${position})`)
     return (
+      // (-2 + phi/2)
       <>
-      <mesh onClick={onClick} rotation={[theta, theta/2, 0]} position={[0, 0, 0]} geometry={felice_geom} scale={scale}>
-        <meshStandardMaterial
-          map={feliceColor} 
-        />
-      </mesh> 
-      <GltfModel onClick={onClick} />
-      <mesh onClick={logPointerLocation} rotation={[-Math.PI / 2 , 0, 0]} position={position} geometry={specs_geom} scale={spec_scale}>
-        <meshStandardMaterial attach="material" color={0xff0000} /> {/*change material color here*/}
-      </mesh> 
+        <GltfModel position={[0,-150,0]} onClick={onClick} scale={1250} />
+        <primitive object={new THREE.AxesHelper(100)} />
+        {/* <FrameFront position={position} rotation={[-Math.PI / 2, 2 * (-Math.PI / 180), -Math.PI / 2]} scale={spec_scale} />
+        <FrameRight position={leftEar} rotation={[-Math.PI / 2, 2 * (-Math.PI / 180), -Math.PI / 2]} scale={spec_scale} /> */}
+        <Specs rotation={[-Math.PI / 2, 2 * (-Math.PI / 180), -Math.PI / 2]} scale={spec_scale} position={position} leftPosition={leftEar} rightPosition={rightEar} preprocessor={preprocessMesh}/>
       </>
+
+      // hires artec scan
+      // <>
+      // <mesh onClick={onClick} rotation={[theta, theta/2, 0]} position={[0, 0, 0]} geometry={felice_geom} scale={scale}>
+      //   <meshStandardMaterial
+      //     map={feliceColor} 
+      //   />
+      // </mesh>
+
+      // old specs model
+      // <mesh onClick={logPointerLocation} rotation={[-Math.PI / 2 , 0, 0]} position={position} geometry={specs_geom} scale={spec_scale}>
+      //   <meshStandardMaterial attach="material" color={0xff0000} /> 
+      // </mesh>
+      // </>
     )
   }
 }
@@ -173,10 +212,8 @@ const Model = (props) => {
 export default function App() {
   return (
     // <Canvas shadows >
-    <Canvas camera={ { fov: 90, position: [0, 0, 300] } }>
-    {/* <Canvas camera={ { fov: 90, position: [0, 0, 1] } }> */}
+    <Canvas camera={{ position: [0, 0, 400] }}>
       <ambientLight />
-      <primitive object={new THREE.AxesHelper(2)} />
       <Suspense fallback={null} >
           <Model />
           <OrbitControls />

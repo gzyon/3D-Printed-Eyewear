@@ -9,8 +9,8 @@ export default function GltfModel({ ...props }) {
   const group = useRef();
   const { nodes, materials } = useGLTF("/poly.glb");
   return (
-    <group ref={group} dispose={null}>
-      <mesh {...props}
+    <group ref={group} dispose={null} {...props}>
+      <mesh 
         rotation={[0, Math.PI / 2, 0]}
         castShadow
         receiveShadow
