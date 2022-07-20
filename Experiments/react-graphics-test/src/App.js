@@ -25,7 +25,7 @@ let spec_scale = 1;
  * @param {THREE.Group} object 
  * @returns {THREE.BufferGeometry}
  */
-function preprocessMesh(object) {
+function removeWhiteSpace(object) {
   var center = new THREE.Vector3;
   object.computeBoundingBox();
   object.boundingBox.getCenter(center);
@@ -33,53 +33,6 @@ function preprocessMesh(object) {
   // object.rotateX(theta);
   object.boundingBox.getCenter(center);
   return object;
-}
-
-/**
- * @param {THREE.BufferGeometry} geometry 
- * @param {Array} renderedOrigin
- * @param {THREE.BufferGeometry} comparedGeometry
- */
-const getEarPositions = (geometry, renderedOrigin, comparedGeometry) => {
-  let iteratedPoints = 0;
-  let leftEar = new THREE.Vector3(renderedOrigin[0], renderedOrigin[1], renderedOrigin[2]);
-  let rightEar = new THREE.Vector3(renderedOrigin[0], renderedOrigin[1], renderedOrigin[2]);
-  const positionAttribute = geometry.getAttribute('position');
-  const point = new THREE.Vector3();
-  console.log(leftEar, rightEar);
-  console.log("total points: " + positionAttribute.count);
-  for (let i=0; i<positionAttribute.count; i++) {
-    point.fromBufferAttribute(positionAttribute, i);
-    // if (point.x <= renderedOrigin[0] + comparedGeometry.boundingBox.max.x && point.x >= renderedOrigin[0] + comparedGeometry.boundingBox.min.x) {
-    if (point.y <= comparedGeometry.boundingBox.max.y && point.y >= comparedGeometry.boundingBox.min.y) {
-      // if (point.z <= renderedOrigin[2] + comparedGeometry.boundingBox.max.z && point.z >= renderedOrigin[2] + comparedGeometry.boundingBox.min.z) {
-      iteratedPoints++;
-      if (point.x < leftEar.x) leftEar = point;
-      else if (point.x > rightEar.x) rightEar = point;
-        // }
-      // }
-    }
-  }
-  console.log(leftEar, rightEar);
-  console.log("num points iterated: " + iteratedPoints);
-
-  // const positions = new Float32Array([leftEar.x, leftEar.y, leftEar.z], [rightEar.x, rightEar.y, rightEar.z]);
-  // const points = new THREE.BufferAttribute(positions, 3);
-
-  // return ( 
-  //   <points>
-  //     <bufferGeometry 
-  //       attach="attributes-position"
-  //       {...points}
-  //     />
-  //     <pointsMaterial
-  //       size={0.1}
-  //       threshold={0.1}
-  //       color={0xff00ff}
-  //       sizeAttenuation={true}
-  //     />
-  //   </points>
-  // )
 }
 
 const Model = (props) => {
@@ -98,13 +51,12 @@ const Model = (props) => {
     feliceMtl.preload();
     loader.setMaterials(feliceMtl);
   })
-  console.log(felice);
   let felice_geom;
   felice.traverse(function(child) {
     if (child.geometry != undefined) 
       felice_geom = child.geometry;
   });
-  felice_geom = preprocessMesh(felice_geom);
+  felice_geom = removeWhiteSpace(felice_geom);
   const phi = Math.atan(felice_geom.boundingBox.max.z/felice_geom.boundingBox.max.x);
   // console.log("felice geom: ", felice_geom);
 
@@ -114,7 +66,7 @@ const Model = (props) => {
   specsModel.traverse(function(child) {
     specs_geom = child.geometry;
   });
-  specs_geom = preprocessMesh(specs_geom);
+  specs_geom = removeWhiteSpace(specs_geom);
   const theta = Math.atan(specs_geom.boundingBox.max.z/specs_geom.boundingBox.max.y);
   // specs_geom.translate(0, 0, specs_geom.boundingBox.min.z);
   // console.log(specs_geom.boundingBox);
@@ -149,8 +101,6 @@ const Model = (props) => {
     }
   }
 
-  const p = [0, 0, 0];
-  const points = new THREE.BufferAttribute(new Float32Array(p), 3);
   if (!renderSpecs) {  
     // getEarPositions(felice_geom, position, specs_geom);
     return (
@@ -163,19 +113,9 @@ const Model = (props) => {
 
       // lowres polycam scan
       <GltfModel position={[0,-150,0]} onClick={onClick} scale={1250} />
-      // <FrameRight position={[0, 0, 0]} rotation={[-Math.PI / 2, 2 * (-Math.PI / 180), -Math.PI / 2]} scale={spec_scale} />
       // <>
-      // <primitive object={new THREE.AxesHelper(2)} />
-      // <points>
-      //   <bufferGeometry>
-      //       <bufferAttribute attach={"attributes-position"} {...points} />
-      //   </bufferGeometry>
-      //   <pointsMaterial
-      //       size={1}
-      //       color={0xff00ff}
-      //       sizeAttenuation={true}
-      //   />
-      // </points>
+      // <primitive object={new THREE.AxesHelper(100)} />
+      // <Specs scale={spec_scale} position={[0, 0, 0]} leftPosition={leftEar} rightPosition={rightEar} preprocessor={removeWhiteSpace}/>
       // </>
     )
   }
@@ -186,10 +126,16 @@ const Model = (props) => {
       // (-2 + phi/2)
       <>
         <GltfModel position={[0,-150,0]} onClick={onClick} scale={1250} />
+        {/* <mesh onClick={onClick} rotation={[theta, theta/2, 0]} position={[0, 0, 0]} geometry={felice_geom} scale={scale}>
+          <meshStandardMaterial
+            map={feliceColor} 
+          />
+        </mesh> */}
         <primitive object={new THREE.AxesHelper(100)} />
         {/* <FrameFront position={position} rotation={[-Math.PI / 2, 2 * (-Math.PI / 180), -Math.PI / 2]} scale={spec_scale} />
         <FrameRight position={leftEar} rotation={[-Math.PI / 2, 2 * (-Math.PI / 180), -Math.PI / 2]} scale={spec_scale} /> */}
-        <Specs rotation={[-Math.PI / 2, 2 * (-Math.PI / 180), -Math.PI / 2]} scale={spec_scale} position={position} leftPosition={leftEar} rightPosition={rightEar} preprocessor={preprocessMesh}/>
+        <Specs scale={spec_scale} position={position} leftPosition={leftEar} rightPosition={rightEar} preprocessor={removeWhiteSpace}/>
+        {/* 2 * (-Math.PI / 180) */}
       </>
 
       // hires artec scan
