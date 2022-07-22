@@ -4,6 +4,7 @@ import { useLoader } from "@react-three/fiber";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
 const Specs = (props) => {
+    console.log(props);
     let frame_front, frame_leftCenter, frame_leftEnd, frame_rightCenter, frame_rightEnd;
 
     // helper functions
@@ -59,9 +60,6 @@ const Specs = (props) => {
     const frontCenter = new THREE.Vector3();
     frontCenterBox = front_geom.boundingBox;
     frontCenterBox.getCenter(frontCenter);
-    const y = props.leftPosition[1] - props.rightPosition[1];
-    const x = props.leftPosition[0] - props.rightPosition[0];
-    const theta = Math.atan(y/x);
 
     // frame left arm
     leftCenter_geom = centraliseMesh(getGeometry(frame_leftCenter), [0, -Math.PI / 4, 0]);
@@ -86,27 +84,54 @@ const Specs = (props) => {
     rightEndBox.getCenter(rightEndCenter);
 
     // math
+
+    //front frame 
+    // rotation
+    const y = (props.leftPosition[1] - props.rightPosition[1]);
+    const x = (props.leftPosition[0] - props.rightPosition[0]);
+    const theta = Math.atan(y/x);
+    console.log(theta);
+
+    // scale
+    const frontFrameScale = (Math.abs(x /(frontCenterBox.max.z * 2)) * 0.8) / 10;
+    // console.log(frontFrameScale);
+
+    // position
     const noseBridgePos = [props.position[0], props.position[1] - frontCenterBox.max.y, props.position[2]];
-    const leftHingePos = [props.position[0] - frontCenterBox.max.x, props.position[1], props.position[2] - frontCenterBox.max.z];
-    const rightHingePos = [props.position[0] + frontCenterBox.max.x, props.position[1], props.position[2] - frontCenterBox.max.z];
+    const leftHingePos = [props.position[0] - (frontCenterBox.max.x * frontFrameScale) + 5, (props.position[1]) * frontFrameScale - theta, props.position[2] - (frontCenterBox.max.z * frontFrameScale)];
+    const rightHingePos = [props.position[0] + (frontCenterBox.max.x * frontFrameScale) - 5, (props.position[1]) * frontFrameScale + theta, props.position[2] - (frontCenterBox.max.z * frontFrameScale)];
 
-    const leftCenterRenderPoint = [props.rightPosition[0] - (props.rightPosition[0] - rightHingePos[0]) / 2, props.rightPosition[1] + (props.position[1]-props.rightPosition[1]) / 2, props.rightPosition[2] + (props.position[2]-props.rightPosition[2]) / 2];
-    const rightCenterRenderPoint = [props.leftPosition[0] - (props.leftPosition[0] - leftHingePos[0]) / 2, props.leftPosition[1] + (props.position[1]-props.leftPosition[1]) / 2, props.leftPosition[2] + (props.position[2]-props.leftPosition[2]) / 2];
+    // left arm 
+    // render points
+    const leftCenterRenderPoint = [props.rightPosition[0] - (props.rightPosition[0] - rightHingePos[0]) / 2, props.rightPosition[1] + (props.position[1]-props.rightPosition[1]) / 2, props.rightPosition[2] + ((props.position[2]-props.rightPosition[2]) / 2)];
+    const leftArmEndRenderPoint = [props.rightPosition[0], props.rightPosition[1] - rightEndBox.max.y, props.rightPosition[2] - rightEndBox.max.z];
+    //  - rightEndBox.max.x
 
-    const currentLeftArmLength = leftCenterBox.max.z - leftCenterBox.min.z;
+    // scaling 
+    const currentLeftArmLength = rightCenterBox.max.z - rightCenterBox.min.z;
     const scaledleftArmLength = Math.sqrt(Math.pow(props.position[1]-props.rightPosition[1], 2) + Math.pow(props.position[2]-props.rightPosition[2], 2)) / currentLeftArmLength;
-    
-    const currentRightArmLength = rightCenterBox.max.z - rightCenterBox.min.z;
+
+    // rotation
+    const leftArmYRotation = Math.atan(Math.abs(rightHingePos[0] - props.rightPosition[0]) / Math.abs(rightHingePos[2] - props.rightPosition[2]));
+    const leftArmXRotation = Math.atan(Math.abs(rightHingePos[1] - props.rightPosition[1]) / Math.abs(rightHingePos[2] - props.rightPosition[2]));
+
+    // right arm 
+    // render points
+    const rightCenterRenderPoint = [props.leftPosition[0] - (props.leftPosition[0] - leftHingePos[0]) / 2, props.leftPosition[1] + (props.position[1]-props.leftPosition[1]) / 2, props.leftPosition[2] + (props.position[2]-props.leftPosition[2]) / 2];
+    const rightArmEndRenderPoint = [props.leftPosition[0], props.leftPosition[1] - leftEndBox.max.y, props.leftPosition[2] - leftEndBox.max.z];  
+    //  - leftEndBox.max.x
+
+    // scaling
+    const currentRightArmLength = leftCenterBox.max.z - leftCenterBox.min.z;
     const scaledRightArmLength = Math.sqrt(Math.pow(props.position[1]-props.leftPosition[1], 2) + Math.pow(props.position[2]-props.leftPosition[2], 2)) / currentRightArmLength;
 
-    const leftArmEndRenderPoint = [props.rightPosition[0] - rightEndBox.max.x, props.rightPosition[1] - rightEndBox.max.y, props.rightPosition[2] - rightEndBox.max.z];
-    const rightArmEndRenderPoint = [props.leftPosition[0] - leftEndBox.max.x, props.leftPosition[1] - leftEndBox.max.y, props.leftPosition[2] - leftEndBox.max.z];   
-
+    // rotation
+    const rightArmYRotation = Math.atan(Math.abs(leftHingePos[0] - props.leftPosition[0]) / Math.abs(leftHingePos[2] - props.leftPosition[2]));
+    const rightArmXRotation = Math.atan(Math.abs(leftHingePos[1] - props.leftPosition[1]) / Math.abs(leftHingePos[2] - props.leftPosition[2]));
 
     return (
         <>
-            <mesh geometry={front_geom} position={noseBridgePos} scale={props.scale} rotation={[0, -theta/2, 0]}>
-            {/* rotation={[props.rotation[0], props.rotation[1] - (theta/2), props.rotation[2]]} */}
+            <mesh geometry={front_geom} position={noseBridgePos} rotation={[0, 0, theta/2]}  scale={frontFrameScale}>
                 <meshStandardMaterial attach="material" color={0xff0000} /> 
             </mesh> 
             <mesh position={leftHingePos}>
@@ -115,19 +140,19 @@ const Specs = (props) => {
             </mesh> 
             <mesh position={rightHingePos}>
                 <boxGeometry args={[5, 5, 5]} />
-                <meshStandardMaterial color={'orange'} />
+                <meshStandardMaterial color={'blue'} />
             </mesh> 
-            <mesh geometry={leftCenter_geom} position={leftCenterRenderPoint} scale={[props.scale, props.scale, props.scale * scaledleftArmLength]}>
+            <mesh geometry={leftCenter_geom} position={leftCenterRenderPoint} scale={[props.scale, props.scale, props.scale * scaledleftArmLength]} rotation={[-leftArmXRotation, -leftArmYRotation, 0]}>
                 <meshStandardMaterial attach="material" color={0xff0000} /> 
             </mesh> 
-            <mesh geometry={leftEnd_geom} position={leftArmEndRenderPoint} scale={props.scale}>
+            <mesh geometry={leftEnd_geom} position={leftArmEndRenderPoint} scale={props.scale} >
                 <meshStandardMaterial attach="material" color={0xff0000} /> 
             </mesh>
             <mesh position={props.rightPosition}>
                 <boxGeometry args={[5, 5, 5]} />
                 <meshStandardMaterial color={'orange'} />
             </mesh> 
-            <mesh geometry={rightCenter_geom} position={rightCenterRenderPoint} scale={[props.scale, props.scale, props.scale * scaledRightArmLength]}>
+            <mesh geometry={rightCenter_geom} position={rightCenterRenderPoint} scale={[props.scale, props.scale, props.scale * scaledRightArmLength]} rotation={[-rightArmXRotation, rightArmYRotation, 0]}>
                 <meshStandardMaterial attach="material" color={0xff0000} /> 
             </mesh> 
             <mesh geometry={rightEnd_geom} position={rightArmEndRenderPoint} scale={props.scale}>

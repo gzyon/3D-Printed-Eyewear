@@ -18,7 +18,7 @@ import FrameRight from "./FrameRight";
 THREE.DefaultLoadingManager.addHandler(/\.dds$/i, new DDSLoader());
 
 let scale = 1;
-let spec_scale = 1;
+// let spec_scale = 1;
 
 /**
  * 
@@ -42,7 +42,8 @@ const Model = (props) => {
   const [rightEar, setRightEar] = useState([]);
   const [renderSpecs, setRender] = useState(false);
   const [clicks, setClicks] = useState(1);
-  const [rotation, setRotation] = useState([]);
+  // const [rotation, setRotation] = useState([]);
+  const [spec_scale, setScale] = useState(1);
 
   // felice
   const feliceMtl = useLoader(MTLLoader, "felice.mtl");
@@ -89,7 +90,7 @@ const Model = (props) => {
     console.log(clicks);
     // setPosition([event.point.x, event.point.y , (event.point.z + 20) * spec_scale]);
     if (clicks % 3 == 1) {
-      setPosition([event.point.x, event.point.y, (event.point.z + 10) * spec_scale]);
+      setPosition([event.point.x, event.point.y, (event.point.z + 5) * spec_scale]);
     } 
     else if (clicks % 3 == 2) {
       setLeftEar([event.point.x, event.point.y, event.point.z]);
@@ -100,6 +101,8 @@ const Model = (props) => {
       setRender(true);
     }
   }
+
+  // const frameScale = 4/5;
 
   if (!renderSpecs) {  
     // getEarPositions(felice_geom, position, specs_geom);
@@ -121,7 +124,8 @@ const Model = (props) => {
   }
   else {
     // getEarPositions(felice_geom, position, specs_geom);
-    console.log(`rendering spectacles at positon (${position})`)
+    console.log(`rendering spectacles at positon (${position})`);
+    console.log("specs scale: " + spec_scale);
     return (
       // (-2 + phi/2)
       <>
@@ -134,7 +138,7 @@ const Model = (props) => {
         <primitive object={new THREE.AxesHelper(100)} />
         {/* <FrameFront position={position} rotation={[-Math.PI / 2, 2 * (-Math.PI / 180), -Math.PI / 2]} scale={spec_scale} />
         <FrameRight position={leftEar} rotation={[-Math.PI / 2, 2 * (-Math.PI / 180), -Math.PI / 2]} scale={spec_scale} /> */}
-        <Specs scale={spec_scale} position={position} leftPosition={leftEar} rightPosition={rightEar} preprocessor={removeWhiteSpace}/>
+        <Specs scale={spec_scale} position={position} leftPosition={leftEar} rightPosition={rightEar} preprocessor={removeWhiteSpace} setScale={setScale} />
         {/* 2 * (-Math.PI / 180) */}
       </>
 
