@@ -14,7 +14,6 @@ import Specs from "./Specs";
 import { Button, Stack, Paper, Box, Grid } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import AlignmentButtons from "./AlignmentButtons";
-import ModelCanvas from "./ModelCanvas";
 
 THREE.DefaultLoadingManager.addHandler(/\.dds$/i, new DDSLoader());
 
