@@ -4,7 +4,7 @@ import { useLoader } from "@react-three/fiber";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
 const Specs = (props) => {
-    console.log(props);
+    // console.log(props);
     let frame_front, frame_leftCenter, frame_leftEnd, frame_rightCenter, frame_rightEnd;
 
     // helper functions
@@ -82,6 +82,7 @@ const Specs = (props) => {
     const rightEndCenter = new THREE.Vector3();
     rightEndBox = rightEnd_geom.boundingBox;
     rightEndBox.getCenter(rightEndCenter);
+    console.log(rightEndBox, rightEndCenter);
 
     // math
 
@@ -89,49 +90,55 @@ const Specs = (props) => {
     // rotation
     const y = (props.leftPosition[1] - props.rightPosition[1]);
     const x = (props.leftPosition[0] - props.rightPosition[0]);
+    const z = (props.leftPosition[2] - props.rightPosition[2]);
     const theta = Math.atan(y/x);
-    console.log(theta);
+    const phi = Math.atan(z/x);
 
     // scale
     const frontFrameScale = (Math.abs(x /(frontCenterBox.max.z * 2)) * 0.8) / 10;
-    // console.log(frontFrameScale);
+    console.log(frontFrameScale);
 
     // position
     const noseBridgePos = [props.position[0], props.position[1] - frontCenterBox.max.y, props.position[2]];
-    const leftHingePos = [props.position[0] - (frontCenterBox.max.x * frontFrameScale) + 5, (props.position[1]) * frontFrameScale - theta, props.position[2] - (frontCenterBox.max.z * frontFrameScale)];
-    const rightHingePos = [props.position[0] + (frontCenterBox.max.x * frontFrameScale) - 5, (props.position[1]) * frontFrameScale + theta, props.position[2] - (frontCenterBox.max.z * frontFrameScale)];
+    const yOffset = (frontCenterBox.max.x * frontFrameScale) * Math.sin(theta/2);
+    const xOffset = Math.sqrt(Math.pow(frontCenterBox.max.x, 2) - Math.pow(yOffset, 2));
+    const zOffset = ((frontCenterBox.max.x * 2) * frontFrameScale) * Math.sin(phi/2);
+    const leftHingePos = [props.position[0] - xOffset + 5, (props.position[1]) * frontFrameScale - yOffset, props.position[2] - (frontCenterBox.max.z * frontFrameScale) + 5 + zOffset];
+    const rightHingePos = [props.position[0] + xOffset - 5, (props.position[1]) * frontFrameScale + yOffset, props.position[2] - (frontCenterBox.max.z * frontFrameScale) + 5 + zOffset];
 
     // left arm 
+    // rotation
+    const leftArmYRotation = Math.atan((Math.abs(rightHingePos[0] - props.rightPosition[0])) / (Math.abs(rightHingePos[2] - props.rightPosition[2]) - 2.5));
+    const leftArmXRotation = Math.atan(Math.abs((rightHingePos[1] - 2.5) - props.rightPosition[1]) / Math.abs(rightHingePos[2] - props.rightPosition[2]));
+
     // render points
-    const leftCenterRenderPoint = [props.rightPosition[0] - (props.rightPosition[0] - rightHingePos[0]) / 2, props.rightPosition[1] + (props.position[1]-props.rightPosition[1]) / 2, props.rightPosition[2] + ((props.position[2]-props.rightPosition[2]) / 2)];
-    const leftArmEndRenderPoint = [props.rightPosition[0], props.rightPosition[1] - rightEndBox.max.y, props.rightPosition[2] - rightEndBox.max.z];
-    //  - rightEndBox.max.x
+    const leftCenterRenderPoint = [props.rightPosition[0] - (props.rightPosition[0] - rightHingePos[0]) / 2, props.rightPosition[1] + (rightHingePos[1]-props.rightPosition[1]) / 2, props.rightPosition[2] + ((rightHingePos[2]-props.rightPosition[2]) / 2) + 2.5];
+    const leftArmEndxOffset = (rightEndBox.max.y / 2) * Math.tan(leftArmYRotation);
+    const leftArmEndRenderPoint = [props.rightPosition[0] + leftArmEndxOffset, props.rightPosition[1] - rightEndBox.max.y, props.rightPosition[2] - rightEndBox.max.z + 5];
 
     // scaling 
     const currentLeftArmLength = rightCenterBox.max.z - rightCenterBox.min.z;
-    const scaledleftArmLength = Math.sqrt(Math.pow(props.position[1]-props.rightPosition[1], 2) + Math.pow(props.position[2]-props.rightPosition[2], 2)) / currentLeftArmLength;
-
-    // rotation
-    const leftArmYRotation = Math.atan(Math.abs(rightHingePos[0] - props.rightPosition[0]) / Math.abs(rightHingePos[2] - props.rightPosition[2]));
-    const leftArmXRotation = Math.atan(Math.abs(rightHingePos[1] - props.rightPosition[1]) / Math.abs(rightHingePos[2] - props.rightPosition[2]));
+    const leftArmDiagonalLength = Math.sqrt(Math.pow(rightHingePos[0] + 2.5 - props.rightPosition[0], 2) + Math.pow(rightHingePos[2] + 2.5 - props.rightPosition[2], 2));
+    const scaledleftArmLength = Math.sqrt(Math.pow(rightHingePos[1] + 2.5 - props.rightPosition[1], 2) + Math.pow(leftArmDiagonalLength, 2)) / currentLeftArmLength;
 
     // right arm 
+    // rotation
+    const rightArmYRotation = Math.atan(Math.abs(leftHingePos[0] - props.leftPosition[0]) / (Math.abs(leftHingePos[2] - props.leftPosition[2]) - 2.5));
+    const rightArmXRotation = Math.atan(Math.abs((leftHingePos[1] - 2.5) - props.leftPosition[1]) / Math.abs(leftHingePos[2] - props.leftPosition[2]));
+
     // render points
-    const rightCenterRenderPoint = [props.leftPosition[0] - (props.leftPosition[0] - leftHingePos[0]) / 2, props.leftPosition[1] + (props.position[1]-props.leftPosition[1]) / 2, props.leftPosition[2] + (props.position[2]-props.leftPosition[2]) / 2];
-    const rightArmEndRenderPoint = [props.leftPosition[0], props.leftPosition[1] - leftEndBox.max.y, props.leftPosition[2] - leftEndBox.max.z];  
-    //  - leftEndBox.max.x
+    const rightCenterRenderPoint = [props.leftPosition[0] - (props.leftPosition[0] - leftHingePos[0]) / 2, props.leftPosition[1] + (leftHingePos[1]-props.leftPosition[1]) / 2, props.leftPosition[2] + (leftHingePos[2]-props.leftPosition[2]) / 2 + 2.5]; 
+    const rightArmEndxOffset = (leftEndBox.max.y / 2) * Math.tan(rightArmXRotation);
+    const rightArmEndRenderPoint = [props.leftPosition[0] - rightArmEndxOffset, props.leftPosition[1] - leftEndBox.max.y - 2.5, props.leftPosition[2] - leftEndBox.max.z + 5]; 
 
     // scaling
     const currentRightArmLength = leftCenterBox.max.z - leftCenterBox.min.z;
-    const scaledRightArmLength = Math.sqrt(Math.pow(props.position[1]-props.leftPosition[1], 2) + Math.pow(props.position[2]-props.leftPosition[2], 2)) / currentRightArmLength;
-
-    // rotation
-    const rightArmYRotation = Math.atan(Math.abs(leftHingePos[0] - props.leftPosition[0]) / Math.abs(leftHingePos[2] - props.leftPosition[2]));
-    const rightArmXRotation = Math.atan(Math.abs(leftHingePos[1] - props.leftPosition[1]) / Math.abs(leftHingePos[2] - props.leftPosition[2]));
+    const rightArmDiagonalLength = Math.sqrt(Math.pow(leftHingePos[0] + 2.5 - props.leftPosition[0], 2) + Math.pow(leftHingePos[2] + 2.5 - props.leftPosition[2], 2));
+    const scaledRightArmLength = Math.sqrt(Math.pow(leftHingePos[1] + 2.5 - props.leftPosition[1], 2) + Math.pow(rightArmDiagonalLength, 2)) / currentRightArmLength;
 
     return (
         <>
-            <mesh geometry={front_geom} position={noseBridgePos} rotation={[0, 0, theta/2]}  scale={frontFrameScale}>
+            <mesh geometry={front_geom} position={noseBridgePos} rotation={[-(leftArmXRotation + rightArmXRotation) / 2, phi / 2, theta / 2]}  scale={frontFrameScale}>
                 <meshStandardMaterial attach="material" color={0xff0000} /> 
             </mesh> 
             <mesh position={leftHingePos}>
@@ -145,7 +152,7 @@ const Specs = (props) => {
             <mesh geometry={leftCenter_geom} position={leftCenterRenderPoint} scale={[props.scale, props.scale, props.scale * scaledleftArmLength]} rotation={[-leftArmXRotation, -leftArmYRotation, 0]}>
                 <meshStandardMaterial attach="material" color={0xff0000} /> 
             </mesh> 
-            <mesh geometry={leftEnd_geom} position={leftArmEndRenderPoint} scale={props.scale} >
+            <mesh geometry={leftEnd_geom} position={leftArmEndRenderPoint} scale={props.scale} rotation={[-leftArmXRotation, 0, 0]}>
                 <meshStandardMaterial attach="material" color={0xff0000} /> 
             </mesh>
             <mesh position={props.rightPosition}>
@@ -155,7 +162,7 @@ const Specs = (props) => {
             <mesh geometry={rightCenter_geom} position={rightCenterRenderPoint} scale={[props.scale, props.scale, props.scale * scaledRightArmLength]} rotation={[-rightArmXRotation, rightArmYRotation, 0]}>
                 <meshStandardMaterial attach="material" color={0xff0000} /> 
             </mesh> 
-            <mesh geometry={rightEnd_geom} position={rightArmEndRenderPoint} scale={props.scale}>
+            <mesh geometry={rightEnd_geom} position={rightArmEndRenderPoint} scale={props.scale} rotation={[-rightArmXRotation, 0, 0]}>
                 <meshStandardMaterial attach="material" color={0xff0000} /> 
             </mesh>
             <mesh position={props.leftPosition}>

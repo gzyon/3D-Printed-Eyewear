@@ -11,14 +11,15 @@ import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import { DDSLoader } from "three-stdlib";
 import GltfModel from "./GltfModel";
 import Specs from "./Specs";
-import FrameFront from "./FrameFront";
-import FrameLeft from "./FrameLeft";
-import FrameRight from "./FrameRight";
+import { Button, Stack, Paper } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import AlignmentButtons from "./AlignmentButtons";
 
 THREE.DefaultLoadingManager.addHandler(/\.dds$/i, new DDSLoader());
 
 let scale = 1;
 // let spec_scale = 1;
+// let renderSpecs = false;
 
 /**
  * 
@@ -35,15 +36,24 @@ function removeWhiteSpace(object) {
   return object;
 }
 
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
+
 const Model = (props) => {
   
   const [position, setPosition] = useState([]);
   const [leftEar, setLeftEar] = useState([]);
   const [rightEar, setRightEar] = useState([]);
-  const [renderSpecs, setRender] = useState(false);
   const [clicks, setClicks] = useState(1);
-  // const [rotation, setRotation] = useState([]);
+  const [rotation, setRotation] = useState([0, 0, 0]);
   const [spec_scale, setScale] = useState(1);
+  const [renderSpecs, setRender] = useState(false);
+  // const [camera, setCamera] = useState(new THREE.Vector3);
 
   // felice
   const feliceMtl = useLoader(MTLLoader, "felice.mtl");
@@ -72,18 +82,6 @@ const Model = (props) => {
   // specs_geom.translate(0, 0, specs_geom.boundingBox.min.z);
   // console.log(specs_geom.boundingBox);
 
-  // gltf files
-  // const gltf = useLoader(GLTFLoader, 'poly.glb')
-  // let gltf_geom;
-  // console.log(gltf);
-  // gltf.scene.traverse(function(child) {
-  //   if (child.geometry != null) {
-  //     gltf_geom = child.geometry;
-  //   }
-  // });
-  // gltf_geom = preprocessMesh(gltf_geom);
-  // console.log("gltf geom", gltf_geom);
-
   function onClick(event) {
     console.log(event);
     setClicks(clicks + 1);
@@ -102,7 +100,11 @@ const Model = (props) => {
     }
   }
 
-  // const frameScale = 4/5;
+  function getCameraDirection(event) {
+    const cameraDirection = new THREE.Vector3();
+    event.camera.getWorldDirection(cameraDirection);
+    setCamera(cameraDirection);
+  }
 
   if (!renderSpecs) {  
     // getEarPositions(felice_geom, position, specs_geom);
@@ -115,29 +117,23 @@ const Model = (props) => {
       // </mesh>
 
       // lowres polycam scan
-      <GltfModel position={[0,-150,0]} onClick={onClick} scale={1250} />
-      // <>
-      // <primitive object={new THREE.AxesHelper(100)} />
-      // <Specs scale={spec_scale} position={[0, 0, 0]} leftPosition={leftEar} rightPosition={rightEar} preprocessor={removeWhiteSpace}/>
-      // </>
+      <>
+      <AlignmentButtons />
+      <GltfModel position={[0,-150,0]} onClick={onClick} scale={1250} rotation={rotation}/>
+      {/* <primitive object={new THREE.AxesHelper(100)} /> */}
+      {/* <primitive object={new THREE.AxesHelper(100)} />
+      <Specs scale={spec_scale} position={[0, 0, 0]} leftPosition={leftEar} rightPosition={rightEar} preprocessor={removeWhiteSpace}/> */}
+      </>
     )
   }
   else {
     // getEarPositions(felice_geom, position, specs_geom);
-    console.log(`rendering spectacles at positon (${position})`);
-    console.log("specs scale: " + spec_scale);
+    // console.log(`rendering spectacles at positon (${position})`);
+    // console.log("specs scale: " + spec_scale);
     return (
-      // (-2 + phi/2)
       <>
         <GltfModel position={[0,-150,0]} onClick={onClick} scale={1250} />
-        {/* <mesh onClick={onClick} rotation={[theta, theta/2, 0]} position={[0, 0, 0]} geometry={felice_geom} scale={scale}>
-          <meshStandardMaterial
-            map={feliceColor} 
-          />
-        </mesh> */}
         <primitive object={new THREE.AxesHelper(100)} />
-        {/* <FrameFront position={position} rotation={[-Math.PI / 2, 2 * (-Math.PI / 180), -Math.PI / 2]} scale={spec_scale} />
-        <FrameRight position={leftEar} rotation={[-Math.PI / 2, 2 * (-Math.PI / 180), -Math.PI / 2]} scale={spec_scale} /> */}
         <Specs scale={spec_scale} position={position} leftPosition={leftEar} rightPosition={rightEar} preprocessor={removeWhiteSpace} setScale={setScale} />
         {/* 2 * (-Math.PI / 180) */}
       </>
@@ -160,14 +156,30 @@ const Model = (props) => {
 }
 
 export default function App() {
+  const [renderSpecs, setRender] = useState(false);
+
+  function confirmRender() {
+    console.log("Rendering");
+    setRender(true);
+  }
+
   return (
     // <Canvas shadows >
-    <Canvas camera={{ position: [0, 0, 400] }}>
-      <ambientLight />
-      <Suspense fallback={null} >
+    <>
+      {/* <Stack spacing={2}>
+        <item>
+        </item>
+      </Stack> */}
+      <Canvas camera={{ position: [0, 0, 400] }}>
+        <ambientLight />
+        <Suspense fallback={null}>
           <Model />
           <OrbitControls />
-      </Suspense>
-    </Canvas>
+        </Suspense>
+      </Canvas>
+      <button onClick={confirmRender}>
+        Confirm
+      </button>
+    </>
   )
 }
