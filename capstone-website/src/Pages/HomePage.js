@@ -88,7 +88,8 @@ const HomePage = (props) => {
                                         Here at Olive Eyecare and Wellness, we are invested in the comfort and aesthetics of our customers' eyewear. We believe that eyewear can be both stylish and comfortable at the same time. With our unique 3D rendering technology and state-of-the-art AI, we will generate eyewear most suited for our customers.
                                     </Typography>
                                     <Grid columns={2} mt={4}>
-                                        <Button m={2} variant="contained" color="darkGreen">Purchase Now</Button>
+                                        <Button m={2} variant="contained" color="darkGreen" href="/upload">Purchase Now</Button>
+                                        
                                         <Button sx={
                                             {
                                                 margin: '8px 30px',

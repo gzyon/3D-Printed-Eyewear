@@ -3,6 +3,7 @@ import './App.css';
 import HomePage from './Pages/HomePage';
 import AboutPage from './Pages/AboutPage';
 import ContactPage from './Pages/ContactPage';
+import UploadPage from './Pages/UploadPage'
 //routers
 import {
   BrowserRouter as Router,
@@ -21,9 +22,9 @@ function App() {
           <Routes>
             <Route path="/about" element={<AboutPage />}></Route>
             
-            <Route path="/contact" element={<ContactPage />}>
+            <Route path="/contact" element={<ContactPage />}></Route>
               
-            </Route>
+            <Route path="/upload" element={<UploadPage />}></Route>
 
             <Route path="/" element={<HomePage />}></Route>
 
