@@ -1,5 +1,6 @@
 import "./App.css";
 import React, { Suspense, useState } from "react";
+import Slider from '@mui/material/Slider';
 
 // three.js imports
 import * as THREE from "three";
@@ -129,7 +130,7 @@ const Model = (props) => {
     return (
       // (-2 + phi/2)
       <>
-        <GltfModel position={[0,-150,0]} onClick={onClick} scale={1250} />
+        <GltfModel position={[0,-150,0]} scale={1250} />
         {/* <mesh onClick={onClick} rotation={[theta, theta/2, 0]} position={[0, 0, 0]} geometry={felice_geom} scale={scale}>
           <meshStandardMaterial
             map={feliceColor} 
@@ -138,7 +139,7 @@ const Model = (props) => {
         <primitive object={new THREE.AxesHelper(100)} />
         {/* <FrameFront position={position} rotation={[-Math.PI / 2, 2 * (-Math.PI / 180), -Math.PI / 2]} scale={spec_scale} />
         <FrameRight position={leftEar} rotation={[-Math.PI / 2, 2 * (-Math.PI / 180), -Math.PI / 2]} scale={spec_scale} /> */}
-        <Specs scale={spec_scale} position={position} leftPosition={leftEar} rightPosition={rightEar} preprocessor={removeWhiteSpace} setScale={setScale} />
+        <Specs group_scale={props.x_value/145} scale={spec_scale} position={position} leftPosition={leftEar} rightPosition={rightEar} preprocessor={removeWhiteSpace}/>
         {/* 2 * (-Math.PI / 180) */}
       </>
 
@@ -160,14 +161,41 @@ const Model = (props) => {
 }
 
 export default function App() {
+  const [x_value, setXValue] = useState(145);
+  const [yz_value, setYZValue] = useState(50);
+  const changeXValue =(event, value) => {
+    setXValue(value);
+    console.log(value)
+  }
+  const changeYZValue =(event, value) => {
+    setYZValue(value);
+  }
+  
   return (
     // <Canvas shadows >
-    <Canvas camera={{ position: [0, 0, 400] }}>
-      <ambientLight />
-      <Suspense fallback={null} >
-          <Model />
-          <OrbitControls />
-      </Suspense>
-    </Canvas>
+    <div className='viewport'>
+      <div className='canvas'>  
+        <Canvas camera={{ position: [0, 0, 400] }}>
+          <ambientLight />
+          <Suspense fallback={null} >
+              <Model x_value={x_value} yz_value={yz_value}/>
+              <OrbitControls />
+          </Suspense>
+        </Canvas>
+      </div>
+      <div className='x_slider'>
+        <Slider 
+          value={x_value} 
+          defaultValue={145}
+          onChange={changeXValue} 
+          min={136} 
+          max={172} 
+          valueLabelDisplay="auto"
+          />
+      </div>
+      <div className='yz_slider'>
+        <Slider value={yz_value} onChange={changeYZValue}/>
+      </div>
+    </div>
   )
 }
