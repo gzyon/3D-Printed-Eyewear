@@ -102,7 +102,7 @@ const Model = (props) => {
       <>
         <GltfModel position={[0,-150,0]} onClick={onClick} scale={1250} />
         <primitive object={new THREE.AxesHelper(100)} />
-        <Specs specsInfo={props.specsInfo} />
+        <Specs specsInfo={props.specsInfo} xScale={props.xScale} />
       </>
     )
   }
@@ -115,8 +115,8 @@ export default function App() {
   const [leftEar, setLeftEar] = useState([]);
   const [rightEar, setRightEar] = useState([]);
 
-  const [x_value, setXValue] = useState(145);
-  const [yz_value, setYZValue] = useState(50);
+  const [x_value, setXValue] = useState(1);
+  const [yz_value, setYZValue] = useState(1);
 
   const changeXValue =(event, value) => {
     setXValue(value);
@@ -171,18 +171,18 @@ export default function App() {
         </Button>
         <Slider 
           value={x_value} 
-          defaultValue={145}
+          defaultValue={1}
           onChange={changeXValue} 
-          min={136} 
-          max={172} 
+          min={0} 
+          max={5} 
           valueLabelDisplay="auto"
-          />
+        />
       </Grid>
       <Grid item xs={6}>
         <Canvas camera={{ position: [0, 0, 400] }}>
           <ambientLight />
           <Suspense fallback={null}>
-            <Model render={renderSpecs} clicks={clicks} setClicks={setClicks} positions={{setFront: setPosition, setLeft: setLeftEar, setRight: setRightEar}} specsInfo={specsInfo}/>
+            <Model render={renderSpecs} clicks={clicks} setClicks={setClicks} positions={{setFront: setPosition, setLeft: setLeftEar, setRight: setRightEar}} specsInfo={specsInfo} xScale={x_value}/>
             <OrbitControls />
           </Suspense>
         </Canvas>

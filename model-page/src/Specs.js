@@ -11,7 +11,7 @@ const Specs = (props) => {
     return (
         <>
             {/* <mesh geometry={front_geom} position={noseBridgePos} rotation={[-(leftArmXRotation + rightArmXRotation) / 2, phi / 2, theta / 2]}  scale={frontFrameScale}> */}
-            <mesh geometry={frontFrameInfo.geometry} position={frontFrameInfo.position} rotation={frontFrameInfo.rotation}  scale={frontFrameInfo.scale}>
+            <mesh geometry={frontFrameInfo.geometry} position={frontFrameInfo.position} rotation={frontFrameInfo.rotation}  scale={[frontFrameInfo.scale * props.xScale, frontFrameInfo.scale, frontFrameInfo.scale]}>
                 <meshStandardMaterial attach="material" color={0xff0000} /> 
             </mesh>
             {/* <mesh position={leftHingePos}>
