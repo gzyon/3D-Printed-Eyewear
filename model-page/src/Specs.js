@@ -8,12 +8,19 @@ const Specs = (props) => {
     const leftArmInfo = props.specsInfo.leftArm;
     const rightArmInfo = props.specsInfo.rightArm;
     const keyPositions = props.specsInfo.keyPositions;
-    console.log(keyPositions)
+    const customScale = props.customScale;
+    console.log(props)
+
+    const frame = props.specsInfo.specsType;
+    let frontFrameScale;
+    if (frame == "frame 1") {
+        frontFrameScale = [frontFrameInfo.scale, frontFrameInfo.scale * customScale.xScale, frontFrameInfo.scale * customScale.yzScale]
+    } 
 
     return (
         <>
             {/* <mesh geometry={front_geom} position={noseBridgePos} rotation={[-(leftArmXRotation + rightArmXRotation) / 2, phi / 2, theta / 2]}  scale={frontFrameScale}> */}
-            <mesh geometry={frontFrameInfo.geometry} position={frontFrameInfo.position} rotation={frontFrameInfo.rotation}  scale={[frontFrameInfo.scale * props.xScale, frontFrameInfo.scale, frontFrameInfo.scale]}>
+            <mesh geometry={frontFrameInfo.geometry} position={frontFrameInfo.position} rotation={frontFrameInfo.rotation}  scale={frontFrameScale}>
             {/* <mesh geometry={frontFrameInfo.geometry}> */}
                 <meshStandardMaterial attach="material" color={0xff0000} /> 
             </mesh>

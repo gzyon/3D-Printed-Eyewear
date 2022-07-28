@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
-import { Button, Typography } from '@mui/material';
+import { Button, Grid, Typography } from '@mui/material';
 
 const AlignmentButtons = (props) => {
     
@@ -17,24 +17,34 @@ const AlignmentButtons = (props) => {
     
     return (
     <>
-        <Box sx={{ width: '50%', height:'50%' }} justifyContent="flex-end">
+        <Box sx={{ width: '100%' }} alignItems="center" justifyContent="center">
             <Stack spacing={2}>
                 <Typography align='center' color="white">
                     Face Direction
                 </Typography>
-                <Item>
-                    <Button>Left</Button>
-                    <Button>Right</Button>
-                </Item>
+                <Grid container alignItems="center" justifyContent="center" spacing={2}>
+                    <Grid item sx={6}>
+                        <Button variant='outlined'>Left</Button>
+                    </Grid>
+                    <Grid item sx={6}>
+                        <Button variant='outlined'>Right</Button>
+                    </Grid>
+                </Grid>
                 <Typography align='center' color="white">
                     Alignment
                 </Typography>
-                <Item>
-                    <Button>Perpendicular</Button>
-                    <Button>Diagonally Left</Button>
-                    <Button>Diagonally Right</Button>
-                </Item>
-                <Button margin={5} variant="outlined">Recenter</Button>
+                <Grid container alignItems="center" justifyContent="center" spacing={1}>
+                    <Grid item sx={4}>
+                        <Button variant='outlined'>Perpendicular</Button>
+                    </Grid>
+                    <Grid item sx={4}>
+                        <Button variant='outlined'>Diagonally Left</Button>
+                    </Grid>
+                    <Grid item sx={4}>
+                        <Button variant='outlined'>Diagonally Right</Button>
+                    </Grid>
+                </Grid>
+                <Button margin={5} variant="contained">Recenter</Button>
             </Stack>
         </Box>
     </>

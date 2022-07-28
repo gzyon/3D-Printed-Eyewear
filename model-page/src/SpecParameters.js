@@ -188,7 +188,7 @@ function SpecParameters(front, left, right) {
     // frontFrameInfo.rotation = [- (-Math.PI / 2 + (leftArmXRotation + rightArmXRotation) / 2), phi / 2, theta / 2];
     frontFrameInfo.rotation = [-(Math.PI / 2 + (leftArmXRotation + rightArmXRotation) / 2), 0, -Math.PI / 2 + phi / 2]
 
-    const specsInfo = {frontFrame: frontFrameInfo, leftArm: leftArmInfo, rightArm: rightArmInfo, keyPositions: keyPositions};
+    const specsInfo = {specsType: "frame 1", frontFrame: frontFrameInfo, leftArm: leftArmInfo, rightArm: rightArmInfo, keyPositions: keyPositions};
 
     return specsInfo; 
 }

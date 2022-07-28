@@ -102,7 +102,7 @@ const Model = (props) => {
       <>
         <GltfModel position={[0,-150,0]} onClick={onClick} scale={1250} />
         <primitive object={new THREE.AxesHelper(100)} />
-        <Specs specsInfo={props.specsInfo} xScale={props.xScale} />
+        <Specs specsInfo={props.specsInfo} customScale={props.customScale} />
       </>
     )
   }
@@ -162,31 +162,47 @@ export default function App() {
 
   return (
     <Grid container sx={{width: '100%', height: '100%'}}>
-      <Grid item xs={6}>
-        <AlignmentButtons />
-        <Button onClick={confirmRender} variant="outlined">
-          Confirm Frame Positions
-        </Button>
-        <Button onClick={resetClicks} variant="outlined">
-          Reset Frame Positions
-        </Button>
+      <Grid item xs={8}>
+        <Canvas camera={{ position: [0, 0, 400] }}>
+          <ambientLight />
+          <Suspense fallback={null}>
+            <Model render={renderSpecs} clicks={clicks} setClicks={setClicks} positions={{setFront: setPosition, setLeft: setLeftEar, setRight: setRightEar}} specsInfo={specsInfo} customScale={{xScale: x_value, yzScale: yz_value}}/>
+            <OrbitControls />
+          </Suspense>
+        </Canvas>
+      </Grid>
+      <Grid item xs={4}>
+        <Stack spacing={2}>
+          <AlignmentButtons />
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <Button onClick={confirmRender} variant="outlined">
+                Confirm Frame Positions
+              </Button>
+            </Grid>
+            <Grid item sx={6}>
+              <Button onClick={resetClicks} variant="outlined">
+                Reset Frame Positions
+              </Button>
+            </Grid>
+          </Grid>
         <Slider 
           value={x_value} 
           defaultValue={1}
           onChange={changeXValue} 
           min={0} 
           max={5} 
+          step={0.01}
           valueLabelDisplay="auto"
         />
-      </Grid>
-      <Grid item xs={6}>
-        <Canvas camera={{ position: [0, 0, 400] }}>
-          <ambientLight />
-          <Suspense fallback={null}>
-            <Model render={renderSpecs} clicks={clicks} setClicks={setClicks} positions={{setFront: setPosition, setLeft: setLeftEar, setRight: setRightEar}} specsInfo={specsInfo} xScale={x_value}/>
-            <OrbitControls />
-          </Suspense>
-        </Canvas>
+        <Slider value={yz_value} onChange={changeYZValue}
+          defaultValue={1}
+          min={0} 
+          max={5} 
+          step={0.01}
+          valueLabelDisplay="auto"
+        />
+        </Stack>
       </Grid>
     </Grid>
   )
