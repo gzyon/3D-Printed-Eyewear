@@ -38,15 +38,15 @@ function SpecParameters(front, left, right) {
 
     // frame front
     let front_geom, leftCenter_geom, leftEnd_geom, rightCenter_geom, rightEnd_geom;
-    front_geom = centraliseMesh(getGeometry(front.frameModel), [Math.PI / 2, 0, Math.PI / 2]);
+    front_geom = centraliseMesh(getGeometry(front.frameModel), [-Math.PI / 2, -Math.PI / 2, 0]);
     let frontCenterBox;
     const frontCenter = new THREE.Vector3();
     frontCenterBox = front_geom.boundingBox;
     frontCenterBox.getCenter(frontCenter);
     
     // frame left arm
-    leftCenter_geom = centraliseMesh(getGeometry(left.centerFrameModel), [0, -Math.PI / 4, 0]);
-    leftEnd_geom = centraliseMesh(getGeometry(left.endFrameModel), [0, -Math.PI / 4, 0]);
+    leftCenter_geom = centraliseMesh(getGeometry(left.centerFrameModel), [0, -Math.PI / 2, 0]);
+    leftEnd_geom = centraliseMesh(getGeometry(left.endFrameModel), [0, -Math.PI / 2, 0]);
     let leftCenterBox, leftEndBox;
     const leftCenter = new THREE.Vector3();
     leftCenterBox = leftCenter_geom.boundingBox;
@@ -56,8 +56,8 @@ function SpecParameters(front, left, right) {
     leftEndBox.getCenter(leftEndCenter);
 
     // frame right arm
-    rightCenter_geom = centraliseMesh(getGeometry(right.centerFrameModel), [0, -Math.PI / 4, 0]);
-    rightEnd_geom = centraliseMesh(getGeometry(right.endFrameModel), [0, -Math.PI / 4, 0]);
+    rightCenter_geom = centraliseMesh(getGeometry(right.centerFrameModel), [0, -Math.PI / 2, 0]);
+    rightEnd_geom = centraliseMesh(getGeometry(right.endFrameModel), [0, -Math.PI / 2, 0]);
     let rightCenterBox, rightEndBox;
     const rightCenter = new THREE.Vector3();
     rightCenterBox = rightCenter_geom.boundingBox;

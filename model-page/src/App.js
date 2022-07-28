@@ -33,7 +33,6 @@ function removeWhiteSpace(object) {
   return object;
 }
 
-let position, leftEar, rightEar;
 const Model = (props) => {
   // const [position, setPosition] = useState([]);
   // const [leftEar, setLeftEar] = useState([]);
@@ -72,24 +71,14 @@ const Model = (props) => {
     console.log(props.clicks);
     if (props.clicks <= 3) 
       props.setClicks(props.clicks + 1);
-    // props.clicks += 1;
-    // setPosition([event.point.x, event.point.y , (event.point.z + 20) * spec_scale]);
     if (props.clicks == 1) {
       props.positions.setFront([event.point.x, event.point.y, (event.point.z + 5) * spec_scale]);
-      // position = [event.point.x, event.point.y, (event.point.z + 5) * spec_scale];
-      // console.log(event.point.x, event.point.y, (event.point.z + 5) * spec_scale);
     } 
     else if (props.clicks == 2) {
       props.positions.setLeft([event.point.x, event.point.y, event.point.z]);
-      // leftEar = [event.point.x, event.point.y, event.point.z];
-      // console.log(event.point.x, event.point.y, event.point.z);
-      // setRender(true);
     }
     else if (props.clicks == 3) {
       props.positions.setRight([event.point.x, event.point.y, event.point.z]);
-      // rightEar = [event.point.x, event.point.y, event.point.z];
-      // console.log(event.point.x, event.point.y, event.point.z);
-      // props.setRender(true);
     } 
   }
 
@@ -104,6 +93,7 @@ const Model = (props) => {
 
       // lowres polycam scan
       <GltfModel position={[0,-150,0]} onClick={onClick} scale={1250} rotation={rotation}/>
+      // <Specs specsInfo={props.specsInfo} />
     )
   }
   else {
@@ -124,7 +114,6 @@ export default function App() {
   const [position, setPosition] = useState([]);
   const [leftEar, setLeftEar] = useState([]);
   const [rightEar, setRightEar] = useState([]);
-  const [specsInfo, setSpecsInfo] = useState({});
 
   const [x_value, setXValue] = useState(145);
   const [yz_value, setYZValue] = useState(50);
@@ -145,11 +134,16 @@ export default function App() {
   frame_rightCenter = useLoader(OBJLoader, 'frame2/templeR_centre.obj').children[0];
   frame_rightEnd = useLoader(OBJLoader, 'frame2/templeR_end.obj').children[0];
 
-  // let specsInfo = {}
+  const [specsInfo, setSpecsInfo] = useState({
+    // frameFront: {frameModel: frame_front, position: position},
+    // leftArm: {centerFrameModel: frame_leftCenter, endFrameModel: frame_rightCenter, position: leftEar},
+    // rightArm: {centerFrameModel: frame_rightCenter, endFrameModel: frame_rightEnd, position: rightEar}
+  });
+
   function confirmRender() {
     console.log("Rendering specs");
     const frameFront = {frameModel: frame_front, position: position};
-    const leftArm = {centerFrameModel: frame_leftCenter, endFrameModel: frame_rightCenter, position: leftEar};
+    const leftArm = {centerFrameModel: frame_leftCenter, endFrameModel: frame_leftEnd, position: leftEar};
     const rightArm = {centerFrameModel: frame_rightCenter, endFrameModel: frame_rightEnd, position: rightEar};
     setSpecsInfo(SpecParameters(frameFront, leftArm, rightArm));
     // console.log(specsInfo);
@@ -159,6 +153,9 @@ export default function App() {
 
   function resetClicks() {
     setClicks(1);
+    setPosition([]);
+    setLeftEar([]);
+    setRightEar([]);
     setRender(false);
   }
 

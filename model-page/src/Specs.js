@@ -4,18 +4,16 @@ import { useLoader } from "@react-three/fiber";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
 const Specs = (props) => {
-    console.log(props);
     const frontFrameInfo = props.specsInfo.frontFrame;
     const leftArmInfo = props.specsInfo.leftArm;
     const rightArmInfo = props.specsInfo.rightArm;
-    console.log(frontFrameInfo, leftArmInfo, rightArmInfo);
 
     return (
         <>
             {/* <mesh geometry={front_geom} position={noseBridgePos} rotation={[-(leftArmXRotation + rightArmXRotation) / 2, phi / 2, theta / 2]}  scale={frontFrameScale}> */}
             <mesh geometry={frontFrameInfo.geometry} position={frontFrameInfo.position} rotation={frontFrameInfo.rotation}  scale={frontFrameInfo.scale}>
                 <meshStandardMaterial attach="material" color={0xff0000} /> 
-            </mesh> 
+            </mesh>
             {/* <mesh position={leftHingePos}>
                 <boxGeometry args={[5, 5, 5]} />
                 <meshStandardMaterial color={'orange'} />
