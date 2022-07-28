@@ -72,7 +72,7 @@ const Model = (props) => {
     if (props.clicks <= 3) 
       props.setClicks(props.clicks + 1);
     if (props.clicks == 1) {
-      props.positions.setFront([event.point.x, event.point.y, (event.point.z + 5) * spec_scale]);
+      props.positions.setFront([event.point.x, event.point.y, (event.point.z)]);
     } 
     else if (props.clicks == 2) {
       props.positions.setLeft([event.point.x, event.point.y, event.point.z]);
@@ -109,6 +109,7 @@ const Model = (props) => {
 }
 
 export default function App() {
+  console.log("main app running");
   const [renderSpecs, setRender] = useState(false);
   const [clicks, setClicks] = useState(1);
   const [position, setPosition] = useState([]);
