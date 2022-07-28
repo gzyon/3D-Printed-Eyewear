@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useState, useEffect} from "react"
 import * as THREE from 'three'
 import { useLoader } from "@react-three/fiber";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
@@ -53,92 +53,140 @@ const Specs = (props) => {
     frame_rightCenter = useLoader(OBJLoader, 'frame2/templeR_centre.obj').children[0];
     frame_rightEnd = useLoader(OBJLoader, 'frame2/templeR_end.obj').children[0];
 
+    
+
+
     // frame front
     let front_geom, leftCenter_geom, leftEnd_geom, rightCenter_geom, rightEnd_geom;
     front_geom = centraliseMesh(getGeometry(frame_front), [Math.PI / 2, 0, Math.PI / 2]);
-    let frontCenterBox;
-    const frontCenter = new THREE.Vector3();
-    frontCenterBox = front_geom.boundingBox;
-    frontCenterBox.getCenter(frontCenter);
-
-    // frame left arm
     leftCenter_geom = centraliseMesh(getGeometry(frame_leftCenter), [0, -Math.PI / 4, 0]);
     leftEnd_geom = centraliseMesh(getGeometry(frame_leftEnd), [0, -Math.PI / 4, 0]);
-    let leftCenterBox, leftEndBox;
-    const leftCenter = new THREE.Vector3();
-    leftCenterBox = leftCenter_geom.boundingBox;
-    leftCenterBox.getCenter(leftCenter);
-    const leftEndCenter = new THREE.Vector3();
-    leftEndBox = leftEnd_geom.boundingBox;
-    leftEndBox.getCenter(leftEndCenter);
-
-    // frame right arm
     rightCenter_geom = centraliseMesh(getGeometry(frame_rightCenter), [0, -Math.PI / 4, 0]);
     rightEnd_geom = centraliseMesh(getGeometry(frame_rightEnd), [0, -Math.PI / 4, 0]);
+        
+    
+    
+    let frontCenterBox;
+    const frontCenter = new THREE.Vector3();
+    
+
+    // frame left arm
+    let leftCenterBox, leftEndBox;
+    const leftCenter = new THREE.Vector3();
+    const leftEndCenter = new THREE.Vector3();
+
+
+    // frame right arm
     let rightCenterBox, rightEndBox;
     const rightCenter = new THREE.Vector3();
-    rightCenterBox = rightCenter_geom.boundingBox;
-    rightCenterBox.getCenter(rightCenter);
     const rightEndCenter = new THREE.Vector3();
-    rightEndBox = rightEnd_geom.boundingBox;
-    rightEndBox.getCenter(rightEndCenter);
-    console.log(rightEndBox, rightEndCenter);
-
+    
     // math
 
     //front frame 
     // rotation
-    const y = (props.leftPosition[1] - props.rightPosition[1]);
-    const x = (props.leftPosition[0] - props.rightPosition[0]);
-    const z = (props.leftPosition[2] - props.rightPosition[2]);
-    const theta = Math.atan(y/x);
-    const phi = Math.atan(z/x);
+    let y, x, theta;
+    
+    // console.log(theta);
 
     // scale
-    const frontFrameScale = (Math.abs(x /(frontCenterBox.max.z * 2)) * 0.8) / 10;
-    console.log(frontFrameScale);
+    let frontFrameScale;
 
     // position
-    const noseBridgePos = [props.position[0], props.position[1] - frontCenterBox.max.y, props.position[2]];
-    const yOffset = (frontCenterBox.max.x * frontFrameScale) * Math.sin(theta/2);
-    const xOffset = Math.sqrt(Math.pow(frontCenterBox.max.x, 2) - Math.pow(yOffset, 2));
-    const zOffset = ((frontCenterBox.max.x * 2) * frontFrameScale) * Math.sin(phi/2);
-    const leftHingePos = [props.position[0] - xOffset + 5, (props.position[1]) * frontFrameScale - yOffset, props.position[2] - (frontCenterBox.max.z * frontFrameScale) + 5 + zOffset];
-    const rightHingePos = [props.position[0] + xOffset - 5, (props.position[1]) * frontFrameScale + yOffset, props.position[2] - (frontCenterBox.max.z * frontFrameScale) + 5 + zOffset];
-
+    let noseBridgePos, leftHingePos, rightHingePos;
+    
     // left arm 
     // rotation
-    const leftArmYRotation = Math.atan((Math.abs(rightHingePos[0] - props.rightPosition[0])) / (Math.abs(rightHingePos[2] - props.rightPosition[2]) - 2.5));
-    const leftArmXRotation = Math.atan(Math.abs((rightHingePos[1] - 2.5) - props.rightPosition[1]) / Math.abs(rightHingePos[2] - props.rightPosition[2]));
+    // const leftArmYRotation = Math.atan((Math.abs(rightHingePos[0] - props.rightPosition[0])) / (Math.abs(rightHingePos[2] - props.rightPosition[2]) - 2.5));
+    // const leftArmXRotation = Math.atan(Math.abs((rightHingePos[1] - 2.5) - props.rightPosition[1]) / Math.abs(rightHingePos[2] - props.rightPosition[2]));
 
-    // render points
-    const leftCenterRenderPoint = [props.rightPosition[0] - (props.rightPosition[0] - rightHingePos[0]) / 2, props.rightPosition[1] + (rightHingePos[1]-props.rightPosition[1]) / 2, props.rightPosition[2] + ((rightHingePos[2]-props.rightPosition[2]) / 2) + 2.5];
-    const leftArmEndxOffset = (rightEndBox.max.y / 2) * Math.tan(leftArmYRotation);
-    const leftArmEndRenderPoint = [props.rightPosition[0] + leftArmEndxOffset, props.rightPosition[1] - rightEndBox.max.y, props.rightPosition[2] - rightEndBox.max.z + 5];
+    // render pointss
+    let leftCenterRenderPoint, leftArmEndRenderPoint;
+    //  - rightEndBox.max.x
 
     // scaling 
-    const currentLeftArmLength = rightCenterBox.max.z - rightCenterBox.min.z;
-    const leftArmDiagonalLength = Math.sqrt(Math.pow(rightHingePos[0] + 2.5 - props.rightPosition[0], 2) + Math.pow(rightHingePos[2] + 2.5 - props.rightPosition[2], 2));
-    const scaledleftArmLength = Math.sqrt(Math.pow(rightHingePos[1] + 2.5 - props.rightPosition[1], 2) + Math.pow(leftArmDiagonalLength, 2)) / currentLeftArmLength;
+    let currentLeftArmLength, scaledleftArmLength;
 
     // right arm 
     // rotation
-    const rightArmYRotation = Math.atan(Math.abs(leftHingePos[0] - props.leftPosition[0]) / (Math.abs(leftHingePos[2] - props.leftPosition[2]) - 2.5));
-    const rightArmXRotation = Math.atan(Math.abs((leftHingePos[1] - 2.5) - props.leftPosition[1]) / Math.abs(leftHingePos[2] - props.leftPosition[2]));
+    let leftArmYRotation, leftArmXRotation;
 
     // render points
-    const rightCenterRenderPoint = [props.leftPosition[0] - (props.leftPosition[0] - leftHingePos[0]) / 2, props.leftPosition[1] + (leftHingePos[1]-props.leftPosition[1]) / 2, props.leftPosition[2] + (leftHingePos[2]-props.leftPosition[2]) / 2 + 2.5]; 
-    const rightArmEndxOffset = (leftEndBox.max.y / 2) * Math.tan(rightArmXRotation);
-    const rightArmEndRenderPoint = [props.leftPosition[0] - rightArmEndxOffset, props.leftPosition[1] - leftEndBox.max.y - 2.5, props.leftPosition[2] - leftEndBox.max.z + 5]; 
+    let rightCenterRenderPoint, rightArmEndRenderPoint;  
+    //  - leftEndBox.max.x
 
     // scaling
-    const currentRightArmLength = leftCenterBox.max.z - leftCenterBox.min.z;
-    const rightArmDiagonalLength = Math.sqrt(Math.pow(leftHingePos[0] + 2.5 - props.leftPosition[0], 2) + Math.pow(leftHingePos[2] + 2.5 - props.leftPosition[2], 2));
-    const scaledRightArmLength = Math.sqrt(Math.pow(leftHingePos[1] + 2.5 - props.leftPosition[1], 2) + Math.pow(rightArmDiagonalLength, 2)) / currentRightArmLength;
+    let currentRightArmLength, scaledRightArmLength;
 
+    // rotation
+    let rightArmYRotation, rightArmXRotation;
+
+    useEffect(() => {
+        console.log("i should run once only");
+        
+        // frame front
+        frontCenterBox = front_geom.boundingBox;
+        frontCenterBox.getCenter(frontCenter);
+
+        // frame left arm
+        leftCenterBox = leftCenter_geom.boundingBox;
+        leftCenterBox.getCenter(leftCenter);
+        leftEndBox = leftEnd_geom.boundingBox;
+        leftEndBox.getCenter(leftEndCenter);
+
+        // frame right arm
+        rightCenterBox = rightCenter_geom.boundingBox;
+        rightCenterBox.getCenter(rightCenter);
+        rightEndBox = rightEnd_geom.boundingBox;
+        rightEndBox.getCenter(rightEndCenter);
+
+        // math
+        // rotation
+        y = (props.leftPosition[1] - props.rightPosition[1]);
+        x = (props.leftPosition[0] - props.rightPosition[0]);
+        theta = Math.atan(y/x);
+
+        // scale
+        frontFrameScale = (Math.abs(x /(frontCenterBox.max.z * 2)) * 0.8) / 10;
+
+        // position
+        noseBridgePos = [props.position[0], props.position[1] - frontCenterBox.max.y, props.position[2]];
+        leftHingePos = [props.position[0] - (frontCenterBox.max.x * frontFrameScale) + 5, (props.position[1]) * frontFrameScale - theta, props.position[2] - (frontCenterBox.max.z * frontFrameScale)];
+        rightHingePos = [props.position[0] + (frontCenterBox.max.x * frontFrameScale) - 5, (props.position[1]) * frontFrameScale + theta, props.position[2] - (frontCenterBox.max.z * frontFrameScale)];
+
+        // left arm 
+        // render points
+        leftCenterRenderPoint = [props.rightPosition[0] - (props.rightPosition[0] - rightHingePos[0]) / 2, props.rightPosition[1] + (props.position[1]-props.rightPosition[1]) / 2, props.rightPosition[2] + ((props.position[2]-props.rightPosition[2]) / 2)];
+        leftArmEndRenderPoint = [props.rightPosition[0], props.rightPosition[1] - rightEndBox.max.y, props.rightPosition[2] - rightEndBox.max.z];
+        
+        // scaling 
+        currentLeftArmLength = rightCenterBox.max.z - rightCenterBox.min.z;
+        scaledleftArmLength = Math.sqrt(Math.pow(props.position[1]-props.rightPosition[1], 2) + Math.pow(props.position[2]-props.rightPosition[2], 2)) / currentLeftArmLength;
+
+        // rotation
+        leftArmYRotation = Math.atan(Math.abs(rightHingePos[0] - props.rightPosition[0]) / Math.abs(rightHingePos[2] - props.rightPosition[2]));
+        leftArmXRotation = Math.atan(Math.abs(rightHingePos[1] - props.rightPosition[1]) / Math.abs(rightHingePos[2] - props.rightPosition[2]));
+
+        // right arm 
+        // render points
+        rightCenterRenderPoint = [props.leftPosition[0] - (props.leftPosition[0] - leftHingePos[0]) / 2, props.leftPosition[1] + (props.position[1]-props.leftPosition[1]) / 2, props.leftPosition[2] + (props.position[2]-props.leftPosition[2]) / 2];
+        rightArmEndRenderPoint = [props.leftPosition[0], props.leftPosition[1] - leftEndBox.max.y, props.leftPosition[2] - leftEndBox.max.z];  
+        //  - leftEndBox.max.x
+
+        // scaling
+        currentRightArmLength = leftCenterBox.max.z - leftCenterBox.min.z;
+        scaledRightArmLength = Math.sqrt(Math.pow(props.position[1]-props.leftPosition[1], 2) + Math.pow(props.position[2]-props.leftPosition[2], 2)) / currentRightArmLength;
+
+        // rotation
+        rightArmYRotation = Math.atan(Math.abs(leftHingePos[0] - props.leftPosition[0]) / Math.abs(leftHingePos[2] - props.leftPosition[2]));
+        rightArmXRotation = Math.atan(Math.abs(leftHingePos[1] - props.leftPosition[1]) / Math.abs(leftHingePos[2] - props.leftPosition[2]));
+
+
+    });
+    console.log(frontFrameScale, theta, noseBridgePos);
     return (
-        <>
-            <mesh geometry={front_geom} position={noseBridgePos} rotation={[-(leftArmXRotation + rightArmXRotation) / 2, phi / 2, theta / 2]}  scale={frontFrameScale}>
+        <group>
+            <mesh geometry={front_geom} position={noseBridgePos} rotation={[0, 0, theta/2]}  scale={frontFrameScale}>
                 <meshStandardMaterial attach="material" color={0xff0000} /> 
             </mesh> 
             <mesh position={leftHingePos}>
@@ -169,7 +217,7 @@ const Specs = (props) => {
                 <boxGeometry args={[5, 5, 5]} />
                 <meshStandardMaterial color={'orange'} />
             </mesh> 
-        </>
+        </group>
     )
 }
 

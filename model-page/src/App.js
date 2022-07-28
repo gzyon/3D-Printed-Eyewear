@@ -11,9 +11,10 @@ import { TextureLoader } from 'three/src/loaders/TextureLoader'
 import { DDSLoader } from "three-stdlib";
 import GltfModel from "./GltfModel";
 import Specs from "./Specs";
-import { Button, Stack, Paper, Box, Grid } from "@mui/material";
+import { Button, Stack, Paper, Box, Grid, Slider } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import AlignmentButtons from "./AlignmentButtons";
+import SpecParameters from "./SpecParameters";
 
 THREE.DefaultLoadingManager.addHandler(/\.dds$/i, new DDSLoader());
 
@@ -23,7 +24,7 @@ THREE.DefaultLoadingManager.addHandler(/\.dds$/i, new DDSLoader());
  * @returns {THREE.BufferGeometry}
  */
 function removeWhiteSpace(object) {
-  var center = new THREE.Vector3;
+  let center = new THREE.Vector3;
   object.computeBoundingBox();
   object.boundingBox.getCenter(center);
   object.translate(-1 * center.x, -1 * center.y, -1 * center.z);
@@ -32,11 +33,11 @@ function removeWhiteSpace(object) {
   return object;
 }
 
+let position, leftEar, rightEar;
 const Model = (props) => {
-  const [position, setPosition] = useState([]);
-  const [leftEar, setLeftEar] = useState([]);
-  const [rightEar, setRightEar] = useState([]);
-  const [clicks, setClicks] = useState(1);
+  // const [position, setPosition] = useState([]);
+  // const [leftEar, setLeftEar] = useState([]);
+  // const [rightEar, setRightEar] = useState([]);
   const [rotation, setRotation] = useState([0, 0, 0]);
   const [spec_scale, setScale] = useState(1);
 
@@ -68,20 +69,28 @@ const Model = (props) => {
   // console.log(specs_geom.boundingBox);
 
   function onClick(event) {
-    setClicks(clicks + 1);
-    console.log(clicks);
+    console.log(props.clicks);
+    if (props.clicks <= 3) 
+      props.setClicks(props.clicks + 1);
+    // props.clicks += 1;
     // setPosition([event.point.x, event.point.y , (event.point.z + 20) * spec_scale]);
-    if (clicks % 3 == 1) {
-      setPosition([event.point.x, event.point.y, (event.point.z + 5) * spec_scale]);
+    if (props.clicks == 1) {
+      props.positions.setFront([event.point.x, event.point.y, (event.point.z + 5) * spec_scale]);
+      // position = [event.point.x, event.point.y, (event.point.z + 5) * spec_scale];
+      // console.log(event.point.x, event.point.y, (event.point.z + 5) * spec_scale);
     } 
-    else if (clicks % 3 == 2) {
-      setLeftEar([event.point.x, event.point.y, event.point.z]);
+    else if (props.clicks == 2) {
+      props.positions.setLeft([event.point.x, event.point.y, event.point.z]);
+      // leftEar = [event.point.x, event.point.y, event.point.z];
+      // console.log(event.point.x, event.point.y, event.point.z);
       // setRender(true);
     }
-    else if (clicks % 3 == 0) {
-      setRightEar([event.point.x, event.point.y, event.point.z]);
+    else if (props.clicks == 3) {
+      props.positions.setRight([event.point.x, event.point.y, event.point.z]);
+      // rightEar = [event.point.x, event.point.y, event.point.z];
+      // console.log(event.point.x, event.point.y, event.point.z);
       // props.setRender(true);
-    }
+    } 
   }
 
   if (!props.render) {  
@@ -98,11 +107,12 @@ const Model = (props) => {
     )
   }
   else {
+    console.log(props.specsInfo)
     return (
       <>
         <GltfModel position={[0,-150,0]} onClick={onClick} scale={1250} />
         <primitive object={new THREE.AxesHelper(100)} />
-        <Specs scale={spec_scale} position={position} leftPosition={leftEar} rightPosition={rightEar} preprocessor={removeWhiteSpace} setScale={setScale} />
+        <Specs specsInfo={props.specsInfo} />
       </>
     )
   }
@@ -110,11 +120,46 @@ const Model = (props) => {
 
 export default function App() {
   const [renderSpecs, setRender] = useState(false);
+  const [clicks, setClicks] = useState(1);
+  const [position, setPosition] = useState([]);
+  const [leftEar, setLeftEar] = useState([]);
+  const [rightEar, setRightEar] = useState([]);
+  const [specsInfo, setSpecsInfo] = useState({});
 
+  const [x_value, setXValue] = useState(145);
+  const [yz_value, setYZValue] = useState(50);
+
+  const changeXValue =(event, value) => {
+    setXValue(value);
+    console.log(value)
+  }
+  const changeYZValue =(event, value) => {
+    setYZValue(value);
+  }
+
+  // load models
+  let frame_front, frame_leftCenter, frame_leftEnd, frame_rightCenter, frame_rightEnd;
+  frame_front = useLoader(OBJLoader, 'frame2/front.obj').children[0];
+  frame_leftCenter = useLoader(OBJLoader, 'frame2/templeL_centre.obj').children[0];
+  frame_leftEnd = useLoader(OBJLoader, 'frame2/templeL_end.obj').children[0];
+  frame_rightCenter = useLoader(OBJLoader, 'frame2/templeR_centre.obj').children[0];
+  frame_rightEnd = useLoader(OBJLoader, 'frame2/templeR_end.obj').children[0];
+
+  // let specsInfo = {}
   function confirmRender() {
     console.log("Rendering specs");
+    const frameFront = {frameModel: frame_front, position: position};
+    const leftArm = {centerFrameModel: frame_leftCenter, endFrameModel: frame_rightCenter, position: leftEar};
+    const rightArm = {centerFrameModel: frame_rightCenter, endFrameModel: frame_rightEnd, position: rightEar};
+    setSpecsInfo(SpecParameters(frameFront, leftArm, rightArm));
+    // console.log(specsInfo);
     setRender(true);
     
+  }
+
+  function resetClicks() {
+    setClicks(1);
+    setRender(false);
   }
 
   return (
@@ -124,12 +169,23 @@ export default function App() {
         <Button onClick={confirmRender} variant="outlined">
           Confirm Frame Positions
         </Button>
+        <Button onClick={resetClicks} variant="outlined">
+          Reset Frame Positions
+        </Button>
+        <Slider 
+          value={x_value} 
+          defaultValue={145}
+          onChange={changeXValue} 
+          min={136} 
+          max={172} 
+          valueLabelDisplay="auto"
+          />
       </Grid>
       <Grid item xs={6}>
         <Canvas camera={{ position: [0, 0, 400] }}>
           <ambientLight />
           <Suspense fallback={null}>
-            <Model render={renderSpecs}/>
+            <Model render={renderSpecs} clicks={clicks} setClicks={setClicks} positions={{setFront: setPosition, setLeft: setLeftEar, setRight: setRightEar}} specsInfo={specsInfo}/>
             <OrbitControls />
           </Suspense>
         </Canvas>

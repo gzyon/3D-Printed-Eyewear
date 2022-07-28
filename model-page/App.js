@@ -15,6 +15,7 @@ import Specs from "./Specs";
 import { Button, Stack, Paper } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import AlignmentButtons from "./AlignmentButtons";
+import SpecsZh from "./SpecsZh";
 
 THREE.DefaultLoadingManager.addHandler(/\.dds$/i, new DDSLoader());
 
@@ -57,29 +58,29 @@ const Model = (props) => {
   // const [camera, setCamera] = useState(new THREE.Vector3);
 
   // felice
-  const feliceMtl = useLoader(MTLLoader, "felice.mtl");
-  const feliceColor = useLoader(TextureLoader, "felice_0.png")
-  const felice = useLoader(OBJLoader, "felice.obj", (loader) => {
-    feliceMtl.preload();
-    loader.setMaterials(feliceMtl);
-  })
-  let felice_geom;
-  felice.traverse(function(child) {
-    if (child.geometry != undefined) 
-      felice_geom = child.geometry;
-  });
-  felice_geom = removeWhiteSpace(felice_geom);
-  const phi = Math.atan(felice_geom.boundingBox.max.z/felice_geom.boundingBox.max.x);
+  // const feliceMtl = useLoader(MTLLoader, "felice.mtl");
+  // const feliceColor = useLoader(TextureLoader, "felice_0.png")
+  // const felice = useLoader(OBJLoader, "felice.obj", (loader) => {
+  //   feliceMtl.preload();
+  //   loader.setMaterials(feliceMtl);
+  // })
+  // let felice_geom;
+  // felice.traverse(function(child) {
+  //   if (child.geometry != undefined) 
+  //     felice_geom = child.geometry;
+  // });
+  // felice_geom = removeWhiteSpace(felice_geom);
+  // const phi = Math.atan(felice_geom.boundingBox.max.z/felice_geom.boundingBox.max.x);
   // console.log("felice geom: ", felice_geom);
 
   // spectacles
-  const specsModel = useLoader(OBJLoader, "Body2.obj");
-  let specs_geom;
-  specsModel.traverse(function(child) {
-    specs_geom = child.geometry;
-  });
-  specs_geom = removeWhiteSpace(specs_geom);
-  const theta = Math.atan(specs_geom.boundingBox.max.z/specs_geom.boundingBox.max.y);
+  // const specsModel = useLoader(OBJLoader, "Body2.obj");
+  // let specs_geom;
+  // specsModel.traverse(function(child) {
+  //   specs_geom = child.geometry;
+  // });
+  // specs_geom = removeWhiteSpace(specs_geom);
+  // const theta = Math.atan(specs_geom.boundingBox.max.z/specs_geom.boundingBox.max.y);
   // specs_geom.translate(0, 0, specs_geom.boundingBox.min.z);
   // console.log(specs_geom.boundingBox);
 
@@ -99,12 +100,6 @@ const Model = (props) => {
       setRightEar([event.point.x, event.point.y, event.point.z]);
       setRender(true);
     }
-  }
-
-  function getCameraDirection(event) {
-    const cameraDirection = new THREE.Vector3();
-    event.camera.getWorldDirection(cameraDirection);
-    setCamera(cameraDirection);
   }
 
   if (!renderSpecs) {  
