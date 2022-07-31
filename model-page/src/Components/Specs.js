@@ -1,19 +1,20 @@
 import React from "react"
+import SpecParameters from "../SpecParameters";
 
 const Specs = (props) => {
-    const frontFrameInfo = props.specsInfo.frontFrame;
-    const leftArmInfo = props.specsInfo.leftArm;
-    const rightArmInfo = props.specsInfo.rightArm;
-    const keyPositions = props.specsInfo.keyPositions;
+    console.log(props);
+    const specsInfo = SpecParameters(props.specsInfo.frameFront, props.specsInfo.leftArm, props.specsInfo.rightArm);
+    const frontFrameInfo = specsInfo.frontFrame;
+    const leftArmInfo = specsInfo.leftArm;
+    const rightArmInfo = specsInfo.rightArm;
+    const keyPositions = specsInfo.keyPositions;
     const customScale = props.customScale;
-    console.log(props)
 
-    const frame = props.specsInfo.specsType;
+    const frame = specsInfo.specsType;
     let frontFrameScale;
     if (frame === "frame 1") {
         frontFrameScale = [frontFrameInfo.scale, frontFrameInfo.scale * customScale.xScale, frontFrameInfo.scale * customScale.yzScale]
     } 
-
 
     return (
         <>

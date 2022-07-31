@@ -3,7 +3,7 @@ import * as THREE from 'three'
 
 function SpecParameters(front, left, right) {
 
-    console.log("calculating parameters");
+    console.log("calculating parameters for ", front, left, right);
 
     // helper functions
     function getGeometry(object) {

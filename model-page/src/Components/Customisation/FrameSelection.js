@@ -7,7 +7,7 @@ const FrameSelection = (props) => {
             <Grid container>
                 <Grid item xs={6}>
                     <Typography align='center' color="white">
-                        Frame Selection
+                        Frame Selection:
                     </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -18,7 +18,7 @@ const FrameSelection = (props) => {
                             defaultValue={"Frame 1"}
                             // value={props.frame}
                             label="Frame Selection"
-                            // onChange={props.changeFrame}
+                            onChange={props.updateFrames}
                             >
                                 <MenuItem value={"Frame 1"}>Frame 1</MenuItem>
                                 <MenuItem value={"Frame 2"}>Frame 2</MenuItem>
@@ -26,6 +26,9 @@ const FrameSelection = (props) => {
                             </Select>
                     </FormControl>
                 </Grid>
+            </Grid>
+            <Grid container>
+                
             </Grid>
         </>
     )

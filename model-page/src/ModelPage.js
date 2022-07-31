@@ -3,7 +3,6 @@ import { OrbitControls } from "@react-three/drei";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
 import { Stack, Grid } from "@mui/material";
-import SpecParameters from "./SpecParameters";
 import PositioningPanel from "./Components/Positioning/PositioningPanel";
 import CustomisationPanel from "./Components/Customisation/CustomisationPanel";
 
@@ -21,19 +20,9 @@ const ModelPage = (props) => {
     // customisation info
     const [x_value, setXValue] = useState(1);
     const [yz_value, setYZValue] = useState(1);
-    // const []
 
     // specs calculations
     const [specsInfo, setSpecsInfo] = useState({});
-
-    // customisation functions
-    const changeXValue =(event, value) => {
-        setXValue(value);
-        console.log(value)
-    }
-    const changeYZValue =(event, value) => {
-        setYZValue(value);
-    }
 
     // load models
     let frame1_front, frame_leftCenter, frame_leftEnd, frame_rightCenter, frame_rightEnd, frame2_front, frame3_front;
@@ -46,13 +35,30 @@ const ModelPage = (props) => {
     frame_rightCenter = useLoader(OBJLoader, 'frame2/templeR_centre.obj').children[0];
     frame_rightEnd = useLoader(OBJLoader, 'frame2/templeR_end.obj').children[0];
 
-    // 
+    const [frameFront, setFrame] = useState({frameModel: frame1_front});
+    const front = {frameModel: frameFront.frameModel, position: position};
+    const leftArm = {centerFrameModel: frame_leftCenter, endFrameModel: frame_leftEnd, position: leftEar};
+    const rightArm = {centerFrameModel: frame_rightCenter, endFrameModel: frame_rightEnd, position: rightEar};
+
+    // customisation functions
+    const changeXValue =(event, value) => {
+        setXValue(value);
+        console.log(value)
+    }
+    const changeYZValue =(event, value) => {
+        setYZValue(value);
+    }
+
+    function changeFrame(event) {
+        console.log(event);
+        if (event.target.value === "Frame 1") setFrame({frameModel: frame1_front});
+        else if (event.target.value === "Frame 2") setFrame({frameModel: frame2_front});
+        else if (event.target.value === "Frame 3") setFrame({frameModel: frame3_front});
+    }
+
+    // render functions
     function confirmRender() {
-        console.log("Rendering specs");
-        const frameFront = {frameModel: frame1_front, position: position};
-        const leftArm = {centerFrameModel: frame_leftCenter, endFrameModel: frame_leftEnd, position: leftEar};
-        const rightArm = {centerFrameModel: frame_rightCenter, endFrameModel: frame_rightEnd, position: rightEar};
-        setSpecsInfo(SpecParameters(frameFront, leftArm, rightArm));
+        console.log("Rendering specs at: " + front.position);
         setRender(true);
     }
 
@@ -64,6 +70,18 @@ const ModelPage = (props) => {
         setRender(false);
     }
 
+    const specs = {
+        eventFunctions: {changeXValue: changeXValue, changeYZValue: changeYZValue, changeFrame: changeFrame, setFrame: setFrame},
+        scaling: {xVal: x_value, yzVal: yz_value},
+        frontFrames: {design1: frame1_front, design2: frame2_front, design3: frame3_front}
+    }
+
+    const modelProps = {
+        variables: {render: renderSpecs, clicks: clicks, frameFront: frameFront, leftArm: leftArm, rightArm: rightArm},
+        functions: {setFront: setPosition, setLeft: setLeftEar, setRight: setRightEar, setFrame: setFrame, setClicks: setClicks},
+        specCustomisations: {xScale: x_value, yzScale: yz_value}
+    }
+
     if (!renderSpecs) {
         return (
             <Grid container sx={{height: '100%'}}>
@@ -71,8 +89,7 @@ const ModelPage = (props) => {
                     <Canvas camera={{ position: [0, 0, 600] }}>
                         <ambientLight />
                         <Suspense fallback={null}>
-                        <Model render={renderSpecs} clicks={clicks} setClicks={setClicks} positions={{setFront: setPosition, setLeft: setLeftEar, setRight: setRightEar}} specsInfo={specsInfo} customScale={{xScale: x_value, yzScale: yz_value}}/>
-                        {/* <Frame2 geometry={frame2_front} /> */}
+                        <Model modelProps={modelProps} specsInfo={{frameFront: front, leftArm: leftArm, rightArm: rightArm}} />
                         <OrbitControls />
                         </Suspense>
                     </Canvas>
@@ -91,13 +108,12 @@ const ModelPage = (props) => {
                 <Grid item xs={8}>
                     <Canvas camera={{ position: [0, 0, 600] }}>
                     <ambientLight />
-                    <Model render={renderSpecs} clicks={clicks} setClicks={setClicks} positions={{setFront: setPosition, setLeft: setLeftEar, setRight: setRightEar}} specsInfo={specsInfo} customScale={{xScale: x_value, yzScale: yz_value}}/>
-                    {/* <Frame2 geometry={frame2_front} /> */}
+                    <Model modelProps={modelProps} specsInfo={{frameFront: front, leftArm: leftArm, rightArm: rightArm}} />
                     <OrbitControls />
                     </Canvas>
                 </Grid>
                 <Grid item xs={4}>
-                    <CustomisationPanel xVal={x_value} changeXValue={changeXValue} yzVal={yz_value} changeYZValue={changeYZValue} resetClicks={resetClicks} />
+                    <CustomisationPanel specDetails={specs} resetClicks={resetClicks}  />
                 </Grid>
             </Grid>
         )
