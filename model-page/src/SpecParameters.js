@@ -59,6 +59,7 @@ function SpecParameters(front, left, right) {
 
     // frame front
     let front_geom, leftCenter_geom, leftEnd_geom, rightCenter_geom, rightEnd_geom;
+    
     front_geom = centraliseMesh(getGeometry(front.frameModel), [-Math.PI / 2, -Math.PI / 2, 0]);
     // front_geom.rotateX(-Math.PI / 2);
     // front_geom.rotateY(-Math.PI / 2);
