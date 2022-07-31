@@ -13,7 +13,8 @@ import { StylesProvider } from '@mui/styles';
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 //logo
-import logo from './logo.png'
+import logo from '../../assets/images/olivelogo.png'
+
 
 
 

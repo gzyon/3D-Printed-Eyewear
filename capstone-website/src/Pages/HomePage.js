@@ -9,7 +9,10 @@ import Abc from '@mui/icons-material/Abc'
 import './HomePage.css';
 
 import landingImage from '../assets/images/landing.png'
+import glasses_landing from '../assets/images/glasses_landing.png'
 import DescItem from '../Components/DescItem/DescItem'
+import DescItemLargeLeft from '../Components/DescItemLarge/DescItemLargeLeft'
+import DescItemLargeRight from '../Components/DescItemLarge/DescItemLargeRight'
 
 //styles
 import { StylesProvider } from '@mui/styles';
@@ -29,7 +32,7 @@ const theme = createTheme({
         MuiTypography: {
             styleOverrides: {
                 root: {
-                    color: "#4E542C"
+                    color: "#000000"
                 }
                 
             }
@@ -41,11 +44,19 @@ const theme = createTheme({
                 }
                 
             }
+        },
+        MuiDivider:{
+            styleOverrides:{
+                root:{
+                    background: "#2e2e2e"
+                }
+            }
         }
     },
     palette:{
         darkGreen: createColor("#4E542C"),
-        lightGreen: createColor("#EAE79B")
+        lightGreen: createColor("#EAE79B"),
+        white:createColor("#FFFFFF")
     }
 })
 
@@ -59,113 +70,71 @@ const HomePage = (props) => {
         ref.current?.scrollIntoView({behavior: 'smooth'});
     };
 
+    const [isVisible, setVisible] = React.useState(true);
+    const domRef = React.useRef();
+    React.useEffect(() => {
+        const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => setVisible(entry.isIntersecting));
+        });
+        observer.observe(domRef.current);
+        return () => observer.unobserve(domRef.current);
+    }, []);
+
     return (
         <StylesProvider injectFirst>
         <ThemeProvider theme={theme}>
         <React.Fragment>
         <CssBaseline />
             <Header />
-            <Container>
-                {/* <Box display="flex" justifyContent="center"> */}
-                    {/* <Box
-                        sx={{ width: 0.8, border: 1, m: 3 }}
-                        display="flex"
-                        justifyContent="center"
-                    > */}
-                        <Grid container spacing={2} columns={16} py={30}>
-                            <Grid
-                                item
-                                xs={8}
-                                display="flex"
-                                justifyContent={'left'}
-                                alignItems="center"
-                            >
-                                <Box>
-                                    <Typography variant="h3" component="h1" color="#14140A">
-                                        <b>Customisable, Ergonomic eyewear</b>
-                                    </Typography>
-                                    <Typography variant="body1" component="body1" color="darkGreen">
-                                        Here at Olive Eyecare and Wellness, we are invested in the comfort and aesthetics of our customers' eyewear. We believe that eyewear can be both stylish and comfortable at the same time. With our unique 3D rendering technology and state-of-the-art AI, we will generate eyewear most suited for our customers.
-                                    </Typography>
-                                    <Grid columns={2} mt={4}>
-                                        <Button m={2} variant="contained" color="darkGreen" href="/upload">Purchase Now</Button>
-                                        
-                                        <Button sx={
-                                            {
-                                                margin: '8px 30px',
-                                                color: "#4E542C"
-                                            }
-                                        } color="darkGreen" onClick={handleClick}>Learn More</Button>
-                                    </Grid>
+            <Grid container>
+                {/* Segment 1: Main product selling page */}
+                <Grid item container columns={16} py={10}>
+                    <Grid sx={{backgroundColor:'#000000'}} item xs={8} display="flex" justifyContent={'left'} alignItems="center" className={`fade-in-bottom-section ${isVisible ? 'is-visible' : ''}`} ref={domRef}>
+                        <Box sx={{backgroundColor:'#000000', padding:"20px"}}>
+                            <Typography variant="h4" color="#FFFFFF">
+                                <b>Customisable, Ergonomic eyewear</b>
+                            </Typography>
+                            
+                            <Typography variant="body2" color="#FFFFFF" >
+                                Here at Olive Eyecare and Wellness, we are invested in the comfort and aesthetics of our customers' eyewear. We believe that eyewear can be both stylish and comfortable at the same time. With our unique 3D rendering technology and state-of-the-art AI, we will generate eyewear most suited for our customers.
+                            </Typography>
+                            
+                            <Grid columns={2} mt={4}>
+                                <Button sx={{width:"100px", padding:0.5 ,margin: '4px 10px',color: "white"}} size="small" variant="contained" color="white" href="/upload">Try Now</Button>
+                                <Button sx={{width:"100px", padding:0.5 ,margin: '4px 10px',color: "white"}} color="white" size="small" onClick={handleClick}>Learn More</Button>
+                            </Grid>
+                        </Box>
+                    </Grid>
 
-                                </Box>
-                            </Grid>
-                            <Grid
-                                item
-                                xs={8}
-                                display="flex"
-                                justifyContent={'center'}
-                                alignItems={'center'}
-                            >
-                                <img src={landingImage} className="bigPic"/> 
-                                {/* <Abc fontSize="large" /> replace with own image later */}
-                            </Grid>
-                        </Grid>
-                    {/* </Box> */}
-                {/* </Box> */}
+                    <Grid item xs={8} display="flex" justifyContent={'center'} alignItems={'center'} sx={{padding:"10px"}}>
+                        <img src={glasses_landing} className={`fade-in-right-section ${isVisible ? 'is-visible' : ''}`} ref={domRef}/>
+                    </Grid>
+                </Grid>
 
                 <Divider variant="middle" />
 
-                <Grid container spacing={2} columns={16} py={30}>
-                            <Grid
-                                item
-                                xs={8}
-                                display="flex"
-                                justifyContent={'center'}
-                                alignItems={'center'}
-                            >
-                                <img src={landingImage} className="bigPic"/>  
-                                {/* <Abc fontSize="large" /> replace with own image later */}
-                            </Grid>
-                            <Grid
-                                item
-                                xs={8}
-                                display="flex"
-                                justifyContent={'left'}
-                                alignItems="center"
-                                ref={ref}
-                            >
-                                <Box>
-                                    <Typography variant="h3" component="h1" color="#14140A" >
-                                        <b> Comfort, Convenience & Customisable</b>
-                                    </Typography>
-                                    <Typography variant="body1" component="body1" color="darkGreen">
-                                        In order to optimise the <b>3Cs</b> of eyewear, we utilised state-of-the-art technology that allows us to generate the best fitting eyewear for the users, based on their demographics. In addition, users are able to visualise the eyewear immediately on the 3D render of their faces and based on their style and preferences they can freely customise the eyewear.
-                                    </Typography>
-                                    <Grid container columns={2} spacing={2} mt={4} direction='column' display='-webkit-inline-box'>
-                                        <Grid item xs={1}>
-                                            <DescItem title='Comfort'
-                                                content='Using AI technology, we are able to generate the best fit for the user based on their demographic information.'
-                                                icon={<AutoAwesomeIcon fontSize='large' color="darkGreen"/>}
-                                            />
-                                         </Grid>
-                                        <Grid item xs={1}>
-                                        <DescItem title='Convenience' 
-                                            content='Customising and generation of the eyewear is done entirely online.'
-                                            icon={<AccessAlarmOutlinedIcon fontSize='large' color="darkGreen"/>}
-                                        />
-                                        </Grid>
-                                        <Grid item xs={1}>
-                                        <DescItem title='Customisability' 
-                                            content='Users can select amongst the large variety of colours, material and design of their desired eyewear. Further personalisation like engraving and custom design is also an option in our 3D printed eyewear.'
-                                            icon={<TuneIcon fontSize='large' color="darkGreen"/>}
-                                        />
-                                        </Grid>
-                                    </Grid>
+                {/* Segment 2: User step details */}
 
-                                </Box>
-                            </Grid>
-                        </Grid>
+                <Grid item container spacing={2} columns={3} px={5} py={30} >
+                    <Grid item xs={1} className={`fade-in-left-section1 ${isVisible ? 'is-visible' : ''}`} ref={domRef}>
+                        <DescItem title='Comfort'
+                            content='Using AI technology, we are able to generate the best fit for the user based on their demographic information.'
+                            icon={<AutoAwesomeIcon fontSize='large' color="darkGreen"/>}
+                        />
+                    </Grid>
+                    <Grid item xs={1} className={`fade-in-left-section2 ${isVisible ? 'is-visible' : ''}`} ref={domRef}>
+                        <DescItem title='Convenience' 
+                            content='Customising and generation of the eyewear is done entirely online.'
+                            icon={<AccessAlarmOutlinedIcon fontSize='large' color="darkGreen"/>}
+                        />
+                    </Grid>
+                    <Grid item xs={1} className={`fade-in-left-section3 ${isVisible ? 'is-visible' : ''}`} ref={domRef}>
+                        <DescItem title='Customisability' 
+                            content='Users can select amongst the large variety of colours, material and design of their desired eyewear. Further personalisation like engraving and custom design is also an option in our 3D printed eyewear.'
+                            icon={<TuneIcon fontSize='large' color="darkGreen"/>}
+                        />
+                    </Grid>
+                </Grid>
                 <Typography
                     variant="h4"
                     component="div"
@@ -179,76 +148,17 @@ const HomePage = (props) => {
 
                 <Divider variant="middle" />
 
-                <Box m={3} display="flex" justifyContent="center">
-                    <Grid sx={{ width: 0.8, m: 2}} spacing={3} container>
-                        <Grid
-                            item
-                            xs
-                            display="flex"
-                            justifyContent={'left'}
-                            alignItems="center"
-                            paddingRight={3}
-                        >
-                            <Typography variant='h5'>
-                                <b>Facial Asymmetry</b>
-                                <br></br>
-                                <br></br>
-                                <Typography>Almost everyone has some degree of asymmetry on our face. However, other factors like injury, aging and smoking can contribute to more obvious asymmetry in our faces. These asymmetry result in the fast-fashion eyewear to not rest perfectly on our facial contours and hence result in discomfort.</Typography>
-                            </Typography>
-                            
-                            
-                        </Grid>
-                        {/* <Grid item xs> */}
-                        <Divider orientation="vertical" variant="middle" flexItem />
-                        {/* </Grid> */}
-                        <Grid
-                            item
-                            xs
-                            display="flex"
-                            justifyContent={'center'}
-                            alignItems="center"
-                        >
-                            <img src={landingImage} className='smallPic'/>  {/* replace with own image later */}
-                        </Grid>
-                    </Grid>
-                </Box>
-
-                <Box m={3} display="flex" justifyContent="center">
-                    <Grid sx={{ width: 0.8, m: 2 }} spacing={3} container>
-                        <Grid
-                            item
-                            xs
-                            display="flex"
-                            justifyContent={'right'}
-                            alignItems="center"
-                            paddingRight={3}
-                        >
-                            <img src={landingImage} className='smallPic'/>  {/* replace with own image later */}
-                        </Grid>
-                        {/* <Grid item xs> */}
-                        <Divider orientation="vertical" variant="middle" flexItem />
-                        {/* </Grid> */}
-                        <Grid
-                            item
-                            xs
-                            display="flex"
-                            justifyContent={'center'}
-                            alignItems="center"
-                            paddingLeft={3}
-                        >
-                            <Typography variant='h5'>
-                                <b>Representation of Comfort</b>
-                                <br></br>
-                                <br></br>
-                                <Typography>While comfort is deeply personal to each and every person. Using Big Data and AI technology, we are able to draw hidden insights that perhaps one's preference in comfort may not be as unique as we may think it is. Depending on one's previous eyewear weight and size and the user's demographic, we are able to predict the comfortability factor of a current design at a particular dimension.</Typography>
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </Box>
-
+                {/* Segment 3: MVPs */}
+                <DescItemLargeLeft title="Facial Asymmetry" content="Almost everyone has some degree of asymmetry on our face. However, other factors like injury, aging and smoking can contribute to more obvious asymmetry in our faces. These asymmetry result in the fast-fashion eyewear to not rest perfectly on our facial contours and hence result in discomfort." image={landingImage}/>
                 
+                <DescItemLargeRight 
+                title="Representation of Comfort" 
+                content="While comfort is deeply personal to each and every person. Using Big Data and AI technology, we are able to draw hidden insights that perhaps one's preference in comfort may not be as unique as we may think it is. Depending on one's previous eyewear weight and size and the user's demographic, we are able to predict the comfortability factor of a current design at a particular dimension." 
+                image={landingImage}/>
 
                 <Divider variant="middle" />
+
+                {/* Segment 4: Additional details */}
 
                 <Typography fontSize={25} display="flex" justifyContent={'center'} m={2}>
                     <b>Here's How It Works!</b>
@@ -295,7 +205,7 @@ const HomePage = (props) => {
                         </ListItem>
                     </List>
                 </Box>
-            </Container>
+            </Grid>
             <Box p="30px" sx={{backgroundColor: '#4E542C'}}>
                 <Divider sx={{ bgcolor: "#EAE79B" }} variant="middle"/>
                     <Footer/>                

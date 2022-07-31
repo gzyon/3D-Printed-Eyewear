@@ -17,17 +17,15 @@ import { StylesProvider } from '@mui/styles';
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 //logo
-import logo from './logo.png'
-
-
+import logo from '../../assets/images/olivelogo.png'
 
 const theme = createTheme({
     components: {
         MuiAppBar: {
             styleOverrides: {
                 root: {
-                    backgroundColor: '#fffdf6',
-                    color: '#4E542C'
+                    backgroundColor: '#FFFFFF',
+                    color: '#000000'
                 }
                 
             }
@@ -37,9 +35,7 @@ const theme = createTheme({
 
 function ElevationScroll(props) {
     const { children, window } = props;
-    // Note that you normally won't need to set the window ref as useScrollTrigger
-    // will default to window.
-    // This is only being set here because the demo is in an iframe.
+
     const trigger = useScrollTrigger({
       disableHysteresis: true,
       threshold: 0,
@@ -53,10 +49,6 @@ function ElevationScroll(props) {
   
   ElevationScroll.propTypes = {
     children: PropTypes.element.isRequired,
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
     window: PropTypes.func,
   };
 
@@ -69,20 +61,13 @@ const Header = (props) => {
             <ElevationScroll {...props}>
                 <AppBar>
                     <Toolbar>
-                    <Box
-                        component="img"
-                        sx={{
-                        height: 64,
-                        pr: 2
-                        }}
-                        alt="Your logo."
-                        src={logo}
-                    />
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <b>Olive Eyecare and Wellness</b>
-                        </Typography>
-                            <Button color="inherit" href="/about">About Us</Button>
-                            <Button color="inherit" href="/contact">Contact Us</Button>
+                    <Box display='flex' flexGrow={1} sx={{ height: 40, pr: 2 }}>
+                        <img src={logo} alt="My logo"/>
+                    </Box>
+                    <div >
+                        <Button color="inherit" href="/about">About Us</Button>
+                        <Button color="inherit" href="/contact">Contact Us</Button>
+                    </div>
                     </Toolbar>
                 </AppBar>
                 </ElevationScroll>
