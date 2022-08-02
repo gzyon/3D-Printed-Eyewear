@@ -8,6 +8,7 @@ import CustomisationPanel from "./Components/Customisation/CustomisationPanel";
 
 import React, { Suspense, useState } from "react";
 import Model from "./Components/Model";
+import { useColor } from "react-color-palette";
 
 const ModelPage = (props) => {
     // positioning info
@@ -20,9 +21,12 @@ const ModelPage = (props) => {
     // customisation info
     const [x_value, setXValue] = useState(1);
     const [yz_value, setYZValue] = useState(1);
-
-    // specs calculations
-    const [specsInfo, setSpecsInfo] = useState({});
+    const [leftLength, setLeftLength] = useState(1);
+    const [rightLength, setRightLength] = useState(1);
+    const [color, setColor] = useColor("hex", "#ff0000");
+    const [leftColor, setLeftColor] = useColor("hex", "#ff0000");
+    const [rightColor, setRightColor] = useColor("hex", "#ff0000");
+    const [component, setComponent] = useState(0);
 
     // load models
     let frame1_front, frame_leftCenter, frame_leftEnd, frame_rightCenter, frame_rightEnd, frame2_front, frame3_front;
@@ -39,6 +43,7 @@ const ModelPage = (props) => {
     const front = {frameModel: frameFront.frameModel, position: position};
     const leftArm = {centerFrameModel: frame_leftCenter, endFrameModel: frame_leftEnd, position: leftEar};
     const rightArm = {centerFrameModel: frame_rightCenter, endFrameModel: frame_rightEnd, position: rightEar};
+    const customisations = {frontScale: [x_value, yz_value], frontColor: color, leftScale: leftLength, leftColor: leftColor, rightScale: rightLength, rightColor: rightColor};
 
     // customisation functions
     const changeXValue =(event, value) => {
@@ -48,6 +53,18 @@ const ModelPage = (props) => {
     const changeYZValue =(event, value) => {
         setYZValue(value);
     }
+
+    const changeLeftLength = (event, value) => {
+        setLeftLength(value);
+    }
+
+    const changeRightLength = (event, value) => {
+        setRightLength(value);
+    }
+
+    const handleComponentChange = (event, newValue) => {
+        setComponent(newValue);
+    };
 
     function changeFrame(event) {
         console.log(event);
@@ -71,15 +88,15 @@ const ModelPage = (props) => {
     }
 
     const specs = {
-        eventFunctions: {changeXValue: changeXValue, changeYZValue: changeYZValue, changeFrame: changeFrame, setFrame: setFrame},
-        scaling: {xVal: x_value, yzVal: yz_value},
+        eventFunctions: {changeXValue: changeXValue, changeYZValue: changeYZValue, changeFrame: changeFrame, setFrame: setFrame, setColor: setColor, setComponent: handleComponentChange, changeLeftLength: changeLeftLength, changeRightLength: changeRightLength, setLeftColor: setLeftColor, setRightColor: setRightColor},
+        scaling: {xVal: x_value, yzVal: yz_value, component: component, leftLength: leftLength, rightLength: rightLength, leftColor: leftColor, rightColor: rightColor, color: color},
         frontFrames: {design1: frame1_front, design2: frame2_front, design3: frame3_front}
     }
 
     const modelProps = {
         variables: {render: renderSpecs, clicks: clicks, frameFront: frameFront, leftArm: leftArm, rightArm: rightArm},
         functions: {setFront: setPosition, setLeft: setLeftEar, setRight: setRightEar, setFrame: setFrame, setClicks: setClicks},
-        specCustomisations: {xScale: x_value, yzScale: yz_value}
+        specCustomisations: customisations
     }
 
     if (!renderSpecs) {
@@ -89,12 +106,12 @@ const ModelPage = (props) => {
                     <Canvas camera={{ position: [0, 0, 600] }}>
                         <ambientLight />
                         <Suspense fallback={null}>
-                        <Model modelProps={modelProps} specsInfo={{frameFront: front, leftArm: leftArm, rightArm: rightArm}} />
+                        <Model modelProps={modelProps} specsInfo={{frameFront: front, leftArm: leftArm, rightArm: rightArm, component: component}} />
                         <OrbitControls />
                         </Suspense>
                     </Canvas>
-                    </Grid>
-                    <Grid item xs={4}>
+                </Grid>
+                <Grid item xs={4}>
                     <Stack spacing={2}>
                         <PositioningPanel confirmRender={confirmRender} resetClicks={resetClicks} />
                     </Stack>
@@ -108,7 +125,7 @@ const ModelPage = (props) => {
                 <Grid item xs={8}>
                     <Canvas camera={{ position: [0, 0, 600] }}>
                     <ambientLight />
-                    <Model modelProps={modelProps} specsInfo={{frameFront: front, leftArm: leftArm, rightArm: rightArm}} />
+                    <Model modelProps={modelProps} specsInfo={{frameFront: front, leftArm: leftArm, rightArm: rightArm, component: component}} />
                     <OrbitControls />
                     </Canvas>
                 </Grid>

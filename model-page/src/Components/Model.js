@@ -18,29 +18,10 @@ const Model = (props) => {
 
     if (variables.clicks == 1) {
       eventFunctions.setFront([event.point.x, event.point.y, event.point.z])
-      // let frontInfo = {
-      //   position: [event.point.x, event.point.y, event.point.z],
-      // }
-      // eventFunctions.setFrame((frameFront) => ({
-      //   ...variables.frameFront,
-      //   ...frontInfo,
-      // }))
     } else if (variables.clicks == 2) {
       eventFunctions.setLeft([event.point.x, event.point.y, event.point.z])
-      // let leftInfo = { position: [event.point.x, event.point.y, event.point.z] }
-      // eventFunctions.setLeftArm((leftArm) => ({
-      //   ...variables.leftArm,
-      //   ...leftInfo,
-      // }))
     } else if (variables.clicks == 3) {
       eventFunctions.setRight([event.point.x, event.point.y, event.point.z])
-      // let rightInfo = {
-      //   position: [event.point.x, event.point.y, event.point.z],
-      // }
-      // eventFunctions.setRightArm((rightArm) => ({
-      //   ...variables.rightArm,
-      //   ...rightInfo,
-      // }))
     }
   }
 
