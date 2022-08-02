@@ -1,19 +1,13 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
-import { Button, Grid, Typography } from '@mui/material';
+import { Slider, Typography } from '@mui/material';
 
 const AlignmentButtons = (props) => {
-    
-    const Item = styled(Paper)(({ theme }) => ({
-      backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-      ...theme.typography.body2,
-      padding: theme.spacing(1),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-    }));
+
+    const handleChange = (event, newValue) => {
+        props.setRotation(newValue);
+    }
     
     return (
     <>
@@ -22,27 +16,15 @@ const AlignmentButtons = (props) => {
                 <Typography align='center' color="white">
                     1. Face Direction (Select the direction that the face mesh is facing)
                 </Typography>
-                <Grid container alignItems="center" justifyContent="center" spacing={2}>
-                    <Grid item sx={4}>
-                        <Button onClick={() => {props.setRotation([1, 0, "perpendicular"])}} variant='outlined'>Left</Button>
-                    </Grid>
-                    <Grid item sx={4}>
-                        <Button onClick={() => {props.setRotation([-1, 0, "perpendicular"])}} variant='outlined'>Right</Button>
-                    </Grid>
-                    <Grid item sx={4}>
-                        <Button onClick={() => {props.setRotation([-1, -1, "diagonal"])}} variant='outlined'>Back Left</Button>
-                    </Grid>
-                    <Grid item sx={4}>
-                        <Button onClick={() => {props.setRotation([1, 1, "diagonal"])}} variant='outlined'>Back Right</Button>
-                    </Grid>
-                    <Grid item sx={4}>
-                        <Button onClick={() => {props.setRotation([0, 1, "diagonal"])}} variant='outlined'>Front Left</Button>
-                    </Grid>
-                    <Grid item sx={4}>
-                        <Button onClick={() => {props.setRotation([0, -1, "diagonal"])}} variant='outlined'>Front Right</Button>
-                    </Grid>
-                </Grid>
-                {/* <Button margin={5} variant="contained">Align Head Rotation</Button> */}
+                <Slider 
+                    value={props.rotation} 
+                    onChange={handleChange}
+                    defaultValue={0}
+                    min={-Math.PI} 
+                    max={Math.PI} 
+                    step={0.01}
+                    valueLabelDisplay="auto"
+                />
             </Stack>
         </Box>
     </>

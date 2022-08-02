@@ -1,4 +1,4 @@
-import { Canvas, render, useLoader } from "@react-three/fiber";
+import { Canvas, useLoader } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
@@ -10,6 +10,7 @@ import React, { Suspense, useState } from "react";
 import Model from "./Components/Model";
 import { useColor } from "react-color-palette";
 
+// main page displaying everything including models + customisation features
 const ModelPage = (props) => {
     // positioning info
     const [renderSpecs, setRender] = useState(false);
@@ -17,7 +18,7 @@ const ModelPage = (props) => {
     const [position, setPosition] = useState([]);
     const [leftEar, setLeftEar] = useState([]);
     const [rightEar, setRightEar] = useState([]);
-    const [rotation, setRotation] = useState([0, 0, ""]);
+    const [rotation, setRotation] = useState(0);
 
     // customisation info
     const [x_value, setXValue] = useState(1);
@@ -34,12 +35,19 @@ const ModelPage = (props) => {
     frame1_front = useLoader(OBJLoader, 'frame2/front.obj').children[0];
     frame2_front = useLoader(OBJLoader, '145frame2.obj').children[0];
     frame3_front = useLoader(OBJLoader, "frame3.obj").children[0];
+    frame1_front.name = "frame 1";
+    frame2_front.name = "frame 2";
+    frame3_front.name = "frame 3";
 
+    // frame_leftCenter = useLoader(OBJLoader, 'templeL_spring_bent.obj').children[0];
     frame_leftCenter = useLoader(OBJLoader, 'frame2/templeL_centre.obj').children[0];
     frame_leftEnd = useLoader(OBJLoader, 'frame2/templeL_end.obj').children[0];
+    // frame_rightCenter = useLoader(OBJLoader, 'templeR_spring_bent.obj').children[0];
     frame_rightCenter = useLoader(OBJLoader, 'frame2/templeR_centre.obj').children[0];
     frame_rightEnd = useLoader(OBJLoader, 'frame2/templeR_end.obj').children[0];
+    console.log(frame_leftCenter, frame_rightCenter);
 
+    // frame information
     const [frameFront, setFrame] = useState({frameModel: frame1_front});
     const front = {frameModel: frameFront.frameModel, position: position};
     const leftArm = {centerFrameModel: frame_leftCenter, endFrameModel: frame_leftEnd, position: leftEar};
@@ -88,12 +96,14 @@ const ModelPage = (props) => {
         setRender(false);
     }
 
+    // props to customise spectacles
     const specs = {
         eventFunctions: {changeXValue: changeXValue, changeYZValue: changeYZValue, changeFrame: changeFrame, setFrame: setFrame, setColor: setColor, setComponent: handleComponentChange, changeLeftLength: changeLeftLength, changeRightLength: changeRightLength, setLeftColor: setLeftColor, setRightColor: setRightColor},
         scaling: {xVal: x_value, yzVal: yz_value, component: component, leftLength: leftLength, rightLength: rightLength, leftColor: leftColor, rightColor: rightColor, color: color},
         frontFrames: {design1: frame1_front, design2: frame2_front, design3: frame3_front}
     }
 
+    // props to render head model
     const modelProps = {
         variables: {render: renderSpecs, clicks: clicks, frameFront: frameFront, leftArm: leftArm, rightArm: rightArm},
         functions: {setFront: setPosition, setLeft: setLeftEar, setRight: setRightEar, setFrame: setFrame, setClicks: setClicks},
@@ -114,7 +124,7 @@ const ModelPage = (props) => {
                 </Grid>
                 <Grid item xs={4}>
                     <Stack spacing={2}>
-                        <PositioningPanel confirmRender={confirmRender} resetClicks={resetClicks} setRotation={setRotation} />
+                        <PositioningPanel confirmRender={confirmRender} resetClicks={resetClicks} setRotation={setRotation} rotation={rotation} />
                     </Stack>
                 </Grid>
             </Grid>
@@ -125,9 +135,9 @@ const ModelPage = (props) => {
             <Grid container sx={{height: '100%'}}>
                 <Grid item xs={8}>
                     <Canvas camera={{ position: [0, 0, 600] }}>
-                    <ambientLight />
-                    <Model modelProps={modelProps} specsInfo={{frameFront: front, leftArm: leftArm, rightArm: rightArm, component: component}} />
-                    <OrbitControls />
+                        <ambientLight />
+                        <Model modelProps={modelProps} specsInfo={{frameFront: front, leftArm: leftArm, rightArm: rightArm, component: component}} rotation={rotation} />
+                        <OrbitControls />
                     </Canvas>
                 </Grid>
                 <Grid item xs={4}>

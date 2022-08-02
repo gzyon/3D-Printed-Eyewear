@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import SpecColour from "./SpecColour";
 
 const ScalingOptions = (props) => {
+    console.log(props);
+    
     const customisableValues = props.customisedValues;
     const setStateFunc = props.setStateFunc;
-
-    console.log(props);
 
     function TabPanel(props) {
         const { children, value, index, ...other } = props;
@@ -51,8 +51,8 @@ const ScalingOptions = (props) => {
             value={props.xVal} 
             defaultValue={1}
             onChange={props.changeXValue} 
-            min={0} 
-            max={5} 
+            min={0.5} 
+            max={2} 
             step={0.01}
             valueLabelDisplay="auto"
         />
@@ -77,9 +77,9 @@ const ScalingOptions = (props) => {
                     value={customisableValues.xVal} 
                     defaultValue={1}
                     onChange={setStateFunc.changeXValue} 
-                    min={0} 
-                    max={5} 
-                    step={0.01}
+                    min={0.5} 
+                    max={2} 
+                    step={0.005}
                     valueLabelDisplay="auto"
                 />
                 <Typography align='center' color="white">
@@ -89,9 +89,9 @@ const ScalingOptions = (props) => {
                     value={customisableValues.yzVal} 
                     onChange={setStateFunc.changeYZValue}
                     defaultValue={1}
-                    min={0} 
-                    max={5} 
-                    step={0.01}
+                    min={0.5} 
+                    max={2} 
+                    step={0.005}
                     valueLabelDisplay="auto"
                 />
                 <SpecColour changeColor={setStateFunc.changeColor} color={customisableValues.frontColor}/>
@@ -105,9 +105,9 @@ const ScalingOptions = (props) => {
                     value={customisableValues.leftLength} 
                     onChange={setStateFunc.changeLeftLength}
                     defaultValue={1}
-                    min={0} 
-                    max={5} 
-                    step={0.01}
+                    min={0.5} 
+                    max={2} 
+                    step={0.005}
                     valueLabelDisplay="auto"
                 />
                 <SpecColour changeColor={setStateFunc.changeLeftColor} color={customisableValues.leftColor}/>
@@ -122,8 +122,8 @@ const ScalingOptions = (props) => {
                     onChange={setStateFunc.changeRightLength}
                     defaultValue={1}
                     min={0} 
-                    max={5} 
-                    step={0.01}
+                    max={2} 
+                    step={0.005}
                     valueLabelDisplay="auto"
                 />
                 <SpecColour changeColor={setStateFunc.changeRightColor} color={customisableValues.rightColor}/>

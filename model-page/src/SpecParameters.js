@@ -1,9 +1,9 @@
-// import { PropTypes } from "prop-types";
 import * as THREE from 'three'
 
-function SpecParameters(front, left, right) {
+// all the math
+function SpecParameters(front, left, right, scale) {
 
-    console.log("calculating parameters for ", front, left, right);
+    console.log("calculating parameters for ", front, left, right, scale);
 
     // helper functions
     function getGeometry(object) {
@@ -22,15 +22,12 @@ function SpecParameters(front, left, right) {
      * @param {THREE.BufferGeometry} geometry 
      * @param {Array} rotation 
      */
-    function centraliseMesh(geometry, rotation) {
+    function centraliseMesh(geometry) {
         geometry.computeBoundingBox();
         const center = new THREE.Vector3();
         geometry.boundingBox.getCenter(center);
 
         geometry.translate(-center.x, -center.y, -center.z);
-        // geometry.rotateX(rotation[0]);
-        // geometry.rotateY(rotation[1]);
-        // geometry.rotateZ(rotation[2]);
         
         geometry.computeBoundingBox();
         return geometry;
@@ -57,21 +54,21 @@ function SpecParameters(front, left, right) {
         else return geomBox.max.z;
     }
 
+    // nose bridge positions (hardcoded)
+    const noseBridgePositions = {"frame 1": [front.position[0], front.position[1] - 5, front.position[2]], "frame 2": [front.position[0], front.position[1] - 7, front.position[2]], "frame 3": [front.position[0], front.position[1] - 7, front.position[2]]};
+
     // frame front
     let front_geom, leftCenter_geom, leftEnd_geom, rightCenter_geom, rightEnd_geom;
     
-    front_geom = centraliseMesh(getGeometry(front.frameModel), [-Math.PI / 2, -Math.PI / 2, 0]);
-    // front_geom.rotateX(-Math.PI / 2);
-    // front_geom.rotateY(-Math.PI / 2);
-    // front_geom.computeBoundingBox();
+    front_geom = centraliseMesh(getGeometry(front.frameModel));
     let frontCenterBox;
     const frontCenter = new THREE.Vector3();
     frontCenterBox = front_geom.boundingBox;
     frontCenterBox.getCenter(frontCenter);
     
     // frame left arm
-    leftCenter_geom = centraliseMesh(getGeometry(left.centerFrameModel), [0, -Math.PI / 2, 0]);
-    leftEnd_geom = centraliseMesh(getGeometry(left.endFrameModel), [0, -Math.PI / 2, 0]);
+    leftCenter_geom = centraliseMesh(getGeometry(left.centerFrameModel));
+    leftEnd_geom = centraliseMesh(getGeometry(left.endFrameModel));
     let leftCenterBox, leftEndBox;
     const leftCenter = new THREE.Vector3();
     leftCenterBox = leftCenter_geom.boundingBox;
@@ -81,8 +78,8 @@ function SpecParameters(front, left, right) {
     leftEndBox.getCenter(leftEndCenter);
 
     // frame right arm
-    rightCenter_geom = centraliseMesh(getGeometry(right.centerFrameModel), [0, -Math.PI / 2, 0]);
-    rightEnd_geom = centraliseMesh(getGeometry(right.endFrameModel), [0, -Math.PI / 2, 0]);
+    rightCenter_geom = centraliseMesh(getGeometry(right.centerFrameModel));
+    rightEnd_geom = centraliseMesh(getGeometry(right.endFrameModel));
     let rightCenterBox, rightEndBox;
     const rightCenter = new THREE.Vector3();
     rightCenterBox = rightCenter_geom.boundingBox;
@@ -90,7 +87,6 @@ function SpecParameters(front, left, right) {
     const rightEndCenter = new THREE.Vector3();
     rightEndBox = rightEnd_geom.boundingBox;
     rightEndBox.getCenter(rightEndCenter);
-    // console.log(rightEndBox, rightEndCenter);
     
     // math
 
@@ -116,12 +112,13 @@ function SpecParameters(front, left, right) {
     // position
     const noseBridgePos = [front.position[0], front.position[1] - frontFrameHeight, front.position[2]];
     const yOffset = (frontFrameLength * frontFrameScale) * Math.sin(theta/2);
-    const xOffset = Math.sqrt(Math.pow(frontFrameLength, 2) - Math.pow(yOffset, 2));
+    const xOffset = Math.sqrt(Math.pow(frontFrameLength * scale.frontScale[0], 2) - Math.pow(yOffset, 2));
     const zOffset = ((frontFrameLength * 2) * frontFrameScale) * Math.sin(phi/2);
-    const leftHingePos = [front.position[0] - xOffset + 5, (front.position[1]) * frontFrameScale - yOffset, front.position[2] - (frontFrameWidth * frontFrameScale) + 5 + zOffset];
-    const rightHingePos = [front.position[0] + xOffset - 5, (front.position[1]) * frontFrameScale + yOffset, front.position[2] - (frontFrameWidth * frontFrameScale) + 5 + zOffset];
+    const leftHingePos = [noseBridgePositions[front.frameModel.name][0] - xOffset + 5, (noseBridgePositions[front.frameModel.name][1]) * scale.frontScale[1] - yOffset, noseBridgePositions[front.frameModel.name][2] - (frontFrameWidth * frontFrameScale) + 5 + zOffset];
+    const rightHingePos = [noseBridgePositions[front.frameModel.name][0] + xOffset - 5, (noseBridgePositions[front.frameModel.name][1]) * scale.frontScale[1] + yOffset, noseBridgePositions[front.frameModel.name][2] - (frontFrameWidth * frontFrameScale) + 5 + zOffset];
 
     let keyPositions = {}
+    keyPositions.noseBridgePos = noseBridgePositions[front.frameModel.name];
     keyPositions.leftHinge = leftHingePos;
     keyPositions.rightHinge = rightHingePos;
     keyPositions.leftPosition = left.position;
@@ -156,6 +153,7 @@ function SpecParameters(front, left, right) {
     leftArmInfo.endGeometry = leftEnd_geom;
     leftArmInfo.endPosition = leftArmEndRenderPoint;
     leftArmInfo.scale = [scaledleftArmLength, 1, 1];
+    // leftArmInfo.centerRotation = [-Math.PI / 2 - leftArmXRotation, 0, -Math.PI / 2 - leftArmYRotation];
     leftArmInfo.centerRotation = [0, -Math.PI / 2 - leftArmYRotation, leftArmXRotation];
     leftArmInfo.endRotation = [-leftArmXRotation, -Math.PI / 2, 0];
 
@@ -183,6 +181,7 @@ function SpecParameters(front, left, right) {
     rightArmInfo.endGeometry = rightEnd_geom;
     rightArmInfo.endPosition = rightArmEndRenderPoint;
     rightArmInfo.scale = [scaledRightArmLength, 1, 1];
+    // rightArmInfo.centerRotation = [-Math.PI / 2 - rightArmXRotation, 0, -Math.PI / 2 + rightArmYRotation];
     rightArmInfo.centerRotation = [0, -Math.PI / 2 + rightArmYRotation, rightArmXRotation];
     rightArmInfo.endRotation = [-rightArmXRotation, -Math.PI / 2, 0];
 
@@ -195,5 +194,3 @@ function SpecParameters(front, left, right) {
 }
 
 export default SpecParameters;
-
-// SpecParameters.propTypes = 

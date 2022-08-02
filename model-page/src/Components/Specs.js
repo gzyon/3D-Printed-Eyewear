@@ -1,14 +1,15 @@
-import React, { useState } from "react"
+import * as React from "react"
 import SpecParameters from "../SpecParameters";
 
 const Specs = (props) => {
     console.log(props);
-    const specsInfo = SpecParameters(props.specsInfo.frameFront, props.specsInfo.leftArm, props.specsInfo.rightArm);
+    const customisations = props.customScale;
+    const scaling = {frontScale: customisations.frontScale, leftScale: customisations.leftScale, rightScale: customisations.rightScale};
+    const specsInfo = SpecParameters(props.specsInfo.frameFront, props.specsInfo.leftArm, props.specsInfo.rightArm, scaling);
     const frontFrameInfo = specsInfo.frontFrame;
     const leftArmInfo = specsInfo.leftArm;
     const rightArmInfo = specsInfo.rightArm;
     const keyPositions = specsInfo.keyPositions;
-    const customisations = props.customScale;
 
     let frontFrameScale, leftArmScale, rightArmScale 
     frontFrameScale = [frontFrameInfo.scale, frontFrameInfo.scale * customisations.frontScale[0], frontFrameInfo.scale * customisations.frontScale[1]]
@@ -17,6 +18,10 @@ const Specs = (props) => {
 
     return (
         <>
+            <mesh position={keyPositions.noseBridgePos}>
+                <boxGeometry args={[5, 5, 5]} />
+                <meshStandardMaterial color={'blue'} />
+            </mesh> 
             <mesh geometry={frontFrameInfo.geometry} position={frontFrameInfo.position} rotation={frontFrameInfo.rotation}  scale={frontFrameScale}>
             {/* <mesh geometry={frontFrameInfo.geometry}> */}
                 <meshStandardMaterial attach="material" color={customisations.frontColor.hex} /> 

@@ -5,7 +5,7 @@ import AlignmentButtons from "./AlignmentButtons";
 const PositioningPanel = (props) => {
     return(
         <>
-        <AlignmentButtons setRotation={props.setRotation} />
+        <AlignmentButtons setRotation={props.setRotation} rotation={props.rotation} />
         <Divider variant="middle" sx={{color: "white"}} />
         <Typography align='center' color="white">
             2. Positioning the frames (Click on the points located between the eyebrows and just before the ears)
