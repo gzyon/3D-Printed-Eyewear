@@ -27,6 +27,8 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 const { palette } = createTheme();
 const { augmentColor } = palette;
 
+// import { Storage } from '@google-cloud/storage';
+
 const createColor = (mainColor) => augmentColor({ color: { main: mainColor } });
 const theme = createTheme({
     components: {
@@ -62,10 +64,24 @@ const theme = createTheme({
     }
 })
 
+async function downloadIntoMemory(storage, bucketName, fileName) {
+    // Downloads the file into a buffer in memory.
+    const contents = await storage.bucket(bucketName).file(fileName).download();
+  
+    console.log(
+      `Contents of gs://${bucketName}/${fileName} are ${contents.toString()}.`
+    );
+  
+    return contents;
+  }
+
 
 
 const HomePage = (props) => {
 
+    
+    const bucketName = "olive-eyewear-and-wellness-bucket"
+    const fileName = "frame1.obj"
     const ref = useRef(null);
 
     const handleClick = () => {
@@ -81,6 +97,8 @@ const HomePage = (props) => {
         observer.observe(domRef.current);
         return () => observer.unobserve(domRef.current);
     }, []);
+
+    
 
     return (
         <StylesProvider injectFirst>
