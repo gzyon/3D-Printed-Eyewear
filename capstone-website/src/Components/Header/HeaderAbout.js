@@ -15,16 +15,13 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 //logo
 import logo from '../../assets/images/olivelogo.png'
 
-
-
-
 const theme = createTheme({
     components: {
         MuiAppBar: {
             styleOverrides: {
                 root: {
-                    backgroundColor: '#fffdf6',
-                    color: '#4E542C'
+                    backgroundColor: '#FFFFFF',
+                    color: '#000000'
                 }
                 
             }
@@ -39,20 +36,13 @@ const HeaderAbout = () => {
             <ThemeProvider theme={theme}>
                 <AppBar position="static" className="Appbar">
                     <Toolbar>
-                    <Box
-                        component="img"
-                        sx={{
-                        height: 64,
-                        pr: 2
-                        }}
-                        alt="Your logo."
-                        src={logo}
-                    />
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <b>Olive Eyecare and Wellness</b>
-                        </Typography>
-                            <Button color="inherit" href="/">Home</Button>
-                            <Button color="inherit" href="/contact">Contact Us</Button>
+                        <Box display='flex' flexGrow={1} sx={{ height: 40, pr: 2 }}>
+                            <img src={logo} alt="My logo"/>
+                        </Box>
+                        <div >
+                                <Button color="inherit" href="/">Home</Button>
+                                <Button color="inherit" href="/contact">Contact Us</Button>
+                        </div>
                     </Toolbar>
                 </AppBar>
             </ThemeProvider>

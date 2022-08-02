@@ -17,6 +17,7 @@ const ModelPage = (props) => {
     const [position, setPosition] = useState([]);
     const [leftEar, setLeftEar] = useState([]);
     const [rightEar, setRightEar] = useState([]);
+    const [rotation, setRotation] = useState([0, 0, ""]);
 
     // customisation info
     const [x_value, setXValue] = useState(1);
@@ -106,14 +107,14 @@ const ModelPage = (props) => {
                     <Canvas camera={{ position: [0, 0, 600] }}>
                         <ambientLight />
                         <Suspense fallback={null}>
-                        <Model modelProps={modelProps} specsInfo={{frameFront: front, leftArm: leftArm, rightArm: rightArm, component: component}} />
+                        <Model modelProps={modelProps} specsInfo={{frameFront: front, leftArm: leftArm, rightArm: rightArm, component: component}} rotation={rotation} />
                         <OrbitControls />
                         </Suspense>
                     </Canvas>
                 </Grid>
                 <Grid item xs={4}>
                     <Stack spacing={2}>
-                        <PositioningPanel confirmRender={confirmRender} resetClicks={resetClicks} />
+                        <PositioningPanel confirmRender={confirmRender} resetClicks={resetClicks} setRotation={setRotation} />
                     </Stack>
                 </Grid>
             </Grid>
@@ -130,7 +131,7 @@ const ModelPage = (props) => {
                     </Canvas>
                 </Grid>
                 <Grid item xs={4}>
-                    <CustomisationPanel specDetails={specs} resetClicks={resetClicks}  />
+                    <CustomisationPanel specDetails={specs} resetClicks={resetClicks} />
                 </Grid>
             </Grid>
         )
