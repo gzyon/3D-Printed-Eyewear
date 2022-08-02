@@ -5,8 +5,6 @@ import * as THREE from 'three'
 
 const Model = (props) => {
   console.log(props)
-  const [rotation, setRotation] = useState([0, 0, 0])
-  const [spec_scale, setScale] = useState(1)
 
   const variables = props.modelProps.variables
   const eventFunctions = props.modelProps.functions
@@ -31,7 +29,7 @@ const Model = (props) => {
         position={[0, -150, 0]}
         onClick={onClick}
         scale={1250}
-        rotation={rotation}
+        rotation={props.rotation}
       />
       // <Specs specsInfo={props.specsInfo} />
     )
@@ -39,7 +37,7 @@ const Model = (props) => {
     console.log(props.specsInfo)
     return (
       <>
-        <GltfModel position={[0, -150, 0]} onClick={onClick} scale={1250} />
+        <GltfModel position={[0, -150, 0]} onClick={onClick} scale={1250} rotation={props.rotation} />
         <primitive object={new THREE.AxesHelper(100)} />
         <Specs specsInfo={props.specsInfo} customScale={props.modelProps.specCustomisations} />
       </>

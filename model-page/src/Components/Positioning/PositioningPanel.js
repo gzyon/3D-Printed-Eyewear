@@ -1,11 +1,15 @@
-import { Button, Grid } from "@mui/material";
+import { Button, Divider, Grid, Typography } from "@mui/material";
 import * as React from "react";
 import AlignmentButtons from "./AlignmentButtons";
 
 const PositioningPanel = (props) => {
     return(
         <>
-        <AlignmentButtons />
+        <AlignmentButtons setRotation={props.setRotation} />
+        <Divider variant="middle" sx={{color: "white"}} />
+        <Typography align='center' color="white">
+            2. Positioning the frames (Click on the points located between the eyebrows and just before the ears)
+        </Typography>
         <Grid container spacing={2}>
             <Grid item xs={6}>
                 <Button onClick={props.confirmRender} variant="outlined">

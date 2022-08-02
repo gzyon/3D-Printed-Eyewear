@@ -7,19 +7,30 @@ import { useGLTF } from "@react-three/drei";
 import * as THREE from 'three'
 
 export default function GltfModel({ ...props }) {
-  // console.log(props);
+  console.log(props);
   const group = useRef();
-  const { nodes, materials } = useGLTF("/dharmesh.glb");
+  const { nodes, materials } = useGLTF("/poly.glb");
   // console.log(nodes, materials);
   const rotatedGeometry = nodes.mesh_0.geometry;
   // console.log(rotatedGeometry.boundingBox);
-  const angle = Math.tan(rotatedGeometry.boundingBox.max.z / rotatedGeometry.boundingBox.max.x)
+  const angle = Math.tan(rotatedGeometry.boundingBox.max.z / rotatedGeometry.boundingBox.max.x);
+  let rotation;
+  if (props.rotation[2] == "perpendicular") rotation = [0, props.rotation[0] * (Math.PI / 2), 0];
+  else if (props.rotation[2] == "diagonal") {
+    console.log("?");
+    rotation = [0, props.rotation[0] * Math.PI + props.rotation[1] * (angle / 2), 0];
+  }
+  console.log(rotation)
+  // const rotation = props.rotation + angle / 2;
   // }
   return (
     // <group ref={group} dispose={null} {...props}>
       <mesh 
-        {...props}
-        rotation={[0, Math.PI + angle /2, 0]}
+        position={props.position}
+        onClick={props.onClick}
+        scale={props.scale}
+        // {...props}
+        rotation={rotation}
         castShadow
         receiveShadow
         geometry={rotatedGeometry}

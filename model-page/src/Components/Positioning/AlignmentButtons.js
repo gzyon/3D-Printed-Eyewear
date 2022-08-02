@@ -20,31 +20,29 @@ const AlignmentButtons = (props) => {
         <Box sx={{ width: '100%' }} alignItems="center" justifyContent="center">
             <Stack spacing={2}>
                 <Typography align='center' color="white">
-                    Face Direction
+                    1. Face Direction (Select the direction that the face mesh is facing)
                 </Typography>
                 <Grid container alignItems="center" justifyContent="center" spacing={2}>
-                    <Grid item sx={6}>
-                        <Button variant='outlined'>Left</Button>
+                    <Grid item sx={4}>
+                        <Button onClick={() => {props.setRotation([1, 0, "perpendicular"])}} variant='outlined'>Left</Button>
                     </Grid>
-                    <Grid item sx={6}>
-                        <Button variant='outlined'>Right</Button>
+                    <Grid item sx={4}>
+                        <Button onClick={() => {props.setRotation([-1, 0, "perpendicular"])}} variant='outlined'>Right</Button>
+                    </Grid>
+                    <Grid item sx={4}>
+                        <Button onClick={() => {props.setRotation([-1, -1, "diagonal"])}} variant='outlined'>Back Left</Button>
+                    </Grid>
+                    <Grid item sx={4}>
+                        <Button onClick={() => {props.setRotation([1, 1, "diagonal"])}} variant='outlined'>Back Right</Button>
+                    </Grid>
+                    <Grid item sx={4}>
+                        <Button onClick={() => {props.setRotation([0, 1, "diagonal"])}} variant='outlined'>Front Left</Button>
+                    </Grid>
+                    <Grid item sx={4}>
+                        <Button onClick={() => {props.setRotation([0, -1, "diagonal"])}} variant='outlined'>Front Right</Button>
                     </Grid>
                 </Grid>
-                <Typography align='center' color="white">
-                    Alignment
-                </Typography>
-                <Grid container alignItems="center" justifyContent="center" spacing={1}>
-                    <Grid item sx={4}>
-                        <Button variant='outlined'>Perpendicular</Button>
-                    </Grid>
-                    <Grid item sx={4}>
-                        <Button variant='outlined'>Diagonally Left</Button>
-                    </Grid>
-                    <Grid item sx={4}>
-                        <Button variant='outlined'>Diagonally Right</Button>
-                    </Grid>
-                </Grid>
-                <Button margin={5} variant="contained">Recenter</Button>
+                {/* <Button margin={5} variant="contained">Align Head Rotation</Button> */}
             </Stack>
         </Box>
     </>
