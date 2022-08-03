@@ -1,13 +1,159 @@
 body{
-    background-color: #FFFDF6;
+    background-color: #FFFFFF !important;
     font-family: Roboto;
 }
 
 
-img.bigPic{
+img.bigPicS1{
     max-width:-webkit-fill-available;
+    animation: fadeInRight 1s ease-in-out;
 }
 
-img.smallPic{
-    max-width:inherit;
+img.bigPicS2{
+    max-width:-webkit-fill-available;
+    animation: fadeInLeft 1s ease-in-out;
 }
+
+@keyframes fadeInRight {
+    from {
+      opacity: 0;
+      transform: translateX(300px);
+    }
+    to {
+      opacity: 1;
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-300px);
+    }
+    to {
+      opacity: 1;
+    }
+}
+
+.fade-in-bottom-section {
+    opacity: 0;
+    transform: translateY(-20vh);
+    visibility: hidden;
+    transition: opacity 0.6s ease-out, transform 1.2s ease-out;
+    will-change: opacity, visibility;
+}
+
+.fade-in-bottom-section.is-visible {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+}
+
+.fade-in-right-section {
+    max-width:-webkit-fill-available;
+    opacity: 0;
+    transform: translateX(20vh);
+    visibility: hidden;
+    transition: opacity 0.6s ease-out, transform 1.2s ease-out;
+    will-change: opacity, visibility;
+}
+
+.fade-in-right-section.is-visible {
+    max-width:-webkit-fill-available;
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+}
+
+.fade-in-right-section-small {
+    max-width:inherit;
+    opacity: 0;
+    transform: translateX(20vh);
+    visibility: hidden;
+    transition: opacity 0.6s ease-out, transform 1.2s ease-out;
+    will-change: opacity, visibility;
+}
+
+.fade-in-right-section-small.is-visible {
+    max-width:inherit;
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+}
+
+.fade-in-left-section1 {
+    max-width:-webkit-fill-available;
+    opacity: 0;
+    transform: translateX(-20vh);
+    visibility: hidden;
+    transition: opacity 0.6s ease-out, transform 1.2s ease-out;
+    will-change: opacity, visibility;
+}
+
+.fade-in-left-section1.is-visible {
+    max-width:-webkit-fill-available;
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+}
+
+.fade-in-left-section2 {
+    max-width:-webkit-fill-available;
+    opacity: 0;
+    transform: translateX(-20vh);
+    visibility: hidden;
+    transition: opacity 0.6s ease-out, transform 1.2s ease-out;
+    transition-delay: 0.3s;
+    will-change: opacity, visibility;
+}
+
+.fade-in-left-section2.is-visible {
+    max-width:-webkit-fill-available;
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+}
+
+.fade-in-left-section3 {
+    max-width:-webkit-fill-available;
+    opacity: 0;
+    transform: translateX(-20vh);
+    visibility: hidden;
+    transition: opacity 0.6s ease-out, transform 1.2s ease-out;
+    transition-delay: 0.5s;
+    will-change: opacity, visibility;
+}
+
+.fade-in-left-section3.is-visible {
+    max-width:-webkit-fill-available;
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+}
+
+.fade-in-left-section-small {
+    max-width:inherit;
+    opacity: 0;
+    transform: translateX(-20vh);
+    visibility: hidden;
+    transition: opacity 0.6s ease-out, transform 1.2s ease-out;
+    will-change: opacity, visibility;
+}
+
+.fade-in-left-section-small.is-visible {
+    max-width:inherit;
+    opacity: 1;
+    transform: none;
+    visibility: visible;
+}
+
+
+img.smallPicL{
+    max-width:inherit;
+    animation: fadeInLeft 1s ease-in-out;
+}
+
+img.smallPicR{
+    max-width:inherit;
+    animation: fadeInRight 1s ease-in-out;
+}
+

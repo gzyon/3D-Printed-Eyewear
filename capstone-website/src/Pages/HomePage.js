@@ -1,14 +1,19 @@
 import { Typography, Grid, styled, Paper, Box, Button, Divider, List, ListItem, ListItemText, Container, BottomNavigation } from '@mui/material'
 import React from 'react'
+import {useRef} from 'react'
 import Header from '../Components/Header/Header'
 import Footer from '../Components/Footer/Footer'
 import Toolbar from '@mui/material/Toolbar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Abc from '@mui/icons-material/Abc'
 import './HomePage.css';
+// import { sizing } from '@material-ui/system';
 
 import landingImage from '../assets/images/landing.png'
+import glasses_landing from '../assets/images/glasses_landing.png'
 import DescItem from '../Components/DescItem/DescItem'
+import DescItemLargeLeft from '../Components/DescItemLarge/DescItemLargeLeft'
+import DescItemLargeRight from '../Components/DescItemLarge/DescItemLargeRight'
 
 //styles
 import { StylesProvider } from '@mui/styles';
@@ -16,9 +21,13 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 // icons
 import AccessAlarmOutlinedIcon from '@mui/icons-material/AccessAlarmOutlined';
+import TuneIcon from '@mui/icons-material/Tune';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 const { palette } = createTheme();
 const { augmentColor } = palette;
+
+// import { Storage } from '@google-cloud/storage';
 
 const createColor = (mainColor) => augmentColor({ color: { main: mainColor } });
 const theme = createTheme({
@@ -26,7 +35,7 @@ const theme = createTheme({
         MuiTypography: {
             styleOverrides: {
                 root: {
-                    color: "#4E542C"
+                    color: "#000000"
                 }
                 
             }
@@ -38,17 +47,58 @@ const theme = createTheme({
                 }
                 
             }
+        },
+        MuiDivider:{
+            styleOverrides:{
+                root:{
+                    background: "#2e2e2e"
+                }
+            }
         }
     },
     palette:{
         darkGreen: createColor("#4E542C"),
-        lightGreen: createColor("#EAE79B")
+        lightGreen: createColor("#EAE79B"),
+        white:createColor("#FFFFFF"),
+        black:createColor("#000000")
     }
 })
+
+async function downloadIntoMemory(storage, bucketName, fileName) {
+    // Downloads the file into a buffer in memory.
+    const contents = await storage.bucket(bucketName).file(fileName).download();
+  
+    console.log(
+      `Contents of gs://${bucketName}/${fileName} are ${contents.toString()}.`
+    );
+  
+    return contents;
+  }
 
 
 
 const HomePage = (props) => {
+
+    
+    const bucketName = "olive-eyewear-and-wellness-bucket"
+    const fileName = "frame1.obj"
+    const ref = useRef(null);
+
+    const handleClick = () => {
+        ref.current?.scrollIntoView({behavior: 'smooth'});
+    };
+
+    const [isVisible, setVisible] = React.useState(true);
+    const domRef = React.useRef();
+    React.useEffect(() => {
+        const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => setVisible(entry.isIntersecting));
+        });
+        observer.observe(domRef.current);
+        return () => observer.unobserve(domRef.current);
+    }, []);
+
+    
 
     return (
         <StylesProvider injectFirst>
@@ -56,239 +106,128 @@ const HomePage = (props) => {
         <React.Fragment>
         <CssBaseline />
             <Header />
-            <Container>
-                {/* <Box display="flex" justifyContent="center"> */}
-                    {/* <Box
-                        sx={{ width: 0.8, border: 1, m: 3 }}
-                        display="flex"
-                        justifyContent="center"
-                    > */}
-                        <Grid container spacing={2} columns={16} py={30}>
-                            <Grid
-                                item
-                                xs={8}
-                                display="flex"
-                                justifyContent={'left'}
-                                alignItems="center"
-                            >
-                                <Box>
-                                    <Typography variant="h3" component="h1" color="#14140A">
-                                        <b>Introduce Your Product Quickly & Effectively</b>
-                                    </Typography>
-                                    <Typography variant="body1" component="body1" color="darkGreen">
-                                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus 
-    mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
-                                    </Typography>
-                                    <Grid columns={2} mt={4}>
-                                        <Button m={2} variant="contained" color="darkGreen">Purchase Now</Button>
-                                        <Button sx={
-                                            {
-                                                margin: '8px 30px',
-                                                color: "#4E542C"
-                                            }
-                                        } color="darkGreen">Learn More</Button>
-                                    </Grid>
-
-                                </Box>
+            <Grid container>
+                {/* Segment 1: Main product selling page */}
+                <Grid item container columns={5} py={5}>
+                    <Grid sx={{backgroundColor:'#000000', height: '80vh'}} item md={3} display="flex" justifyContent={'left'} alignItems="center" ref={domRef}>
+                        <Box sx={{backgroundColor:'#000000', padding:"100px", width:"45vw"}}>
+                            <Typography variant="h4" color="#FFFFFF">
+                                <b>Customisable, Ergonomic eyewear</b>
+                            </Typography>
+                            
+                            <Typography variant="body2" color="#FFFFFF" >
+                                Here at Olive Eyecare and Wellness, we are invested in the comfort and aesthetics of our customers' eyewear. We believe that eyewear can be both stylish and comfortable at the same time. With our unique 3D rendering technology and state-of-the-art AI, we will generate eyewear most suited for our customers.
+                            </Typography>
+                            
+                            <Grid columns={2} mt={4}>
+                                <Button sx={{width:"100px", padding:0.5 ,margin: '4px 10px',color: "white"}} size="small" variant="contained" color="white" href="/upload">Try Now</Button>
+                                <Button sx={{width:"100px", padding:0.5 ,margin: '4px 10px',color: "white"}} color="white" size="small" onClick={handleClick}>Learn More</Button>
                             </Grid>
-                            <Grid
-                                item
-                                xs={8}
-                                display="flex"
-                                justifyContent={'center'}
-                                alignItems={'center'}
-                            >
-                                <img src={landingImage} className="bigPic"/> 
-                                {/* <Abc fontSize="large" /> replace with own image later */}
-                            </Grid>
-                        </Grid>
-                    {/* </Box> */}
-                {/* </Box> */}
-
-                <Divider variant="middle" />
-
-                <Grid container spacing={2} columns={16} py={30}>
-                            <Grid
-                                item
-                                xs={8}
-                                display="flex"
-                                justifyContent={'left'}
-                                alignItems="center"
-                            >
-                                <Box>
-                                    <Typography variant="h3" component="h1" color="#14140A">
-                                        <b>Light, Fast & Powerful</b>
-                                    </Typography>
-                                    <Typography variant="body1" component="body1" color="darkGreen">
-                                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus 
-    mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
-                                    </Typography>
-                                    <Grid container columns={2} mt={4} direction='column' display='-webkit-inline-box'>
-                                        <Grid item m='32px 32px 32px 0px' maxWidth='200px' minWidth='200px'>
-                                            <DescItem title='Convenience'
-                                                content=' Lorem ipsum dolor sit amet, consectetuer adipisc'
-                                                icon={<AccessAlarmOutlinedIcon fontSize='large' color="darkGreen"/>}
-                                            />
-                                         </Grid>
-                                        <Grid item m='32px 32px 32px 0px' maxWidth='200px' minWidth='200px'>
-                                        <DescItem title='Comfort' content='lorem ipsum'
-                                            icon={<AccessAlarmOutlinedIcon fontSize='large' color="darkGreen"/>}
-                                        />
-                                        </Grid>
-                                        <Grid item m='32px 32px 32px 0px' maxWidth='200px' minWidth='200px'>
-                                        <DescItem title='Customisability' content='lorem ipsum'
-                                            icon={<AccessAlarmOutlinedIcon fontSize='large' color="darkGreen"/>}
-                                        />
-                                        </Grid>
-                                    </Grid>
-
-                                </Box>
-                            </Grid>
-                            <Grid
-                                item
-                                xs={8}
-                                display="flex"
-                                justifyContent={'center'}
-                                alignItems={'center'}
-                            >
-                                <img src={landingImage} className="bigPic"/>  
-                                {/* <Abc fontSize="large" /> replace with own image later */}
-                            </Grid>
-                        </Grid>
-                <Typography
-                    variant="h4"
-                    component="div"
-                    m={2}
-                    display="flex"
-                    justifyContent="center"
-                    align='center'
-                >
-                    <b>What are the problems faced?</b>
-                </Typography>
-
-                <Divider variant="middle" />
-
-                <Box m={3} display="flex" justifyContent="center">
-                    <Grid sx={{ width: 0.8, m: 2 }} spacing={3} container>
-                        <Grid
-                            item
-                            xs
-                            display="flex"
-                            justifyContent={'left'}
-                            alignItems="center"
-                        >
-                            <Typography>Thing 1</Typography>
-                        </Grid>
-                        {/* <Grid item xs> */}
-                        <Divider orientation="vertical" variant="middle" flexItem />
-                        {/* </Grid> */}
-                        <Grid
-                            item
-                            xs
-                            display="flex"
-                            justifyContent={'center'}
-                            alignItems="center"
-                        >
-                            <img src={landingImage} className='smallPic'/>  {/* replace with own image later */}
-                        </Grid>
+                        </Box>
                     </Grid>
-                </Box>
 
-                <Box m={3} display="flex" justifyContent="center">
-                    <Grid sx={{ width: 0.8, m: 2 }} spacing={3} container>
-                        <Grid
-                            item
-                            xs
-                            display="flex"
-                            justifyContent={'left'}
-                            alignItems="center"
-                        >
-                            <img src={landingImage} className='smallPic'/>  {/* replace with own image later */}
-                        </Grid>
-                        {/* <Grid item xs> */}
-                        <Divider orientation="vertical" variant="middle" flexItem />
-                        {/* </Grid> */}
-                        <Grid
-                            item
-                            xs
-                            display="flex"
-                            justifyContent={'center'}
-                            alignItems="center"
-                        >
-                            <Typography>Thing 2</Typography>
-                        </Grid>
+                    <Grid item md={2} display="flex" justifyContent={'center'} alignItems={'center'} sx={{padding:"10px", margin:"150px 0px 0px -100px", display: { xs: 'none', md: 'block' }}}>
+                        <img src={glasses_landing} height={280}/>
                     </Grid>
-                </Box>
+                </Grid>
 
-                <Box m={3} display="flex" justifyContent="center">
-                    <Grid sx={{ width: 0.8, m: 2 }} spacing={3} container>
-                        <Grid item xs display="flex" justifyContent={'left'}>
-                            <Typography>Thing 3</Typography>
-                        </Grid>
-                        {/* <Grid item xs> */}
-                        <Divider orientation="vertical" variant="middle" flexItem />
-                        {/* </Grid> */}
-                        <Grid
-                            item
-                            xs
-                            display="flex"
-                            justifyContent={'center'}
-                            alignItems="center"
-                        >
-                            <img src={landingImage} className='smallPic'/>  {/* replace with own image later */}
-                        </Grid>
+                {/* Segment 2: User step details */}
+
+                <Grid item container spacing={8} columns={4} px={5} py={5} sx={{height:"80vh"}} alignContent="center">
+                    <Grid item md={1} className={`fade-in-left-section1 ${isVisible ? 'is-visible' : ''}`} ref={domRef}>
+                        <DescItem title='User Step 1'
+                            content='Using AI technology, we are able to generate the best fit for the user based on their demographic information.'
+                            icon={<AutoAwesomeIcon fontSize='large' color="black"/>}
+                        />
                     </Grid>
-                </Box>
+                    <Grid item md={1} className={`fade-in-left-section2 ${isVisible ? 'is-visible' : ''}`} ref={domRef}>
+                        <DescItem title='User Step 2' 
+                            content='Customising and generation of the eyewear is done entirely online.'
+                            icon={<AccessAlarmOutlinedIcon fontSize='large' color="black"/>}
+                        />
+                    </Grid>
+                    <Grid item md={1} className={`fade-in-left-section3 ${isVisible ? 'is-visible' : ''}`} ref={domRef}>
+                        <DescItem title='User Step 3' 
+                            content='Users can select amongst the large variety of colours, material and design of their desired eyewear. Further personalisation like engraving and custom design is also an option in our 3D printed eyewear.'
+                            icon={<TuneIcon fontSize='large' color="black"/>}
+                        />
+                    </Grid>
+                    <Grid item md={1} className={`fade-in-left-section3 ${isVisible ? 'is-visible' : ''}`} ref={domRef}>
+                        <DescItem title='User Step 4' 
+                            content='Users can select amongst the large variety of colours, material and design of their desired eyewear. Further personalisation like engraving and custom design is also an option in our 3D printed eyewear.'
+                            icon={<TuneIcon fontSize='large' color="black"/>}
+                        />
+                    </Grid>
+                </Grid>
+                {/* <Grid item container justifyContent="center" align='center' >
+                    <Grid item>
+                        <Typography
+                            variant="h4"
+                            component="div"
+                            m={2}
+                            display="flex"
+                        >
+                            <b>What do we aim to solve?</b>
+                        </Typography>
+                    </Grid>
 
-                <Divider variant="middle" />
 
-                <Typography fontSize={25} display="flex" justifyContent={'center'} m={2}>
-                    <b>Here's How It Works!</b>
-                </Typography>
-                <Box
-                    sx={{ m: 3 }}
-                    display="flex"
-                    justifyContent="center"
-                // alignItems="center"
-                >
-                    <List sx={{ display: 'list-item' }}>
-                        <ListItem>
-                            <ListItemText
-                                disableTypography
-                                primary={<Typography fontSize={20} type="body1" style={{ color: '#4E542C' }}><b>1. Scan Your Face</b></Typography>}
-                                secondary={<Typography fontSize={15} type="body2" style={{ color: '#4E542C' }}>Short description of scanning process</Typography>}
-                                
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemText
-                                disableTypography
-                                primary={<Typography fontSize={20} type="body1" style={{ color: '#4E542C' }}><b>2. Select Your Favourite Frame Design</b></Typography>}
-                                secondary={<Typography fontSize={15} type="body2" style={{ color: '#4E542C' }}>Short description of virtual try-on</Typography>}
-                                
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemText
-                                disableTypography
-                                primary={<Typography fontSize={20} type="body1" style={{ color: '#4E542C' }}><b>3. Receive Your New Frame</b></Typography>}
-                                secondary={<Typography fontSize={15} type="body2" style={{ color: '#4E542C' }}>Short description of production and home delivery</Typography>}
-                                
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemText
-                                disableTypography
-                                primary={<Typography fontSize={20} type="body1" style={{ color: '#4E542C' }}><b>4. Fine Tuning of Frame</b></Typography>}
-                                secondary={<Typography fontSize={15} type="body2" style={{ color: '#4E542C' }}>Short description of how to adjust intricate pieces</Typography>}
-                                
-                            />
-                        </ListItem>
-                    </List>
-                </Box>
-            </Container>
-            <Box p="30px" sx={{backgroundColor: '#4E542C'}}>
-                <Divider sx={{ bgcolor: "#EAE79B" }} variant="middle"/>
+                    {/* Segment 3: MVPs */}
+                    {/* <Grid item>
+                        <DescItemLargeLeft title="Facial Asymmetry" content="Almost everyone has some degree of asymmetry on our face. However, other factors like injury, aging and smoking can contribute to more obvious asymmetry in our faces. These asymmetry result in the fast-fashion eyewear to not rest perfectly on our facial contours and hence result in discomfort." image={landingImage}/>
+                        
+                        <DescItemLargeRight 
+                        title="Representation of Comfort" 
+                        content="While comfort is deeply personal to each and every person. Using Big Data and AI technology, we are able to draw hidden insights that perhaps one's preference in comfort may not be as unique as we may think it is. Depending on one's previous eyewear weight and size and the user's demographic, we are able to predict the comfortability factor of a current design at a particular dimension." 
+                        image={landingImage}/>
+                    </Grid>
+                </Grid> */}
+
+
+                {/* Segment 4: Additional details */}
+                <Grid item container py={5}>
+                    <Grid sx={{backgroundColor:'#000000'}} item display="flex" justifyContent={'left'} alignItems="center" ref={domRef}>
+                        <Box sx={{backgroundColor:'#000000', padding:"100px"}}>
+                            <Typography variant="h4" color="#FFFFFF">
+                                <b>Customisable, Ergonomic eyewear</b>
+                            </Typography>
+                            
+                            <Typography variant="body2" color="#FFFFFF" >
+                                Some random content here!!
+                                 we are invested in the comfort and aesthetics of our customers' eyewear. We believe that eyewear can be both stylish and comfortable at the same time. With our unique 3D rendering technology and state-of-the-art AI, we will generate eyewear most suited for our customers.
+                            </Typography>
+                            
+                        </Box>
+                    </Grid>
+                </Grid>
+
+                <Grid item container justifyContent="center" align='center' >
+                    <Grid item>
+                        <Typography
+                            variant="h4"
+                            component="div"
+                            m={2}
+                            display="flex"
+                        >
+                            <b>What do we aim to solve?</b>
+                        </Typography>
+                    </Grid>
+
+
+                    {/* Segment 3: MVPs */}
+                    <Grid item>
+                        <DescItemLargeLeft title="Facial Asymmetry" content="Almost everyone has some degree of asymmetry on our face. However, other factors like injury, aging and smoking can contribute to more obvious asymmetry in our faces. These asymmetry result in the fast-fashion eyewear to not rest perfectly on our facial contours and hence result in discomfort." image={landingImage}/>
+                        
+                        <DescItemLargeRight 
+                        title="Representation of Comfort" 
+                        content="While comfort is deeply personal to each and every person. Using Big Data and AI technology, we are able to draw hidden insights that perhaps one's preference in comfort may not be as unique as we may think it is. Depending on one's previous eyewear weight and size and the user's demographic, we are able to predict the comfortability factor of a current design at a particular dimension." 
+                        image={landingImage}/>
+                    </Grid>
+                </Grid>
+                
+            </Grid>
+            <Box p="30px" sx={{backgroundColor: '#000000'}}>
+                <Divider sx={{ bgcolor: "#FFFFFF" }} variant="middle"/>
                     <Footer/>                
             </Box>
         </React.Fragment>
