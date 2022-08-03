@@ -1,7 +1,6 @@
 from flask import Flask, request
 import joblib
 import numpy as np
-import pandas as pd
 import ast  
 
 app = Flask(__name__) 
