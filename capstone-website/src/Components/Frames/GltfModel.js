@@ -8,7 +8,8 @@ import { useGLTF } from "@react-three/drei";
 export default function GltfModel({ ...props }) {
   console.log(props);
   // const group = useRef();
-  const { nodes, materials } = useGLTF("capstone-website/src/server_fileuploader/public/model.glb");
+  // console.log(capstone-website/src/server_fileuploader/public/model.glb);
+  const { nodes, materials } = useGLTF("/model.glb");
   console.log(nodes, materials)
   const rotatedGeometry = nodes.mesh_0.geometry;
   rotatedGeometry.computeVertexNormals();
@@ -26,10 +27,10 @@ export default function GltfModel({ ...props }) {
         castShadow
         receiveShadow
         geometry={rotatedGeometry}
-        material={nodes.mesh_0.material}
+        material={mat}
       />
     // </group>
   );
 }
 
-useGLTF.preload("/poly.glb");
+useGLTF.preload("/model.glb");

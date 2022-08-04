@@ -1,11 +1,14 @@
+import { useLoader } from "@react-three/fiber";
 import * as React from "react"
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import SpecParameters from "../../SpecParameters";
 
 const Specs = (props) => {
     console.log(props);
+    const frontFrame = useLoader(OBJLoader, props.specsInfo.frameFront.frameModel);
     const customisations = props.customScale;
     const scaling = {frontScale: customisations.frontScale, leftScale: customisations.leftScale, rightScale: customisations.rightScale};
-    const specsInfo = SpecParameters(props.specsInfo.frameFront, props.specsInfo.leftArm, props.specsInfo.rightArm, scaling);
+    const specsInfo = SpecParameters({frameModel: frontFrame.children[0], position: props.specsInfo.frameFront.position}, props.specsInfo.leftArm, props.specsInfo.rightArm, scaling);
     const frontFrameInfo = specsInfo.frontFrame;
     const leftArmInfo = specsInfo.leftArm;
     const rightArmInfo = specsInfo.rightArm;

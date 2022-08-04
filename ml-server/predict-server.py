@@ -1,17 +1,19 @@
 from flask import Flask, request
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import joblib
 import numpy as np
 import ast  
+import json
 
-app = Flask(__name__) 
+app = Flask(__name__)
 CORS(app)
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    print(request.get_data())
     query_dict = ast.literal_eval(request.get_data().decode("utf-8"))
-    # print(query_dict)
-    # print(type(query_dict))
+    print(query_dict)
+    print(type(query_dict))
     features = {
         'age': 0.0, 
         'weight': 00.0, 

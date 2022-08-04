@@ -1,9 +1,7 @@
 import './style.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { toast} from 'react-toastify';
-import {useNavigate} from 'react-router-dom';
-
 import {
   Button,
   Checkbox,
@@ -14,11 +12,42 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
+
 
 
 export const FileUploader = ({onSuccess}) => {
+
+  if (document.readyState !== 'loading') {
+    console.log('document is already ready, just execute code here');
+    const form = document.querySelector('.contact-form');
+    console.log("here",form);
+    if (form != null){
+      form.addEventListener('submit', handleFormSubmit);
+    }
+    else{
+      console.log("else here")
+      document.addEventListener('DOMContentLoaded', function () {
+          console.log('document was not ready, place code here');
+          const form = document.querySelector('.contact-form');
+          console.log("here",form);
+          form.addEventListener('submit', handleFormSubmit);
+    });
+    }
+  } else {
+      document.addEventListener('DOMContentLoaded', function () {
+          console.log('document was not ready, place code here');
+          const form = document.querySelector('.contact-form');
+          console.log("here",form);
+          form.addEventListener('submit', handleFormSubmit);
+      });
+  }
+
+
     const [files, setFiles] = useState([]);
-    const navigate = useNavigate();
+    const [pred, setpred] = useState([]);
+    let navigate = useNavigate();
     
 
       const onInputChange = (e) => {
@@ -33,6 +62,8 @@ export const FileUploader = ({onSuccess}) => {
           for(let i = 0; i < files.length; i++) {
               data.append('file', files[i]);
           }
+          
+          console.log("submitting!")
 
           axios.post('//localhost:8000/upload', data)
               .then((response) => {
@@ -42,14 +73,12 @@ export const FileUploader = ({onSuccess}) => {
               .catch((e) => {
                   toast.error('Upload Error')
               })
-          
-          navigateHome();
       };
 
       function handleFormSubmit(event) {
         event.preventDefault();
         
-        const data = new FormData(event.target);
+        const data = new FormData(document.getElementById("#"));
 
         const formJSON = Object.fromEntries(data.entries());
         formJSON.purpose = data.getAll('purpose');
@@ -64,25 +93,21 @@ export const FileUploader = ({onSuccess}) => {
           {
             headers: {"Access-Control-Allow-Origin": "*"},
            },
-        ).then(({data})=> console.log(data));
+        ).then(({data})=>{
+          console.log("data here",data)
+          setpred(data)
+          console.log("pred here",pred)
+          navigate("/model", { state: data });
+        } );
+        
+        
       }
       
-      document.addEventListener("DOMContentLoaded", function() { 
-        // this function runs when the DOM is ready, i.e. when the document has been parsed
-        const form = document.querySelector('.contact-form');
-        console.log(form);
-        form.addEventListener('submit', handleFormSubmit);
-      });
-
-      const navigateHome = () => {
-        // 👇️ navigate to /
-        navigate('/model');
-      };
-
+      
     return (
       <>
       <section className="contact-form">
-        <form method="post" action="#" id="#" onSubmit={onSubmit} >
+        <form method="post" action="#" id="#" onSubmit={onSubmit}>
               
                 <div className="input-group">
                   <p className="group-label">Race:</p>
@@ -179,7 +204,7 @@ export const FileUploader = ({onSuccess}) => {
                         />
                 </Button>
               </div>
-              <button type="submit" >Send It!</button>
+              <button type="submit">Send It!</button>
               
           </form>
           </section>

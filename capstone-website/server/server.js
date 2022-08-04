@@ -69,18 +69,30 @@ app.post('/upload', (req, res) => {
     })
 });
 
-app.get('/frame/', async (req, res) => {
+app.get('/frame/:id', async (req, res) => {
     // const fileName = "frame2.obj"
 
     // 1. req or params (/frame/:id) should contain the filename of the object to be retrieved
     // 2. the bucket is currently public. future work: should set it to private (med priority)
     //      -- retrieve file link from private bucket can be done using signed url https://cloud.google.com/storage/docs/access-control/signing-urls-with-helpers#storage-signed-url-object-nodejs
-
-    const [metadata] = await storage.bucket(bucketName).file(fileName).getMetadata()
-    console.log(metadata.mediaLink)
+    const requestedId = req.params.id;
+    const [metadata] = await storage.bucket(bucketName).file("frame"+requestedId+".obj").getMetadata()
+    console.log("frame thing from server" + requestedId)
     return res.status(200).send({'mediaLink': metadata.mediaLink})
 })
 
-app.listen(8000, () => {
-    console.log('App is running on port 8000')
+app.get('/framedefaults/:id', async (req, res) => {
+    // const fileName = "frame2.obj"
+
+    // 1. req or params (/frame/:id) should contain the filename of the object to be retrieved
+    // 2. the bucket is currently public. future work: should set it to private (med priority)
+    //      -- retrieve file link from private bucket can be done using signed url https://cloud.google.com/storage/docs/access-control/signing-urls-with-helpers#storage-signed-url-object-nodejs
+    const requestedId = req.params.id;
+    const [metadata] = await storage.bucket(bucketName).file(requestedId+".obj").getMetadata()
+    console.log("frame thing from server" + requestedId)
+    return res.status(200).send({'mediaLink': metadata.mediaLink})
+})
+
+app.listen(8001, () => {
+    console.log('App is running on port 8001')
 });
