@@ -3,14 +3,15 @@ import { OrbitControls } from "@react-three/drei";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
 import { Stack, Grid } from "@mui/material";
-import PositioningPanel from "./Components/Positioning/PositioningPanel";
-import CustomisationPanel from "./Components/Customisation/CustomisationPanel";
+import PositioningPanel from "../Components/Frames/Positioning/PositioningPanel";
+import CustomisationPanel from "../Components/Frames/Customisation/CustomisationPanel";
 
 import React, { Suspense, useState } from "react";
-import Model from "./Components/Model";
+import Model from "../Components/Frames/Model";
 import { useColor } from "react-color-palette";
 
 const ModelPage = (props) => {
+    console.log("model page rendering");
     // positioning info
     const [renderSpecs, setRender] = useState(false);
     const [clicks, setClicks] = useState(1);

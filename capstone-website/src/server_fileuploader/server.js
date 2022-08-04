@@ -12,7 +12,8 @@ const storage = multer.diskStorage({
         cb(null, 'public')
     },
     filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname)
+        const filetype = file.originalname
+        cb(null, "model."+filetype.split(".")[1])
     }
 });
 

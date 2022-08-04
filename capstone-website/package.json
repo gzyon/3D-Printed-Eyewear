@@ -2,7 +2,6 @@
   "name": "capstone-website",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
@@ -22,6 +21,7 @@
     "react": "^18.1.0",
     "react-animated-css": "^1.2.1",
     "react-animation-on-scroll": "^5.1.0",
+    "react-color-palette": "^6.2.0",
     "react-dom": "^18.1.0",
     "react-scripts": "5.0.1",
     "react-toastify": "^9.0.7",
