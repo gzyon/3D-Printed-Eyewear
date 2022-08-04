@@ -55,16 +55,19 @@ export const FileUploader = ({onSuccess}) => {
         console.log(formJSON_test)
 
         axios.post(
-          '//localhost:5000/predict', 
-          formJSON_test
-        )
-        .then((response) => {
-            toast.success('Upload Success');
-            onSuccess(response.data)
-        })
-        .catch((e) => {
-            toast.error('Upload Error')
-        })
+          '//127.0.0.1:5000/predict', 
+          formJSON_test,
+          {
+            headers: {"Access-Control-Allow-Origin": "*"},
+           },
+        ).then(({data})=> console.log(data));
+        // .then((response) => {
+        //     toast.success('Upload Success');
+        //     onSuccess(response.data)
+        // })
+        // .catch((e) => {
+        //     toast.error('Upload Error')
+        // })
         
       }
       
