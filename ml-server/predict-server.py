@@ -7,15 +7,48 @@ app = Flask(__name__)
 @app.route('/predict', methods=['POST'])
 def predict():
     query_dict = ast.literal_eval(request.get_json())
-    query = np.fromiter(query_dict.values(), dtype=float)
-    query = query.reshape(1, -1)
+    features = {
+        'age': 0.0, 
+        'weight': 00.0, 
+        'height': 0.0, 
+        'wearhours': 0.0, 
+        'wearyears': 0.0, 
+        'eyewearweight': 0.0, 
+        'nosearea': 0.0, 
+        'currentcomfort': 0.0, 
+        'headwidth': 0.0, 
+        'PCorrect': 0.0, 
+        'PSports': 0.0, 
+        'PStudy': 0.0, 
+        'PCosmetic': 0.0, 
+        'Female': 0.0, 
+        'Male': 0.0, 
+        'Race_Chinese': 0.0, 
+        'Race_Eurasian': 0.0, 
+        'Race_Indian': 0.0, 
+        'Race_Malay': 0.0, 
+        'Race_Others': 0.0
+    }
+    for key, value in query_dict.items():
+        if key == "race" or key == "gender":
+            features[value] = 1.0
+        elif key == "purpose":
+            for purpose in value:
+                features[purpose] = 1.0
+        elif key == "objfile":  
+            pass
+        else:
+            features[key] = value
+    print(features)
+    features_array = np.fromiter(features.values(), dtype=float)
+    features_array = features_array.reshape(1, -1)
     
     model_frame1 = joblib.load('model_frame1.pkl')
     model_frame2 = joblib.load('model_frame2.pkl')
     model_frame3 = joblib.load('model_frame3.pkl')
-    prediction1 = float(model_frame1.predict(query)[0])
-    prediction2 = float(model_frame2.predict(query)[0])
-    prediction3 = float(model_frame3.predict(query)[0])
+    prediction1 = float(model_frame1.predict(features_array)[0])
+    prediction2 = float(model_frame2.predict(features_array)[0])
+    prediction3 = float(model_frame3.predict(features_array)[0])
     
     result = f"predicted frame score: {prediction1} {prediction2} {prediction3}"
     print(result)
