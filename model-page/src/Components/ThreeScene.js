@@ -9,7 +9,7 @@ const ThreeScene = (props) => {
     return (
         <Canvas camera={{ position: camPos }}>
             <directionalLight position={[1, 2, 1.5]} intensity={1.5} />  
-            <hemisphereLight intensity={0.5} groundColor="red" />
+            <hemisphereLight intensity={0.5} groundColor="white" />
             {/* <ambientLight intensity={3} /> */}
             <Suspense fallback={null}>
                 {props.model}

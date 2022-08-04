@@ -10,7 +10,7 @@ THREE.DefaultLoadingManager.addHandler(/\.dds$/i, new DDSLoader());
 
 export default function App() {
   return(
-    // <ModelPage />
-    <CaseCustomisation />
+    <ModelPage />
+    // <CaseCustomisation />
   )
 }

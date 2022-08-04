@@ -8,8 +8,13 @@ import { useGLTF } from "@react-three/drei";
 export default function GltfModel({ ...props }) {
   console.log(props);
   // const group = useRef();
-  const { nodes, materials } = useGLTF("/poly.glb");
+  const { nodes, materials } = useGLTF("/fib.glb");
+  console.log(nodes, materials)
   const rotatedGeometry = nodes.mesh_0.geometry;
+  rotatedGeometry.computeVertexNormals();
+  const mat = nodes.mesh_0.material;
+  mat.flatShading = false;
+
   return (
     // <group ref={group} dispose={null} {...props}>
       <mesh 
@@ -27,4 +32,4 @@ export default function GltfModel({ ...props }) {
   );
 }
 
-useGLTF.preload("/poly.glb");
+useGLTF.preload("/fib.glb");
