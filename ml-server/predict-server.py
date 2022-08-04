@@ -1,12 +1,17 @@
 from flask import Flask, request
+from flask_cors import CORS
 import joblib
 import numpy as np
 import ast  
 
 app = Flask(__name__) 
+CORS(app)
+
 @app.route('/predict', methods=['POST'])
 def predict():
-    query_dict = ast.literal_eval(request.get_json())
+    query_dict = ast.literal_eval(request.get_data().decode("utf-8"))
+    # print(query_dict)
+    # print(type(query_dict))
     features = {
         'age': 0.0, 
         'weight': 00.0, 
@@ -38,7 +43,7 @@ def predict():
         elif key == "objfile":  
             pass
         else:
-            features[key] = value
+            features[key] = float(value)
     print(features)
     features_array = np.fromiter(features.values(), dtype=float)
     features_array = features_array.reshape(1, -1)

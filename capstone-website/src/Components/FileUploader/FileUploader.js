@@ -53,6 +53,18 @@ export const FileUploader = ({onSuccess}) => {
         let formJSON_test = JSON.stringify(formJSON, null, 2);
 
         console.log(formJSON_test)
+
+        axios.post(
+          '//localhost:5000/predict', 
+          formJSON_test
+        )
+        .then((response) => {
+            toast.success('Upload Success');
+            onSuccess(response.data)
+        })
+        .catch((e) => {
+            toast.error('Upload Error')
+        })
         
       }
       
