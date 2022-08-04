@@ -1,9 +1,10 @@
 import React from 'react';
-import { render } from "react-dom";
+import ReactDOM from "react-dom/client";
 import './index.css';
 import HomePage from './Pages/HomePage';
 import AboutPage from './Pages/AboutPage';
 import ContactPage from './Pages/ContactPage';
+import ModelPage from './Pages/ModelPage';
 import UploadPage from './Pages/UploadPage'
 import reportWebVitals from './reportWebVitals';
 
@@ -14,11 +15,14 @@ import {
   Route
 } from "react-router-dom";
 
-const root = document.getElementById('root');
-render(
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
   <React.StrictMode>
     <Router>
       <Routes>
+        <Route path="/model" element={<ModelPage />}></Route>
+
         <Route path="/about" element={<AboutPage />}></Route>
         
         <Route path="/contact" element={<ContactPage />}></Route>
@@ -29,8 +33,7 @@ render(
 
       </Routes>
     </Router>
-  </React.StrictMode>,
-  root
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

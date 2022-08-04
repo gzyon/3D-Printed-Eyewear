@@ -1,7 +1,9 @@
 import './style.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast} from 'react-toastify';
+import {useNavigate} from 'react-router-dom';
+
 import {
   Button,
   Checkbox,
@@ -16,6 +18,7 @@ import {
 
 export const FileUploader = ({onSuccess}) => {
     const [files, setFiles] = useState([]);
+    const navigate = useNavigate();
     
 
       const onInputChange = (e) => {
@@ -31,7 +34,6 @@ export const FileUploader = ({onSuccess}) => {
               data.append('file', files[i]);
           }
 
-
           axios.post('//localhost:8000/upload', data)
               .then((response) => {
                   toast.success('Upload Success');
@@ -40,6 +42,8 @@ export const FileUploader = ({onSuccess}) => {
               .catch((e) => {
                   toast.error('Upload Error')
               })
+          
+          navigateHome();
       };
 
       function handleFormSubmit(event) {
@@ -61,14 +65,6 @@ export const FileUploader = ({onSuccess}) => {
             headers: {"Access-Control-Allow-Origin": "*"},
            },
         ).then(({data})=> console.log(data));
-        // .then((response) => {
-        //     toast.success('Upload Success');
-        //     onSuccess(response.data)
-        // })
-        // .catch((e) => {
-        //     toast.error('Upload Error')
-        // })
-        
       }
       
       document.addEventListener("DOMContentLoaded", function() { 
@@ -77,6 +73,11 @@ export const FileUploader = ({onSuccess}) => {
         console.log(form);
         form.addEventListener('submit', handleFormSubmit);
       });
+
+      const navigateHome = () => {
+        // 👇️ navigate to /
+        navigate('/model');
+      };
 
     return (
       <>
@@ -178,7 +179,7 @@ export const FileUploader = ({onSuccess}) => {
                         />
                 </Button>
               </div>
-              <button type="submit">Send It!</button>
+              <button type="submit" >Send It!</button>
               
           </form>
           </section>
