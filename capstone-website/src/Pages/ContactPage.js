@@ -1,18 +1,14 @@
-import { Typography, Grid, styled, Paper, Box, Button, Divider, List, ListItem, ListItemText, Container, BottomNavigation } from '@mui/material'
+import { Typography, Grid, Container,Box} from '@mui/material'
 import React from 'react'
 import HeaderContact from '../Components/Header/HeaderContact'
-import Footer from '../Components/Footer/Footer'
-import Abc from '@mui/icons-material/Abc'
 
 import landingImage from '../assets/images/landing.png'
-import DescItem from '../Components/DescItem/DescItem'
 
 //styles
 import { StylesProvider } from '@mui/styles';
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 // icons
-import AccessAlarmOutlinedIcon from '@mui/icons-material/AccessAlarmOutlined';
 import Socials from "../Components/Footer/Socials";
 
 const { palette } = createTheme();

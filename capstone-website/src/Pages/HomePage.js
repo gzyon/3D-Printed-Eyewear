@@ -1,11 +1,9 @@
-import { Typography, Grid, styled, Paper, Box, Button, Divider, List, ListItem, ListItemText, Container, BottomNavigation } from '@mui/material'
+import { Typography, Grid,Box, Button, Divider} from '@mui/material'
 import React from 'react'
 import {useRef} from 'react'
 import Header from '../Components/Header/Header'
 import Footer from '../Components/Footer/Footer'
-import Toolbar from '@mui/material/Toolbar';
 import CssBaseline from '@mui/material/CssBaseline';
-import Abc from '@mui/icons-material/Abc'
 import './HomePage.css';
 // import { sizing } from '@material-ui/system';
 
@@ -126,7 +124,7 @@ const HomePage = (props) => {
                         </Box>
                     </Grid>
 
-                    <Grid item md={2} display="flex" justifyContent={'center'} alignItems={'center'} sx={{padding:"10px", margin:"150px 0px 0px -100px", display: { xs: 'none', md: 'block' }}}>
+                    <Grid item md={2} display="flex" justifyContent={'center'} alignItems={'center'} sx={{padding:"10px", margin:"200px 0px 0px -100px", display: { xs: 'none', md: 'block' }}}>
                         <img src={glasses_landing} height={280}/>
                     </Grid>
                 </Grid>
