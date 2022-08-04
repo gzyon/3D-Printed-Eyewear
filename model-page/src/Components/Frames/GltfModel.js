@@ -7,7 +7,6 @@ import { useGLTF } from "@react-three/drei";
 
 export default function GltfModel({ ...props }) {
   console.log(props);
-  // const group = useRef();
   const { nodes, materials } = useGLTF("/fib.glb");
   console.log(nodes, materials)
   const rotatedGeometry = nodes.mesh_0.geometry;
