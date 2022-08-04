@@ -1,0 +1,28 @@
+from flask import Flask, request
+import joblib
+import numpy as np
+import pandas as pd
+import ast  
+
+app = Flask(__name__) 
+@app.route('/predict', methods=['POST'])
+def predict():
+    query_dict = ast.literal_eval(request.get_json())
+    query = np.fromiter(query_dict.values(), dtype=float)
+    query = query.reshape(1, -1)
+    
+    model_frame1 = joblib.load('model_frame1.pkl')
+    model_frame2 = joblib.load('model_frame2.pkl')
+    model_frame3 = joblib.load('model_frame3.pkl')
+    prediction1 = float(model_frame1.predict(query)[0])
+    prediction2 = float(model_frame2.predict(query)[0])
+    prediction3 = float(model_frame3.predict(query)[0])
+    
+    result = f"{prediction1} {prediction2} {prediction3}"
+    print(result)
+    
+    return result
+
+
+if __name__ == '__main__':
+     app.run(debug=True, port=5000)

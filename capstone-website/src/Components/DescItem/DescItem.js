@@ -7,7 +7,7 @@ const DescItem = ({ title, content, icon }) => {
             <Typography variant='h6' component='h6'>
                 <b>{title}</b>
             </Typography>
-            <Typography variant='body2' component='body2' sx={
+            <Typography variant='body2' sx={
                 {
                     color: "#000000"
                 }
