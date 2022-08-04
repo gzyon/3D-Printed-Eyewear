@@ -46,7 +46,7 @@ const Model = (props) => {
       <>
         <GltfModel position={[0, -150, 0]} onClick={onClick} scale={1100} rotation={props.rotation} />
         {/* <primitive object={new THREE.AxesHelper(100)} /> */}
-        <Specs specsInfo={props.specsInfo} customScale={props.modelProps.specCustomisations} />
+        <Specs specsInfo={props.specsInfo} customScale={props.modelProps.specCustomisations} setFrameWeight={props.setFrameWeight} />
       </>
     )
   }

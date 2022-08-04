@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useColor } from "react-color-palette";
 import CaseModels from "../Components/Casing/CaseModels";

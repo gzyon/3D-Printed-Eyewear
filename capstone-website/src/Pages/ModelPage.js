@@ -18,7 +18,8 @@ import ThreeScene from "../Components/ThreeScene";
 const ModelPage = (props) => {
 
     let location = useLocation();
-    console.log("loc here",location.state);
+    const weightPredictions = location.state;
+    // console.log(weightPredictions['lower']);
 
     // positioning info
     const [renderSpecs, setRender] = useState(false);
@@ -37,41 +38,28 @@ const ModelPage = (props) => {
     const [leftColor, setLeftColor] = useColor("hex", "#ff0000");
     const [rightColor, setRightColor] = useColor("hex", "#ff0000");
     const [component, setComponent] = useState(0);
+    const [frameMetalness, setMetalness] = useState([0, 0, 0]);
+    const [wireframeStatus, setWireframe] = useState(false);
 
     // load models
     let frame1_front, frame_leftCenter, frame_leftEnd, frame_rightCenter, frame_rightEnd, frame2_front, frame3_front;
-   
-    // frame1_front = useLoader(OBJLoader, items).children[0];
-    // frame2_front = useLoader(OBJLoader, '145frame2.obj').children[0];
-    // frame3_front = useLoader(OBJLoader, "frame3.obj").children[0];
-    // frame1_front.name = "frame 1";
-    // frame2_front.name = "frame 2";
-    // frame3_front.name = "frame 3";
-
-    // frame_leftCenter = useLoader(OBJLoader, 'templeL_spring_bent.obj').children[0];
     frame_leftCenter = useLoader(OBJLoader, 'frame2/templeL_centre.obj').children[0];
     frame_leftEnd = useLoader(OBJLoader, 'frame2/templeL_end.obj').children[0];
-    // frame_rightCenter = useLoader(OBJLoader, 'templeR_spring_bent.obj').children[0];
     frame_rightCenter = useLoader(OBJLoader, 'frame2/templeR_centre.obj').children[0];
     frame_rightEnd = useLoader(OBJLoader, 'frame2/templeR_end.obj').children[0];
-    // const testObj = useLoader(OBJLoader, 'https://storage.googleapis.com/download/storage/v1/b/olive-eyewear-and-wellness-bucket/o/frame1.obj?generation=1659432676012813&alt=media');
-    // console.log(testObj);
-    // console.log(frame_leftCenter, frame_rightCenter);
 
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState("https://storage.googleapis.com/download/storage/v1/b/olive-eyewear-and-wellness-bucket/o/frame1.obj?generation=1659432676012813&alt=media");
-    
-    // const testObj = useLoader(OBJLoader, items);
-    // console.log("testobjs", testObj)
 
     // frame information
     const [frameid, setFrameId] = useState(1);
     const [frameFront, setFrame] = useState({frameModel: items});
-    const front = {frameModel: items.mediaLink, position: position};
+    const [frameWeight, setFrameWeight] = useState(16.8);
+    const front = {frameId: frameid, frameModel: items.mediaLink, position: position};
     const leftArm = {centerFrameModel: frame_leftCenter, endFrameModel: frame_leftEnd, position: leftEar};
     const rightArm = {centerFrameModel: frame_rightCenter, endFrameModel: frame_rightEnd, position: rightEar};
-    const customisations = {frontScale: [x_value, yz_value], frontColor: color, leftScale: leftLength, leftColor: leftColor, rightScale: rightLength, rightColor: rightColor};
+    const customisations = {frontScale: [x_value, yz_value], frontColor: color, leftScale: leftLength, leftColor: leftColor, rightScale: rightLength, rightColor: rightColor, metalness: frameMetalness, wireframeStatus: wireframeStatus};
 
     // customisation functions
     const changeXValue =(event, value) => {
@@ -95,6 +83,16 @@ const ModelPage = (props) => {
         setComponent(newValue);
     };
 
+    const adjustMetalness = (event, value) => {
+        if (component === 0) setMetalness([value, frameMetalness[1], frameMetalness[2]]);
+        else if (component === 1) setMetalness([frameMetalness[0], value, frameMetalness[2]]);
+        else if (component === 2) setMetalness([frameMetalness[0], frameMetalness[1], value]);
+    }
+
+    const handleWireframe = (event) => {
+        setWireframe(event.target.checked);
+    }
+
     // render functions
     function confirmRender() {
         console.log("Rendering specs at: " + front.position);
@@ -111,8 +109,8 @@ const ModelPage = (props) => {
 
     // props to customise spectacles
     const specs = {
-        eventFunctions: {changeXValue: changeXValue, changeYZValue: changeYZValue, changeFrame: changeFrame, setFrame: setFrame, setColor: setColor, setComponent: handleComponentChange, changeLeftLength: changeLeftLength, changeRightLength: changeRightLength, setLeftColor: setLeftColor, setRightColor: setRightColor},
-        scaling: {xVal: x_value, yzVal: yz_value, component: component, leftLength: leftLength, rightLength: rightLength, leftColor: leftColor, rightColor: rightColor, color: color},
+        eventFunctions: {changeXValue: changeXValue, changeYZValue: changeYZValue, changeFrame: changeFrame, setFrame: setFrame, setColor: setColor, setComponent: handleComponentChange, changeLeftLength: changeLeftLength, changeRightLength: changeRightLength, setLeftColor: setLeftColor, setRightColor: setRightColor, setMetalness: adjustMetalness, setWireframe: handleWireframe},
+        scaling: {xVal: x_value, yzVal: yz_value, component: component, leftLength: leftLength, rightLength: rightLength, leftColor: leftColor, rightColor: rightColor, color: color, metalness: frameMetalness},
         frontFrames: {design1: frame1_front, design2: frame2_front, design3: frame3_front}
     }
 
@@ -124,7 +122,7 @@ const ModelPage = (props) => {
     }
 
     const faceSpecModel = (
-        <Model modelProps={modelProps} specsInfo={{frameFront: front, leftArm: leftArm, rightArm: rightArm, component: component}} rotation={rotation} />
+        <Model modelProps={modelProps} specsInfo={{frameFront: front, leftArm: leftArm, rightArm: rightArm, component: component}} rotation={rotation} setFrameWeight={setFrameWeight} />
     )
 
     useEffect(() => {
@@ -179,7 +177,7 @@ const ModelPage = (props) => {
                         <ThreeScene position={[0, 0, 300]} model={faceSpecModel} /> 
                     </Box>
                     <Typography sx={{ fontWeight: 'bold', fontSize: 20 }} m={3} align="center">
-                        Frame Weight Comfort Rating: 8/10
+                        Frame Weight Comfort Rating: {frameWeight / (weightPredictions['lower'] + weightPredictions['upper']) * 10}/10
                     </Typography>
                 </Grid>
                 <Grid item xs={4}>
