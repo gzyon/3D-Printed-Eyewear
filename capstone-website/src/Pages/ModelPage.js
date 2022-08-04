@@ -157,14 +157,14 @@ const ModelPage = (props) => {
         return (
             <Grid container sx={{height: '90%', width: '90%'}} margin={3} >
                 <Grid item xs={8}>
-                    <Box sx={{height: '80%', width: '90%'}} margin={3}>
+                    <Box sx={{height: '90%', width: '90%'}} margin={3}>
                         <ThreeScene position={[0, 0, 300]} model={faceSpecModel} />
                     </Box>
                 </Grid>
                 <Grid item xs={4}>
-                    <Stack spacing={2}>
+                    {/* <Stack spacing={2}> */}
                         <PositioningPanel confirmRender={confirmRender} resetClicks={resetClicks} setRotation={setRotation} rotation={rotation} />
-                    </Stack>
+                    {/* </Stack> */}
                 </Grid>
             </Grid>
         )

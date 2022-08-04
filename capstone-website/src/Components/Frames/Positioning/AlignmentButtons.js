@@ -14,7 +14,7 @@ const AlignmentButtons = (props) => {
         <Box sx={{ width: '100%' }} alignItems="center" justifyContent="center">
             <Stack spacing={2}>
                 <Typography align='center' >
-                    1. Face Direction (Select the direction that the face mesh is facing)
+                    1. Face Direction (Drag the slider until the face is facing the front)
                 </Typography>
                 <Slider 
                     value={props.rotation} 
