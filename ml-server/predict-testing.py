@@ -3,7 +3,7 @@ import random
 import requests
 
 data = pd.read_csv("RFData.csv")
-features = data.drop(['Frame1', 'Frame2', 'Frame3'], axis = 1)
+features = data.drop(['Frame1', 'Frame2', 'Frame3', 'EarToFrame', 'EarToEye'], axis = 1)
 
 test = features.iloc[random.randint(0, 100)]
 
