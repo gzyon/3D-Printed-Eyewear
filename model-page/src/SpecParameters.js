@@ -102,11 +102,11 @@ function SpecParameters(front, left, right, scale) {
     const frontFrameHeight = getModelHeight(front_geom);
 
     // rotation
-    const y = (left.position[1] - right.position[1]);
-    const x = (left.position[0] - right.position[0]);
-    const z = (left.position[2] - right.position[2]);
-    const theta = Math.atan(y/x);
-    const phi = Math.atan(z/x);
+    let y = (left.position[1] - right.position[1]);
+    let x = (left.position[0] - right.position[0]);
+    let z = (left.position[2] - right.position[2]);
+    let theta = Math.atan(y/x);
+    let phi = Math.atan(z/x);
 
     // scale
     // let frontFrameScale = (Math.abs(x /(frontCenterBox.max.z * 2) * 0.8)) / 10;
@@ -123,8 +123,8 @@ function SpecParameters(front, left, right, scale) {
     const zOffset = ((frontFrameLength * 2) * frontFrameScale) * Math.sin(phi/2);
 
     const hingeHeightRatio = (noseBridgePos[1] * scale.frontScale[1]) / (frontFrameHeight);
-    let leftHingePos = [noseBridgePos[0] - xOffset + 5, (noseBridgePos[1]) * (scale.frontScale[1]) - yOffset, noseBridgePos[2] - (frontFrameWidth * frontFrameScale) + 5 + zOffset];
-    let rightHingePos = [noseBridgePos[0] + xOffset - 5, (noseBridgePos[1]) * (scale.frontScale[1]) + yOffset, noseBridgePos[2] - (frontFrameWidth * frontFrameScale) + 5 + zOffset];
+    let leftHingePos = [noseBridgePos[0] - xOffset + 5, (noseBridgePos[1]) * (scale.frontScale[1]) - yOffset / 2, noseBridgePos[2] - (frontFrameWidth * frontFrameScale) + 5 + zOffset];
+    let rightHingePos = [noseBridgePos[0] + xOffset - 5, (noseBridgePos[1]) * (scale.frontScale[1]) + yOffset / 2, noseBridgePos[2] - (frontFrameWidth * frontFrameScale) + 5 + zOffset];
 
     frontFrameInfo.geometry = front_geom;
     frontFrameInfo.scale = frontFrameScale;
@@ -152,9 +152,9 @@ function SpecParameters(front, left, right, scale) {
     leftArmXRotation = Math.atan(Math.abs((rightHingePos[1] - 2.5) - right.position[1]) / Math.abs(rightHingePos[2] - right.position[2]));
 
     // render points
-    const leftCenterRenderPoint = [right.position[0] - (right.position[0] - rightHingePos[0]) / 2, right.position[1] + (rightHingePos[1]-right.position[1]) / 2, right.position[2] + ((rightHingePos[2]-right.position[2]) / 2) + leftHingeOffset / 2];
+    const leftCenterRenderPoint = [right.position[0] - (right.position[0] - rightHingePos[0]) / 2, right.position[1] + (rightHingePos[1]-right.position[1]) / 2, right.position[2] + ((rightHingePos[2]-right.position[2]) / 2) + leftHingeOffset];
     const leftArmEndxOffset = (leftEndLength / 2) * Math.tan(leftArmYRotation);
-    const leftArmEndRenderPoint = [right.position[0] - leftArmEndxOffset, right.position[1] - leftEndHeight, right.position[2] - leftEndLength]; 
+    const leftArmEndRenderPoint = [right.position[0], right.position[1] - leftEndHeight, right.position[2] - leftEndLength]; 
 
     leftArmInfo.centerGeometry = leftCenter_geom;
     leftArmInfo.centerPosition = leftCenterRenderPoint;
@@ -186,9 +186,9 @@ function SpecParameters(front, left, right, scale) {
     rightArmXRotation = Math.atan(Math.abs((leftHingePos[1] - 2.5) - left.position[1]) / Math.abs(leftHingePos[2] - left.position[2]));
 
     // render points
-    const rightCenterRenderPoint = [left.position[0] - (left.position[0] - leftHingePos[0]) / 2, left.position[1] + (leftHingePos[1]-left.position[1]) / 2, left.position[2] + (leftHingePos[2]-left.position[2]) / 2 + 2.5 + rightHingeOffset / 2]; 
+    const rightCenterRenderPoint = [left.position[0] - (left.position[0] - leftHingePos[0]) / 2, left.position[1] + (leftHingePos[1]-left.position[1]) / 2, left.position[2] + (leftHingePos[2]-left.position[2]) / 2 + 2.5 + rightHingeOffset]; 
     const rightArmEndxOffset = (leftEndBox.max.y / 2) * Math.tan(rightArmXRotation);
-    const rightArmEndRenderPoint = [left.position[0] - rightArmEndxOffset, left.position[1] - rightEndHeight - 2.5, left.position[2] - rightEndLength]; 
+    const rightArmEndRenderPoint = [left.position[0], left.position[1] - rightEndHeight - 2.5, left.position[2] - rightEndLength]; 
 
     rightArmInfo.centerGeometry = rightCenter_geom;
     rightArmInfo.centerPosition = rightCenterRenderPoint;
@@ -202,7 +202,7 @@ function SpecParameters(front, left, right, scale) {
     // frontFrameInfo.rotation = [- (-Math.PI / 2 + (leftArmXRotation + rightArmXRotation) / 2), phi / 2, theta / 2];
     frontFrameInfo.position = [frontRenderPos[0], frontRenderPos[1], frontRenderPos[2] + (rightHingeOffset + leftHingeOffset) / 2];
     const rotationOffset = Math.atan((frontFrameInfo[2] - rightHingePos) / (frontFrameInfo[0] - leftHingePos));
-    frontFrameInfo.rotation = [-(Math.PI / 2 + (leftArmXRotation + rightArmXRotation) / 2), 0, -Math.PI / 2 + phi / 2]
+    frontFrameInfo.rotation = [-Math.PI / 2  - (leftArmXRotation + rightArmXRotation) / 2, phi / 2, -Math.PI / 2 ]
 
     let keyPositions = {}
     keyPositions.noseBridgePos = noseBridgePos;

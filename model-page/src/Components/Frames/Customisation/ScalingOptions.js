@@ -1,4 +1,4 @@
-import { Box, Grid, Slider, Tab, Tabs, Typography } from "@mui/material";
+import { Box, FormControlLabel, Grid, Slider, Switch, Tab, Tabs, Typography } from "@mui/material";
 import * as React from "react";
 import PropTypes from 'prop-types';
 import SpecColour from "../../ComponentColour";
@@ -44,18 +44,6 @@ const ScalingOptions = (props) => {
 
     const sharedOptions = (
         <>
-        <Typography align='center' >
-            Metalness 
-        </Typography>
-        <Slider 
-            value={props.xVal} 
-            defaultValue={1}
-            onChange={props.changeXValue} 
-            min={0} 
-            max={1} 
-            step={0.01}
-            valueLabelDisplay="auto"
-        />
         </>
     )
 
@@ -79,8 +67,8 @@ const ScalingOptions = (props) => {
                             value={customisableValues.xVal} 
                             defaultValue={1}
                             onChange={setStateFunc.changeXValue} 
-                            min={0.6} 
-                            max={1.2} 
+                            min={0.9} 
+                            max={1.15} 
                             step={0.005}
                             valueLabelDisplay="auto"
                         />
@@ -93,15 +81,33 @@ const ScalingOptions = (props) => {
                             value={customisableValues.yzVal} 
                             onChange={setStateFunc.changeYZValue}
                             defaultValue={1}
-                            min={0.6} 
-                            max={1.2} 
+                            min={0.9} 
+                            max={1.15} 
                             step={0.005}
                             valueLabelDisplay="auto"
                         />
                     </Grid>
                 </Grid>
                 <SpecColour changeColor={setStateFunc.changeColor} color={customisableValues.frontColor}/>
-                {sharedOptions}
+                <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                        <Typography align='center' >
+                            Metalness 
+                        </Typography>
+                        <Slider 
+                            value={customisableValues.metalness[0]} 
+                            defaultValue={0}
+                            onChange={setStateFunc.setMetalness} 
+                            min={0} 
+                            max={1} 
+                            step={0.01}
+                            valueLabelDisplay="auto"
+                        />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <FormControlLabel control={<Switch/>} onChange={setStateFunc.setWireframe} label="Generative Design" />
+                    </Grid>
+                </Grid>
             </TabPanel>
             <TabPanel value={customisableValues.component} index={1}>
                 <Typography align='center' >
@@ -111,13 +117,31 @@ const ScalingOptions = (props) => {
                     value={customisableValues.leftLength} 
                     onChange={setStateFunc.changeLeftLength}
                     defaultValue={1}
-                    min={0.8} 
-                    max={1.5} 
+                    min={1} 
+                    max={1.1} 
                     step={0.005}
                     valueLabelDisplay="auto"
                 />
                 <SpecColour changeColor={setStateFunc.changeLeftColor} color={customisableValues.leftColor}/>
-                {sharedOptions}
+                <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                        <Typography align='center' >
+                            Metalness 
+                        </Typography>
+                        <Slider 
+                            value={customisableValues.metalness[1]} 
+                            defaultValue={0}
+                            onChange={setStateFunc.setMetalness} 
+                            min={0} 
+                            max={1} 
+                            step={0.01}
+                            valueLabelDisplay="auto"
+                        />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <FormControlLabel control={<Switch/>} onChange={setStateFunc.setWireframe} label="Generative Design" />
+                    </Grid>
+                </Grid>
             </TabPanel>
             <TabPanel value={customisableValues.component} index={2}>
             <Typography align='center' >
@@ -127,13 +151,31 @@ const ScalingOptions = (props) => {
                     value={customisableValues.rightLength} 
                     onChange={setStateFunc.changeRightLength}
                     defaultValue={1}
-                    min={0.8} 
-                    max={1.5} 
+                    min={1} 
+                    max={1.1} 
                     step={0.005}
                     valueLabelDisplay="auto"
                 />
                 <SpecColour changeColor={setStateFunc.changeRightColor} color={customisableValues.rightColor}/>
-                {sharedOptions}
+                <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                        <Typography align='center' >
+                            Metalness 
+                        </Typography>
+                        <Slider 
+                            value={customisableValues.metalness[2]} 
+                            defaultValue={0}
+                            onChange={setStateFunc.setMetalness} 
+                            min={0} 
+                            max={1} 
+                            step={0.01}
+                            valueLabelDisplay="auto"
+                        />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <FormControlLabel control={<Switch/>} onChange={setStateFunc.setWireframe} label="Generative Design" />
+                    </Grid>
+                </Grid>
             </TabPanel>
         </Box>
         </>

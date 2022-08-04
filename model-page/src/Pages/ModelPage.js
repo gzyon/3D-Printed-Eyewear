@@ -30,6 +30,8 @@ const ModelPage = (props) => {
     const [leftColor, setLeftColor] = useColor("hex", "#ff0000");
     const [rightColor, setRightColor] = useColor("hex", "#ff0000");
     const [component, setComponent] = useState(0);
+    const [frameMetalness, setMetalness] = useState([0, 0, 0]);
+    const [wireframeStatus, setWireframe] = useState(false);
 
     // load models
     let frame1_front, frame_leftCenter, frame_leftEnd, frame_rightCenter, frame_rightEnd, frame2_front, frame3_front;
@@ -46,22 +48,20 @@ const ModelPage = (props) => {
     // frame_rightCenter = useLoader(OBJLoader, 'templeR_spring_bent.obj').children[0];
     frame_rightCenter = useLoader(OBJLoader, 'frame2/templeR_centre.obj').children[0];
     frame_rightEnd = useLoader(OBJLoader, 'frame2/templeR_end.obj').children[0];
-    const testObj = useLoader(OBJLoader, 'https://storage.googleapis.com/download/storage/v1/b/olive-eyewear-and-wellness-bucket/o/frame1.obj?generation=1659432676012813&alt=media');
-    console.log(testObj);
-    // console.log(frame_leftCenter, frame_rightCenter);
 
     // frame information
     const [frameFront, setFrame] = useState({frameModel: frame1_front});
     const front = {frameModel: frameFront.frameModel, position: position};
     const leftArm = {centerFrameModel: frame_leftCenter, endFrameModel: frame_leftEnd, position: leftEar};
     const rightArm = {centerFrameModel: frame_rightCenter, endFrameModel: frame_rightEnd, position: rightEar};
-    const customisations = {frontScale: [x_value, yz_value], frontColor: color, leftScale: leftLength, leftColor: leftColor, rightScale: rightLength, rightColor: rightColor};
+    const customisations = {frontScale: [x_value, yz_value], frontColor: color, leftScale: leftLength, leftColor: leftColor, rightScale: rightLength, rightColor: rightColor, metalness: frameMetalness, wireframeStatus: wireframeStatus};
 
     // customisation functions
     const changeXValue =(event, value) => {
         setXValue(value);
         console.log(value)
     }
+
     const changeYZValue =(event, value) => {
         setYZValue(value);
     }
@@ -72,6 +72,26 @@ const ModelPage = (props) => {
 
     const changeRightLength = (event, value) => {
         setRightLength(value);
+    }
+
+    const adjustMetalness = (event, value) => {
+        if (component === 0) {
+            console.log("setting front frame metalness value to " + value);
+            setMetalness([value, frameMetalness[1], frameMetalness[2]]);
+        }
+        else if (component === 1) {
+            console.log("setting front frame metalness value to " + value);
+            setMetalness([frameMetalness[0], value, frameMetalness[2]]);
+        }
+        else if (component === 2) {
+            console.log("setting front frame metalness value to " + value);
+            setMetalness([frameMetalness[0], frameMetalness[1], value]);
+        }
+    }
+
+    const handleWireframe = (event) => {
+        console.log(event.target.checked);
+        setWireframe(event.target.checked);
     }
 
     const handleComponentChange = (event, newValue) => {
@@ -101,8 +121,8 @@ const ModelPage = (props) => {
 
     // props to customise spectacles
     const specs = {
-        eventFunctions: {changeXValue: changeXValue, changeYZValue: changeYZValue, changeFrame: changeFrame, setFrame: setFrame, setColor: setColor, setComponent: handleComponentChange, changeLeftLength: changeLeftLength, changeRightLength: changeRightLength, setLeftColor: setLeftColor, setRightColor: setRightColor},
-        scaling: {xVal: x_value, yzVal: yz_value, component: component, leftLength: leftLength, rightLength: rightLength, leftColor: leftColor, rightColor: rightColor, color: color},
+        eventFunctions: {changeXValue: changeXValue, changeYZValue: changeYZValue, changeFrame: changeFrame, setFrame: setFrame, setColor: setColor, setComponent: handleComponentChange, changeLeftLength: changeLeftLength, changeRightLength: changeRightLength, setLeftColor: setLeftColor, setRightColor: setRightColor, setMetalness: adjustMetalness, setWireframe: handleWireframe},
+        scaling: {xVal: x_value, yzVal: yz_value, component: component, leftLength: leftLength, rightLength: rightLength, leftColor: leftColor, rightColor: rightColor, color: color, metalness: frameMetalness},
         frontFrames: {design1: frame1_front, design2: frame2_front, design3: frame3_front}
     }
 
