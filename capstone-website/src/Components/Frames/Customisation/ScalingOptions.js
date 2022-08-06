@@ -141,7 +141,7 @@ const ScalingOptions = (props) => {
                             Metalness 
                         </Typography>
                         <Slider 
-                            value={customisableValues.metalness[0]} 
+                            value={customisableValues.metalness[1]} 
                             defaultValue={0}
                             onChange={setStateFunc.setMetalness} 
                             min={0} 
@@ -175,7 +175,7 @@ const ScalingOptions = (props) => {
                             Metalness 
                         </Typography>
                         <Slider 
-                            value={customisableValues.metalness[0]} 
+                            value={customisableValues.metalness[2]} 
                             defaultValue={0}
                             onChange={setStateFunc.setMetalness} 
                             min={0} 

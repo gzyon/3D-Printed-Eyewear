@@ -1,4 +1,4 @@
-import { Box, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import React from "react";
 
 const InputForm = (props) => {
@@ -42,6 +42,9 @@ const InputForm = (props) => {
                     </FormControl>
                 </Grid>
             </Grid>
+            <Button>
+                Submit Customisations
+            </Button>
       </Box>
     )
 }

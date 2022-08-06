@@ -15,6 +15,7 @@ import {
   Route
 } from "react-router-dom";
 import CaseCustomisation from './Pages/CaseCustomisation';
+import Submitted from './Pages/Submitted';
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -33,6 +34,8 @@ root.render(
         <Route path="/case" element={<CaseCustomisation />}></Route>
 
         <Route path="/" element={<HomePage />}></Route>
+
+        <Route path="/success" element={<Submitted />}></Route>
 
       </Routes>
     </Router>

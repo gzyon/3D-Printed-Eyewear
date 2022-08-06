@@ -6,6 +6,7 @@ import SpecParameters from "../../SpecParameters";
 const Specs = (props) => {
     console.log(props);
     const frontFrame = useLoader(OBJLoader, props.specsInfo.frameFront.frameModel);
+    console.log("frame front", frontFrame)
     const customisations = props.customScale;
     const scaling = {frontScale: customisations.frontScale, leftScale: customisations.leftScale, rightScale: customisations.rightScale};
     const specsInfo = SpecParameters({frameId: props.specsInfo.frameFront.frameId, frameModel: frontFrame.children[0], position: props.specsInfo.frameFront.position}, props.specsInfo.leftArm, props.specsInfo.rightArm, scaling, props.setFrameWeight);
@@ -40,19 +41,19 @@ const Specs = (props) => {
             </mesh> 
             <mesh geometry={leftArmInfo.centerGeometry} position={leftArmInfo.centerPosition} scale={leftArmScale} rotation={leftArmInfo.centerRotation}>
             {/* <mesh geometry={leftArmInfo.centerGeometry} > */}
-                <meshStandardMaterial attach="material" color={customisations.leftColor.hex} wireframe={customisations.wireframeStatus} metalness={customisations.metalness[1]} /> 
+                <meshStandardMaterial attach="material" color={customisations.leftColor.hex} metalness={customisations.metalness[1]} /> 
             </mesh> 
             <mesh geometry={leftArmInfo.endGeometry} position={leftArmInfo.endPosition} scale={1} rotation={leftArmInfo.endRotation}>
             {/* <mesh geometry={leftArmInfo.endGeometry} rotation={leftArmInfo.endRotation}> */}
-                <meshStandardMaterial attach="material" color={customisations.leftColor.hex} wireframe={customisations.wireframeStatus} metalness={customisations.metalness[1]} /> 
+                <meshStandardMaterial attach="material" color={customisations.leftColor.hex} metalness={customisations.metalness[1]} /> 
             </mesh>
             <mesh geometry={rightArmInfo.centerGeometry} position={rightArmInfo.centerPosition} scale={rightArmScale} rotation={rightArmInfo.centerRotation}>
             {/* <mesh geometry={rightArmInfo.centerGeometry}> */}
-                <meshStandardMaterial attach="material" color={customisations.rightColor.hex} wireframe={customisations.wireframeStatus} metalness={customisations.metalness[2]} /> 
+                <meshStandardMaterial attach="material" color={customisations.rightColor.hex} metalness={customisations.metalness[2]} /> 
             </mesh> 
             <mesh geometry={rightArmInfo.endGeometry} position={rightArmInfo.endPosition} scale={1} rotation={rightArmInfo.endRotation}>
             {/* <mesh geometry={rightArmInfo.endGeometry} rotation={leftArmInfo.endRotation}> */}
-                <meshStandardMaterial attach="material" color={customisations.rightColor.hex} wireframe={customisations.wireframeStatus} metalness={customisations.metalness[2]} /> 
+                <meshStandardMaterial attach="material" color={customisations.rightColor.hex} metalness={customisations.metalness[2]} /> 
             </mesh>
         </>
     )

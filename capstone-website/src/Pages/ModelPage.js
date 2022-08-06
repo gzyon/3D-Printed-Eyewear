@@ -177,7 +177,7 @@ const ModelPage = (props) => {
                         <ThreeScene position={[0, 0, 300]} model={faceSpecModel} /> 
                     </Box>
                     <Typography sx={{ fontWeight: 'bold', fontSize: 20 }} m={3} align="center">
-                        Frame Weight Comfort Rating: {frameWeight / (weightPredictions['lower'] + weightPredictions['upper']) * 10}/10
+                        Frame Weight Comfort Rating: {frameWeight < weightPredictions['upper'] && frameWeight > weightPredictions['lower'] ? "Comfortable" : "Not Comfortable"}
                     </Typography>
                 </Grid>
                 <Grid item xs={4}>

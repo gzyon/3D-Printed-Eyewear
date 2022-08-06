@@ -1,13 +1,16 @@
-import { Box, Slider, Tab, Tabs, TextField, Typography } from "@mui/material";
+import { Box, Button, Slider, Tab, Tabs, TextField, Typography } from "@mui/material";
 import * as React from "react";
 import PropTypes from 'prop-types';
 import ComponentColour from "../ComponentColour";
 import InputForm from "./InputForm";
+import { useNavigate } from "react-router-dom";
 
 const CustomisationOptions = (props) => {
     const variables = props.variables;
     const stateFunctions = props.stateFunctions;
     console.log(props);
+
+    const nav = useNavigate();
 
     function TabPanel(props) {
         const { children, value, index, ...other } = props;
@@ -40,6 +43,11 @@ const CustomisationOptions = (props) => {
             id: `simple-tab-${index}`,
             'aria-controls': `simple-tabpanel-${index}`,
         };
+    }
+
+    function onClick() {
+        console.log("woop");
+        nav("/success");
     }
 
     const tabInfo = [
@@ -91,6 +99,9 @@ const CustomisationOptions = (props) => {
                 </Tabs>
             </Box>   
             {customisations}
+            <Button onClick={onClick} align="center" variant="outlined" >
+                Submit Customisations
+            </Button>
         </>
     )
 }

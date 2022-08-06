@@ -107,10 +107,10 @@ const HomePage = (props) => {
             <Grid container>
                 {/* Segment 1: Main product selling page */}
                 <Grid item container columns={5} py={5}>
-                    <Grid sx={{backgroundColor:'#000000', height: '80vh'}} item md={3} display="flex" justifyContent={'left'} alignItems="center" ref={domRef}>
+                    <Grid sx={{backgroundColor:'#000000', height: '100vh'}} item md={3} display="flex" justifyContent={'left'} alignItems="center" ref={domRef}>
                         <Box sx={{backgroundColor:'#000000', padding:"100px", width:"45vw"}}>
                             <Typography variant="h4" color="#FFFFFF">
-                                <b>Customisable, Ergonomic eyewear</b>
+                                <b>Customisable, Ergonomic Eyewear</b>
                             </Typography>
                             
                             <Typography variant="body2" color="#FFFFFF" >
@@ -124,14 +124,14 @@ const HomePage = (props) => {
                         </Box>
                     </Grid>
 
-                    <Grid item md={2} display="flex" justifyContent={'center'} alignItems={'center'} sx={{padding:"10px", margin:"200px 0px 0px -100px", display: { xs: 'none', md: 'block' }}}>
-                        <img src={glasses_landing} height={280}/>
+                    <Grid item md={2} display="flex" justifyContent={'center'} alignItems={'center'} sx={{padding:"10px", margin:"-100px 0px 0px -150px", display: { xs: 'none', md: 'block' }}}>
+                        <img src={glasses_landing} height={1300}/>
                     </Grid>
                 </Grid>
 
                 {/* Segment 2: User step details */}
 
-                <Grid item container spacing={8} columns={4} px={5} py={5} sx={{height:"80vh"}} alignContent="center">
+                <Grid item container spacing={8} columns={4} px={5} py={2} sx={{height:"70vh"}} alignContent="center">
                     <Grid item md={1} className={`fade-in-left-section1 ${isVisible ? 'is-visible' : ''}`} ref={domRef}>
                         <DescItem title='User Step 1'
                             content='Using AI technology, we are able to generate the best fit for the user based on their demographic information.'
@@ -187,7 +187,7 @@ const HomePage = (props) => {
                     <Grid sx={{backgroundColor:'#000000'}} item display="flex" justifyContent={'left'} alignItems="center" ref={domRef}>
                         <Box sx={{backgroundColor:'#000000', padding:"100px"}}>
                             <Typography variant="h4" color="#FFFFFF">
-                                <b>Customisable, Ergonomic eyewear</b>
+                                <b>Customisable, Ergonomic Eyewear</b>
                             </Typography>
                             
                             <Typography variant="body2" color="#FFFFFF" >
